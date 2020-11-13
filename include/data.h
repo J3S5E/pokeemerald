@@ -41,6 +41,8 @@ struct TrainerMonItemCustomMoves
 {
     u16 iv;
     u8 lvl;
+    u8 evs[NUM_STATS];
+    u8 abilityNum;
     u16 species;
     u16 heldItem;
     u16 moves[MAX_MON_MOVES];
