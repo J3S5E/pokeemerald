@@ -426,8 +426,11 @@ static s32 GetParentToInheritNature(struct DayCare *daycare)
     // search for female gender
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        if (GetBoxMonGender(&daycare->mons[i].mon) == MON_FEMALE)
-            parent = i;
+        parent = i;
+        if (GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_HELD_ITEM) == ITEM_EVERSTONE)
+        {
+            return parent;
+        }
     }
 
     // search for ditto
@@ -449,7 +452,7 @@ static s32 GetParentToInheritNature(struct DayCare *daycare)
 
     // Don't inherit nature if not holding Everstone
     if (GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_HELD_ITEM) != ITEM_EVERSTONE
-        || Random() >= USHRT_MAX / 2)
+        || Random() >= USHRT_MAX)
     {
         return -1;
     }
