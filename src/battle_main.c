@@ -1806,9 +1806,10 @@ static void sub_8038538(struct Sprite *sprite)
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer)
 {
     u32 nameHash = 0;
+    u32 newLevel = 0;
     u32 personalityValue;
     u8 fixedIV;
-    s32 i, j;
+    s32 i, j, k;
     u8 monsCount;
 
     if (trainerNum == TRAINER_SECRET_BASE)
@@ -1901,7 +1902,34 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                if (partyData[i].dynamicLvl == 1)
+                {
+                    for (k = 0; k < PARTY_SIZE; k++)
+                    {
+                        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+                        {
+                            if (gPlayerParty[k].level >= newLevel)
+                                newLevel = gPlayerParty[k].level;
+                        }
+                        else
+                            break;
+                    }
+
+                    if (partyData[i].lvl < newLevel)
+                    {
+                        CreateMon(&party[i], partyData[i].species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                    }
+                    else
+                    {
+                        CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                    }
+                    
+                }
+                else
+                {
+                    CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                }
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 
