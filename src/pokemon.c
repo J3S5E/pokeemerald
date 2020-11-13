@@ -3376,16 +3376,7 @@ u8 CountAliveMonsInBattle(u8 caseId)
 
 static bool8 ShouldGetStatBadgeBoost(u16 badgeFlag, u8 battlerId)
 {
-    if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_x2000000 | BATTLE_TYPE_FRONTIER))
-        return FALSE;
-    else if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)
-        return FALSE;
-    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
-        return FALSE;
-    else if (FlagGet(badgeFlag))
-        return TRUE;
-    else
-        return FALSE;
+    return FALSE;
 }
 
 u8 GetDefaultMoveTarget(u8 battlerId)

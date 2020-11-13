@@ -4259,7 +4259,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
         && FlagGet(FLAG_BADGE03_GET)
         && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
     {
-        speed = (speed * 110) / 100;
+        speed = speed;
     }
 
     // item effects
