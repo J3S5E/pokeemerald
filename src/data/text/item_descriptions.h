@@ -1761,6 +1761,229 @@ static const u8 sTM50Desc[] = _(
     "lowers SP. ATK.");
 
 
+// Gen4 TMs
+static const u8 sTM51Desc[] = _(
+    "Restores the users\n"
+    "HP by up to half\n"
+    "its max HP.");
+
+static const u8 sTM52Desc[] = _(
+    "Waits before unlea-\n"
+    "shing attack,lowers\n"
+    "foes SP. DEF.");
+
+static const u8 sTM53Desc[] = _(
+    "Draws natures power\n"
+    "to attack, lowers\n"
+    "foes SP. DEF.");
+
+static const u8 sTM54Desc[] = _(
+    "Leaves the foe\n"
+    "with at least\n"
+    "1 HP.");
+
+static const u8 sTM55Desc[] = _(
+    "x2 attack power\n"
+    "if foes health is\n"
+    "below half.");
+
+static const u8 sTM56Desc[] = _(
+    "The user flings its\n"
+    "held item at the\n"
+    "foe.");
+
+static const u8 sTM57Desc[] = _(
+    "Fires concentrated\n"
+    "electricity, might\n"
+    "raise SP. ATK.");
+
+static const u8 sTM58Desc[] = _(
+    "Always leaves\n"
+    "at least 1 HP.\n"
+    "");
+
+static const u8 sTM59Desc[] = _(
+    "Target is attacked\n"
+    "with a shock wave.\n"
+    "");
+
+static const u8 sTM60Desc[] = _(
+    "An energy-draining\n"
+    "punch. Users HP\n"
+    "may be restored.");
+
+static const u8 sTM61Desc[] = _(
+    "Inflicts a burn on\n"
+    "the foe with\n"
+    "intense fire.");
+
+static const u8 sTM62Desc[] = _(
+    "A powdery attack\n"
+    "that may also\n"
+    "raise user stats.");
+
+static const u8 sTM63Desc[] = _(
+    "Prevents the foe\n"
+    "from using its\n"
+    "held item.");
+
+static const u8 sTM64Desc[] = _(
+    "Very powerful but\n"
+    "makes user faint.\n"
+    "");
+
+static const u8 sTM65Desc[] = _(
+    "The user slashes\n"
+    "with a sharp claws.\n"
+    "High critical-rate.");
+
+static const u8 sTM66Desc[] = _(
+    "If attacking after\n"
+    "foe attacks, its\n"
+    "power is doubled.");
+
+static const u8 sTM67Desc[] = _(
+    "Recycles a used\n"
+    "item for one more\n"
+    "use.");
+
+static const u8 sTM68Desc[] = _(
+    "User charges at the\n"
+    "foe. User must rest\n"
+    "after use.");
+
+static const u8 sTM69Desc[] = _(
+    "User polishes its\n"
+    "body to reduce drag\n"
+    "Raises users speed.");
+
+static const u8 sTM70Desc[] = _(
+    "Obstacles are moved\n"
+    "reducing the foe's\n"
+    "evasion stat.");
+
+static const u8 sTM71Desc[] = _(
+    "The user stabs the\n"
+    "foe with a sharp\n"
+    "stone.");
+
+static const u8 sTM72Desc[] = _(
+    "Inflicts x2 damage\n"
+    "if user has been\n"
+    "hurt the same turn.");
+
+static const u8 sTM73Desc[] = _(
+    "A weak jolt of\n"
+    "electricity that\n"
+    "paralyzes the foe.");
+
+static const u8 sTM74Desc[] = _(
+    "A high-speed spin\n"
+    "attack.\n"
+    "");
+
+static const u8 sTM75Desc[] = _(
+    "A fighting dance\n"
+    "that sharply\n"
+    "raises Attack.");
+
+static const u8 sTM76Desc[] = _(
+    "User lays a trap of\n"
+    "levitating stones\n"
+    "around the foe.");
+
+static const u8 sTM77Desc[] = _(
+    "Copies the foe's\n"
+    "stat changes.\n"
+    "");
+
+static const u8 sTM78Desc[] = _(
+    "If foes gender\n"
+    "is opposite user\n"
+    "foe is charmed.");
+
+static const u8 sTM79Desc[] = _(
+    "User releases a ho-\n"
+    "rrible aura imbued\n"
+    "with dark thoughts.");
+
+static const u8 sTM80Desc[] = _(
+    "Large boulders are\n"
+    "hurled. May cause\n"
+    "flinching.");
+
+static const u8 sTM81Desc[] = _(
+    "The user slashes at\n"
+    "the foe by crossing\n"
+    "its claws.");
+
+static const u8 sTM82Desc[] = _(
+    "Uses an available\n"
+    "move randomly\n"
+    "while asleep.");
+
+static const u8 sTM83Desc[] = _(
+    "User draws power\n"
+    "from its held\n"
+    "Berry.");
+
+static const u8 sTM84Desc[] = _(
+    "The foe is stabbed\n"
+    "with poison attack.\n"
+    "May also poison foe");
+
+static const u8 sTM85Desc[] = _(
+    "Takes one half the\n"
+    "damage inflicted\n"
+    "on a sleeping foe.");
+
+static const u8 sTM86Desc[] = _(
+    "User snares foe\n"
+    "with grass and\n"
+    "trips it.");
+
+static const u8 sTM87Desc[] = _(
+    "A move that makes\n"
+    "the foe confused\n"
+    "with raised attack.");
+
+static const u8 sTM88Desc[] = _(
+    "User pecks foe.\n"
+    "If foe has a Berry,\n"
+    "gains its effect.");
+
+static const u8 sTM89Desc[] = _(
+    "After attack the\n"
+    "user switches place\n"
+    "with a party member");
+
+static const u8 sTM90Desc[] = _(
+    "Makes a decoy\n"
+    "with 1/4 users\n"
+    "max HP.");
+
+static const u8 sTM91Desc[] = _(
+    "User gathers light\n"
+    "energy and releases\n"
+    "it at foe.");
+
+static const u8 sTM92Desc[] = _(
+    "User creates a\n"
+    "bizarre area which\n"
+    "slower is faster.");
+
+static const u8 sTM93Desc[] = _(
+    "Traps and hurts the\n"
+    "foe in a whirlpool\n"
+    "for 2 to 5 turns.");
+
+static const u8 sTM94Desc[] = _(
+    "A charging attack\n"
+    "that may also leave\n"
+    "the foe confused.");
+
+// end gen4 TMs
+
 static const u8 sHM01Desc[] = _(
     "Attacks the foe\n"
     "with sharp blades\n"
