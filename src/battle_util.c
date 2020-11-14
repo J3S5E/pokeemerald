@@ -2760,6 +2760,29 @@ static const u16 sWeatherFlagsInfo[][3] =
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
+
+    if (GetBattlerAbility(battler) == ABILITY_PRIMORDIAL_SEA)
+    {
+        gBattleWeather = sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1];
+        return TRUE;
+    }
+
+    if (GetBattlerAbility(battler) == ABILITY_DESOLATE_LAND)
+    {
+        gBattleWeather = sWeatherFlagsInfo[ENUM_WEATHER_SUN][1];
+        return TRUE;
+    }
+
+    if (gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1])
+    {
+        return FALSE;
+    }
+
+    if (gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_SUN][1])
+    {
+        return FALSE;
+    }
+
     if (viaAbility && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]))
     {
         gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
@@ -3126,6 +3149,20 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u8 ability, u8 special, u16 moveA
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
             {
                 BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
+                effect++;
+            }
+            break;
+        case ABILITY_DESOLATE_LAND:
+            if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
+                effect++;
+            }
+            break;
+        case ABILITY_PRIMORDIAL_SEA:
+            if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                 effect++;
             }
             break;
