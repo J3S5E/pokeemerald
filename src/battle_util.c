@@ -2761,13 +2761,13 @@ static const u16 sWeatherFlagsInfo[][3] =
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
 
-    if (GetBattlerAbility(battler) == ABILITY_PRIMORDIAL_SEA)
+    if ((GetBattlerAbility(battler) == ABILITY_PRIMORDIAL_SEA) && (!(gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1])))
     {
         gBattleWeather = sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1];
         return TRUE;
     }
 
-    if (GetBattlerAbility(battler) == ABILITY_DESOLATE_LAND)
+    if ((GetBattlerAbility(battler) == ABILITY_DESOLATE_LAND) && (!(gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_SUN][1])))
     {
         gBattleWeather = sWeatherFlagsInfo[ENUM_WEATHER_SUN][1];
         return TRUE;
@@ -6494,7 +6494,16 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
     if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_RAIN_ANY)
     {
         if (moveType == TYPE_FIRE)
-            dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+        {
+            if (gBattleWeather == WEATHER_RAIN_PERMANENT)
+            {
+                dmg = ApplyModifier(UQ_4_12(0), dmg);
+            }
+            else
+            {
+                dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+            }
+        }
         else if (moveType == TYPE_WATER)
             dmg = ApplyModifier(UQ_4_12(1.5), dmg);
     }
@@ -6503,7 +6512,16 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
         if (moveType == TYPE_FIRE)
             dmg = ApplyModifier(UQ_4_12(1.5), dmg);
         else if (moveType == TYPE_WATER)
-            dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+        {
+            if (gBattleWeather == WEATHER_SUN_PERMANENT)
+            {
+                dmg = ApplyModifier(UQ_4_12(0), dmg);
+            }
+            else
+            {
+                dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+            }
+        }
     }
 
     // check stab
