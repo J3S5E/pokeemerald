@@ -6506,6 +6506,12 @@ BattleScript_DrizzleActivates::
 	call BattleScript_WeatherFormChanges
 	end3
 
+BattleScript_DeltaActivates::
+	pause 0x20
+	call BattleScript_AbilityPopUp
+	call BattleScript_WeatherFormChanges
+	end3
+
 BattleScript_DefiantActivates::
 	pause 0x20
 	call BattleScript_AbilityPopUp

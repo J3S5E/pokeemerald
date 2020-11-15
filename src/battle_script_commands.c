@@ -1285,7 +1285,7 @@ static bool32 AccuracyCalcHelper(u16 move)
 
     if ((WEATHER_HAS_EFFECT &&
             (((gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-         || (((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD))))
+         || (((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD && !(gBattleWeather == WEATHER_HAIL_PERMANENT)))))
      || (gBattleMoves[move].effect == EFFECT_VITAL_THROW)
      || (gBattleMoves[move].accuracy == 0)
      || ((B_MINIMIZE_DMG_ACC >= GEN_6) && (gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE)))
@@ -1351,7 +1351,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 
     if (defAbility == ABILITY_SAND_VEIL && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)
         calc = (calc * 80) / 100; // 1.2 sand veil loss
-    else if (defAbility == ABILITY_SNOW_CLOAK && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)
+    else if (defAbility == ABILITY_SNOW_CLOAK && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY && !(gBattleWeather == WEATHER_HAIL_PERMANENT))
         calc = (calc * 80) / 100; // 1.2 snow cloak loss
     else if (defAbility == ABILITY_TANGLED_FEET && gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
         calc = (calc * 50) / 100; // 1.5 tangled feet loss
@@ -9387,7 +9387,7 @@ static void Cmd_weatherdamage(void)
                     gBattleMoveDamage = 1;
             }
         }
-        if (gBattleWeather & WEATHER_HAIL_ANY)
+        if ((gBattleWeather & WEATHER_HAIL_ANY) && (!(gBattleWeather == WEATHER_HAIL_PERMANENT)))
         {
             if (ability == ABILITY_ICE_BODY
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))

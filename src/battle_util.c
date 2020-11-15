@@ -1263,8 +1263,8 @@ u8 DoFieldEndTurnEffects(void)
             }
             gBattleStruct->turnCountersTracker++;
             break;
-        case ENDTURN_HAIL:
-            if (gBattleWeather & WEATHER_HAIL_ANY)
+        case ENDTURN_HAIL: // delta
+            if ((gBattleWeather & WEATHER_HAIL_ANY) && (!(gBattleWeather == WEATHER_HAIL_PERMANENT)))
             {
                 if (!(gBattleWeather & WEATHER_HAIL_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)
                 {
@@ -2719,6 +2719,7 @@ u8 TryWeatherFormChange(u8 battler)
         }
         else if (!(gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
         {
+            
             SET_BATTLER_TYPE(battler, TYPE_NORMAL);
             ret = 1;
         }
@@ -2761,6 +2762,12 @@ static const u16 sWeatherFlagsInfo[][3] =
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
 
+    if ((GetBattlerAbility(battler) == ABILITY_DELTA_STREAM) && (!(gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_HAIL][1])))
+    {
+        gBattleWeather = sWeatherFlagsInfo[ENUM_WEATHER_HAIL][1];
+        return TRUE;
+    }
+
     if ((GetBattlerAbility(battler) == ABILITY_PRIMORDIAL_SEA) && (!(gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1])))
     {
         gBattleWeather = sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1];
@@ -2776,6 +2783,14 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
     if (gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_RAIN][1])
     {
         return FALSE;
+    }
+
+    if (gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_HAIL][1])
+    {
+        if ((GetBattlerAbility(battler) == ABILITY_DELTA_STREAM) || (GetBattlerAbility(BATTLE_OPPOSITE(battler)) == ABILITY_DELTA_STREAM))
+        {
+            return FALSE;
+        }
     }
 
     if (gBattleWeather == sWeatherFlagsInfo[ENUM_WEATHER_SUN][1])
@@ -3163,6 +3178,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u8 ability, u8 special, u16 moveA
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
             {
                 BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
+                effect++;
+            }
+            break;
+        case ABILITY_DELTA_STREAM:
+            if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_DeltaActivates);
                 effect++;
             }
             break;
@@ -6135,7 +6157,8 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
         break;
     case EFFECT_SOLARBEAM:
         if (WEATHER_HAS_EFFECT && gBattleWeather & (WEATHER_HAIL_ANY | WEATHER_SANDSTORM_ANY | WEATHER_RAIN_ANY))
-            MulModifier(&modifier, UQ_4_12(0.5));
+            if (!(gBattleWeather == WEATHER_HAIL_PERMANENT))
+                MulModifier(&modifier, UQ_4_12(0.5));
         break;
     case EFFECT_STOMPING_TANTRUM:
         if (gBattleStruct->lastMoveFailed & gBitTable[battlerAtk])
@@ -6473,6 +6496,7 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
     u32 abilityDef = GetBattlerAbility(battlerDef);
     u32 defSide = GET_BATTLER_SIDE(battlerDef);
     u16 finalModifier = UQ_4_12(1.0);
+    bool32 canBeZero = FALSE;
 
     // check multiple targets in double battle
     if (GetMoveTargetCount(move, battlerAtk, battlerDef) >= 2)
@@ -6498,6 +6522,7 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
             if (gBattleWeather == WEATHER_RAIN_PERMANENT)
             {
                 dmg = ApplyModifier(UQ_4_12(0), dmg);
+                canBeZero = TRUE;
             }
             else
             {
@@ -6520,6 +6545,28 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
             else
             {
                 dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+            }
+        }
+    }
+    // Delta Stream
+    else if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)
+    {
+        if (gBattleWeather == WEATHER_HAIL_PERMANENT)
+        {
+            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_FLYING))
+            {
+                if (moveType == TYPE_ELECTRIC)
+                {
+                    dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+                }
+                else if (moveType == TYPE_ICE)
+                {
+                    dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+                }
+                else if (moveType == TYPE_ROCK)
+                {
+                    dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+                }
             }
         }
     }
