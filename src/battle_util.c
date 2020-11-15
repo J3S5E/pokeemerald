@@ -5937,6 +5937,9 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
         if (basePower <= 60)
            MulModifier(&modifier, UQ_4_12(1.5));
         break;
+    case ABILITY_PARENTAL_BOND:
+        MulModifier(&modifier, UQ_4_12(1.25));
+        break;
     case ABILITY_FLARE_BOOST:
         if (gBattleMons[battlerAtk].status1 & STATUS1_BURN && IS_MOVE_SPECIAL(move))
            MulModifier(&modifier, UQ_4_12(1.5));
