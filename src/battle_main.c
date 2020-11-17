@@ -1953,6 +1953,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 SetMonData(&party[i], MON_DATA_ABILITY_NUM, &partyData[i].abilityNum);
 
+                if ((partyData[i].lvl > 0) && (partyData[i].lvl < 28))
+                    SetMonData(&party[i], MON_DATA_POKEBALL, &partyData[i].pokeballNum);
+
                 CalculateMonStats(&party[i]);
 
                 break;
