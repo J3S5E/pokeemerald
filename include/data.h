@@ -44,6 +44,7 @@ struct TrainerMonItemCustomMoves
     u8 evs[NUM_STATS];
     u8 abilityNum;
     u8 dynamicLvl;
+    u8 shiny;
     u16 species;
     u16 heldItem;
     u16 moves[MAX_MON_MOVES];
