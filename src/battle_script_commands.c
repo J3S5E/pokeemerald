@@ -1538,11 +1538,6 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
             critChance = ARRAY_COUNT(sCriticalHitChance) - 1;
     }
 
-    if (GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER)
-    {
-        critChance++;
-    }
-
     return critChance;
 }
 
