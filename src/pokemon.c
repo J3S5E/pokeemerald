@@ -2353,9 +2353,9 @@ static const s8 sFriendshipEventModifiers[][3] =
     [FRIENDSHIP_EVENT_LEAGUE_BATTLE]   = { 100,  20,  20},
     [FRIENDSHIP_EVENT_LEARN_TMHM]      = { 1,  1,  0},
     [FRIENDSHIP_EVENT_WALKING]         = { 1,  1,  1},
-    [FRIENDSHIP_EVENT_FAINT_SMALL]     = {-1, -1, -1},
-    [FRIENDSHIP_EVENT_FAINT_FIELD_PSN] = {-5, -5, -10},
-    [FRIENDSHIP_EVENT_FAINT_LARGE]     = {-5, -5, -10},
+    [FRIENDSHIP_EVENT_FAINT_SMALL]     = {-100, -40, -20},
+    [FRIENDSHIP_EVENT_FAINT_FIELD_PSN] = {-100, -100, -50},
+    [FRIENDSHIP_EVENT_FAINT_LARGE]     = {-100, -100, -100},
 };
 
 static const u16 sHMMoves[] =
