@@ -969,6 +969,8 @@ u8 DoFieldEndTurnEffects(void)
 {
     u8 effect = 0;
 
+    AddPokemonToChampion();
+
     for (gBattlerAttacker = 0; gBattlerAttacker < gBattlersCount && gAbsentBattlerFlags & gBitTable[gBattlerAttacker]; gBattlerAttacker++)
     {
     }
@@ -7126,4 +7128,171 @@ bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId)
     }
 
     return FALSE;
+}
+
+void AddPokemonToChampion(void)
+{
+
+    s32 i, j, k = 0;
+    
+    u8 level = 5, fixedIV = 31, evs = 255;
+
+    u16 newPokemon, newHeldItem, newAbilityNum, newMoves, move;
+    u16 newPokemonList[4];
+    u16 newHeldItemList[4];
+    u32 newNatureList[4];
+    u8 newAbilityNumList[4];
+    u8 pp[MAX_MON_MOVES];
+    u16 newMovesList[4][MAX_MON_MOVES];
+
+    struct Pokemon *party;
+    party = gEnemyParty;
+
+    
+
+    if (GetMonData(&party[0], MON_DATA_LEVEL) != level)
+    {
+        return;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SHEDINJA) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GARCHOMP) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MEGA_GARCHOMP) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_FERROTHORN) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SLAKING) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_DRAGONITE) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_STARMIE) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    if (k != 4)
+    {
+        return;
+    }
+
+
+    k = 0;
+
+    newPokemonList[0] = SPECIES_HYDREIGON;
+    newPokemonList[1] = SPECIES_LUCARIO;
+    newPokemonList[2] = SPECIES_TOGEKISS;
+    newPokemonList[3] = SPECIES_GLISCOR;
+
+    newHeldItemList[0] = ITEM_LIFE_ORB;
+    newHeldItemList[1] = ITEM_LIFE_ORB;
+    newHeldItemList[2] = ITEM_LEFTOVERS;
+    newHeldItemList[3] = ITEM_LEFTOVERS;
+
+    newNatureList[0] = 15;
+    newNatureList[1] = 3;
+    newNatureList[2] = 15;
+    newNatureList[3] = 13;
+
+    newAbilityNumList[0] = 0;
+    newAbilityNumList[1] = 2;
+    newAbilityNumList[2] = 1;
+    newAbilityNumList[3] = 0;
+
+
+    newMovesList[0][0] = MOVE_DARK_PULSE;
+    newMovesList[0][1] = MOVE_ROOST;
+    newMovesList[0][2] = MOVE_FLAMETHROWER;
+    newMovesList[0][3] = MOVE_FOCUS_BLAST;
+
+    newMovesList[1][0] = MOVE_BULLET_PUNCH;
+    newMovesList[1][1] = MOVE_CLOSE_COMBAT;
+    newMovesList[1][2] = MOVE_EXTREME_SPEED;
+    newMovesList[1][3] = MOVE_CRUNCH;
+
+    newMovesList[2][0] = MOVE_NASTY_PLOT;
+    newMovesList[2][1] = MOVE_ROOST;
+    newMovesList[2][2] = MOVE_AIR_SLASH;
+    newMovesList[2][3] = MOVE_AURA_SPHERE;
+
+    newMovesList[3][0] = MOVE_KNOCK_OFF;
+    newMovesList[3][1] = MOVE_EARTHQUAKE;
+    newMovesList[3][2] = MOVE_ICE_FANG;
+    newMovesList[3][3] = MOVE_ROOST;
+
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0))
+        {
+            u32 personality = GetMonData(&party[i], MON_DATA_PERSONALITY);
+            while (personality % 25 != newNatureList[k])
+            {
+                personality = Random32();
+            }
+
+            ZeroMonData(&party[i]);
+
+            newPokemon = newPokemonList[k];
+
+            // Created pokemon
+            CreateMon(&party[i], newPokemon, level, fixedIV, TRUE, personality, OT_ID_RANDOM_YES_SHINY, 0);
+
+            // Set held item
+            newHeldItem = newHeldItemList[k];
+            SetMonData(&party[i], MON_DATA_HELD_ITEM, &newHeldItem);
+
+            // Set ability
+            newAbilityNum = newAbilityNumList[k];
+            SetMonData(&party[i], MON_DATA_ABILITY_NUM, &newAbilityNum);
+
+            // Set EVs
+            for (j = 0; j < NUM_STATS; j++)
+                    {
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs);
+                    }
+
+            // Set moves
+            for (j = 0; j < MAX_MON_MOVES; j++)
+            {
+                newMoves = newMovesList[i][j];
+                SetMonData(&party[i], MON_DATA_MOVE1 + j, &newMoves);
+                move = GetMonData(&party[i], MON_DATA_PP2 + i, NULL);
+                SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[move].pp);
+            }
+
+            // calc stats
+            CalculateMonStats(&party[i]);
+
+            k++;
+        }
+    }
+
+
 }
