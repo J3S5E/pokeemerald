@@ -7135,7 +7135,7 @@ void AddPokemonToChampion(void)
 
     s32 i, j, k = 0;
     
-    u8 level = 5, fixedIV = 31, evs = 255;
+    u8 level = 100, fixedIV = 31, evs = 255;
 
     u16 newPokemon, newHeldItem, newAbilityNum, newMoves, move;
     u16 newPokemonList[4];
