@@ -969,8 +969,6 @@ u8 DoFieldEndTurnEffects(void)
 {
     u8 effect = 0;
 
-    AddPokemonToChampion();
-
     for (gBattlerAttacker = 0; gBattlerAttacker < gBattlersCount && gAbsentBattlerFlags & gBitTable[gBattlerAttacker]; gBattlerAttacker++)
     {
     }
@@ -6946,6 +6944,9 @@ bool32 CanMegaEvolve(u8 battlerId)
     u8 partnerPosition = GetBattlerPosition(BATTLE_PARTNER(battlerId));
     struct MegaEvolutionData *mega = &(((struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]))->mega);
 
+    AddPokemonToChampion();
+    AddPokemonToFinalDouble();
+
     // Check if trainer already mega evolved a pokemon.
     if (mega->alreadyEvolved[battlerPosition])
         return FALSE;
@@ -7157,53 +7158,110 @@ void AddPokemonToChampion(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SHEDINJA) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SHEDINJA) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GARCHOMP) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GARCHOMP) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MEGA_GARCHOMP) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MEGA_GARCHOMP) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_FERROTHORN) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_FERROTHORN) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SLAKING) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SLAKING) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_DRAGONITE) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_DRAGONITE) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if ((GetMonData(&party[i], MON_DATA_HP) == 0) && (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_STARMIE) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_STARMIE) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
-    if (k != 4)
+    for (i = 0; i < PARTY_SIZE; i++)
     {
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_HYDREIGON) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_LUCARIO) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_TOGEKISS) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GLISCOR) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    if (k != 6)
         return;
-    }
 
 
     k = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0))
+            k++;
+    }
+
+    if (k == 0)
+        return;
+
+    k = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_HYDREIGON)
+            k = 1;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_LUCARIO)
+            k = 2;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_TOGEKISS)
+            k = 3;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GLISCOR)
+            k = 4;
+    }
 
     newPokemonList[0] = SPECIES_HYDREIGON;
     newPokemonList[1] = SPECIES_LUCARIO;
@@ -7247,7 +7305,8 @@ void AddPokemonToChampion(void)
     newMovesList[3][3] = MOVE_ROOST;
 
 
-    for (i = 0; i < PARTY_SIZE; i++)
+
+    for (i = 0; i < PARTY_SIZE && k < 4; i++)
     {
         if ((GetMonData(&party[i], MON_DATA_HP) == 0))
         {
@@ -7283,7 +7342,7 @@ void AddPokemonToChampion(void)
             {
                 newMoves = newMovesList[i][j];
                 SetMonData(&party[i], MON_DATA_MOVE1 + j, &newMoves);
-                move = GetMonData(&party[i], MON_DATA_PP2 + i, NULL);
+                move = GetMonData(&party[i], MON_DATA_PP2 + j, NULL);
                 SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[move].pp);
             }
 
@@ -7293,6 +7352,328 @@ void AddPokemonToChampion(void)
             k++;
         }
     }
+}
 
 
+void AddPokemonToFinalDouble(void)
+{
+
+    s32 i, j, k = 0;
+    
+    u8 level, fixedIV = 31;
+
+    u16 newPokemon, newHeldItem, newAbilityNum, newMoves, move;
+    u16 newPokemonList[6];
+    u16 newHeldItemList[6];
+    u32 newNatureList[6];
+    u8 newAbilityNumList[6];
+    u8 pp[MAX_MON_MOVES];
+    u8 evList[6][6] = {
+        {200, 200, 108, 0, 0, 0},
+        {0, 40, 0, 216, 252, 0},
+        {0, 4, 0, 252, 252, 0},
+        {248, 116, 0, 144, 0, 0},
+        {0, 252, 0, 252, 0, 4},
+        {252, 0, 80, 0, 0, 176}
+    };
+    u16 newMovesList[6][MAX_MON_MOVES];
+
+    struct Pokemon *party;
+    party = gEnemyParty;
+
+    
+    // test if double battle
+    if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
+        return;
+
+
+    // check for if right battle teams
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_KYOGRE)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SHARPEDO)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GYARADOS)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MUK)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GROUDON)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_CAMERUPT)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_FLYGON)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_WEEZING)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MIGHTYENA)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_CROBAT)
+            k++;
+    }
+
+    if (k != 6)
+    {
+        return;
+    }
+
+    newHeldItemList[0] = ITEM_LIFE_ORB;
+    newHeldItemList[1] = ITEM_LIFE_ORB;
+    newHeldItemList[2] = ITEM_LEFTOVERS;
+
+    newHeldItemList[3] = ITEM_LEFTOVERS;
+    newHeldItemList[4] = ITEM_LEFTOVERS;
+    newHeldItemList[5] = ITEM_BLACK_SLUDGE;
+
+
+    newNatureList[0] = 3;
+    newNatureList[1] = 19;
+    newNatureList[2] = 14;
+
+    newNatureList[3] = 3;
+    newNatureList[4] = 13;
+    newNatureList[5] = 23;
+
+
+    newAbilityNumList[0] = 0;
+    newAbilityNumList[1] = 1;
+    newAbilityNumList[2] = 0;
+
+    newAbilityNumList[3] = 0;
+    newAbilityNumList[4] = 0;
+    newAbilityNumList[5] = 1;
+
+
+    newPokemonList[0] = SPECIES_GROUDON;
+    newPokemonList[1] = SPECIES_CAMERUPT;
+    newPokemonList[2] = SPECIES_FLYGON;
+
+    newPokemonList[3] = SPECIES_MIGHTYENA;
+    newPokemonList[4] = SPECIES_CROBAT;
+    newPokemonList[5] = SPECIES_MUK;
+
+
+    newMovesList[0][0] = MOVE_EARTHQUAKE;
+    newMovesList[0][1] = MOVE_DRAGON_CLAW;
+    newMovesList[0][2] = MOVE_FIRE_PUNCH;
+    newMovesList[0][3] = MOVE_STONE_EDGE;
+
+    newMovesList[1][0] = MOVE_EXPLOSION;
+    newMovesList[1][1] = MOVE_FIRE_BLAST;
+    newMovesList[1][2] = MOVE_EARTH_POWER;
+    newMovesList[1][3] = MOVE_ROCK_SLIDE;
+
+    newMovesList[2][0] = MOVE_EARTHQUAKE;
+    newMovesList[2][1] = MOVE_OUTRAGE;
+    newMovesList[2][2] = MOVE_FIRE_BLAST;
+    newMovesList[2][3] = MOVE_TOXIC;
+
+
+
+    newMovesList[3][0] = MOVE_SUPER_FANG;
+    newMovesList[3][1] = MOVE_POISON_FANG;
+    newMovesList[3][2] = MOVE_ICE_FANG;
+    newMovesList[3][3] = MOVE_CRUNCH;
+
+    newMovesList[4][0] = MOVE_FLY;
+    newMovesList[4][1] = MOVE_ROOST;
+    newMovesList[4][2] = MOVE_RAIN_DANCE;
+    newMovesList[4][3] = MOVE_PURSUIT;
+
+    newMovesList[5][0] = MOVE_GUNK_SHOT;
+    newMovesList[5][1] = MOVE_REST;
+    newMovesList[5][2] = MOVE_PAYBACK;
+    newMovesList[5][3] = MOVE_ICE_PUNCH;
+
+
+    k = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_HP) == 0))
+            k++;
+    }
+
+    if (k == 0)
+        return;
+
+    k = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GROUDON)
+            k = 1;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_CAMERUPT)
+            k = 2;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_FLYGON)
+            k = 3;
+    }
+
+    // Add pokemon Left side
+    if (k < 3)
+    {
+        for (i = 3; i < PARTY_SIZE && k < 3; i++)
+        {
+            if ((GetMonData(&party[i], MON_DATA_HP) == 0))
+            {
+                u32 personality = GetMonData(&party[i], MON_DATA_PERSONALITY);
+                while (personality % 25 != newNatureList[k])
+                {
+                    personality = Random32();
+                }
+
+                level = GetMonData(&party[i], MON_DATA_LEVEL);
+
+                ZeroMonData(&party[i]);
+
+                newPokemon = newPokemonList[k];
+
+                // Created pokemon
+                CreateMon(&party[i], newPokemon, level, fixedIV, TRUE, personality, OT_ID_RANDOM_NO_SHINY, 0);
+
+                // Set held item
+                newHeldItem = newHeldItemList[k];
+                SetMonData(&party[i], MON_DATA_HELD_ITEM, &newHeldItem);
+
+                // Set ability
+                newAbilityNum = newAbilityNumList[k];
+                SetMonData(&party[i], MON_DATA_ABILITY_NUM, &newAbilityNum);
+
+                // Set EVs
+                for (j = 0; j < NUM_STATS; j++)
+                        {
+                            SetMonData(&party[i], MON_DATA_HP_EV + j, &evList[k][j]);
+                        }
+
+                // Set moves
+                for (j = 0; j < MAX_MON_MOVES; j++)
+                {
+                    newMoves = newMovesList[i][j];
+                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &newMoves);
+                    move = GetMonData(&party[i], MON_DATA_PP2 + j, NULL);
+                    SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[move].pp);
+                }
+
+                // calc stats
+                CalculateMonStats(&party[i]);
+
+                k++;
+            }
+        }
+    }
+
+    k = 3;
+
+    for (i = 0; i < (PARTY_SIZE / 2); i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MIGHTYENA)
+            k = 4;
+    }
+
+    for (i = 0; i < (PARTY_SIZE / 2); i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_CROBAT)
+            k = 5;
+    }
+
+    for (i = 0; i < (PARTY_SIZE / 2); i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_MUK)
+            k = 6;
+    }
+
+    // Add pokemon Right side
+    if (k < 6)
+    {
+        for (i = 0; i < (PARTY_SIZE / 2) && k < 6; i++)
+        {
+            if ((GetMonData(&party[i], MON_DATA_HP) == 0))
+            {
+                u32 personality = GetMonData(&party[i], MON_DATA_PERSONALITY);
+                while (personality % 25 != newNatureList[k])
+                {
+                    personality = Random32();
+                }
+
+                level = GetMonData(&party[i], MON_DATA_LEVEL);
+
+                ZeroMonData(&party[i]);
+
+                newPokemon = newPokemonList[k];
+
+                // Created pokemon
+                CreateMon(&party[i], newPokemon, level, fixedIV, TRUE, personality, OT_ID_RANDOM_NO_SHINY, 0);
+
+                // Set held item
+                newHeldItem = newHeldItemList[k];
+                SetMonData(&party[i], MON_DATA_HELD_ITEM, &newHeldItem);
+
+                // Set ability
+                newAbilityNum = newAbilityNumList[k];
+                SetMonData(&party[i], MON_DATA_ABILITY_NUM, &newAbilityNum);
+
+                // Set EVs
+                for (j = 0; j < NUM_STATS; j++)
+                        {
+                            SetMonData(&party[i], MON_DATA_HP_EV + j, &evList[k][j]);
+                        }
+
+                // Set moves
+                for (j = 0; j < MAX_MON_MOVES; j++)
+                {
+                    newMoves = newMovesList[i][j];
+                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &newMoves);
+                    move = GetMonData(&party[i], MON_DATA_PP2 + j, NULL);
+                    SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[move].pp);
+                }
+
+                // calc stats
+                CalculateMonStats(&party[i]);
+            }
+        }
+    }
 }
