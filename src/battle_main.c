@@ -86,6 +86,7 @@ static void CB2_HandleStartMultiBattle(void);
 static void CB2_HandleStartBattle(void);
 static void TryCorrectShedinjaLanguage(struct Pokemon *mon);
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer);
+static u16 CanMonEvolve(u16 species, u32 level);
 static void BattleMainCB1(void);
 static void sub_8038538(struct Sprite *sprite);
 static void sub_8038F14(void);
@@ -1811,6 +1812,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u8 fixedIV;
     s32 i, j, k;
     u8 monsCount;
+    u16 species;
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
@@ -1858,7 +1860,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+                
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
@@ -1870,7 +1875,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 for (j = 0; j < MAX_MON_MOVES; j++)
                 {
@@ -1888,7 +1896,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
@@ -1902,6 +1911,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
+
+                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
 
                 newLevel = 1;
 
@@ -1918,11 +1929,11 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     if (partyData[i].shiny == 1)
                     {
-                        CreateMon(&party[i], partyData[i].species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
+                        CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
                     }
                     else
                     {
-                        CreateMon(&party[i], partyData[i].species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                        CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                     }
                     
                 }
@@ -1930,11 +1941,11 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     if (partyData[i].shiny == 1)
                     {
-                        CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
+                        CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
                     }
                     else
                     {
-                        CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                        CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                     }
                 }
 
@@ -1967,6 +1978,50 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     }
 
     return gTrainers[trainerNum].partySize;
+}
+
+static u16 CanMonEvolve(u16 species, u32 level)
+{
+    u32 i, j[EVOS_PER_MON], k = 0;
+    u16 newSpecies;
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[species][i].method == EVO_LEVEL
+            && gEvolutionTable[species][i].param <= level)
+                species = gEvolutionTable[species][i].targetSpecies;
+    }
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[species][i].method == EVO_LEVEL
+            && gEvolutionTable[species][i].param <= level)
+                species = gEvolutionTable[species][i].targetSpecies;
+    }
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[species][i].method == EVO_FOE_LEVEL && gEvolutionTable[species][i].param <= level)
+        {
+            newSpecies = gEvolutionTable[species][i].targetSpecies;
+            j[k] = i;
+            k++;
+        }
+    }
+
+    if (k == 1)
+    {
+        species = newSpecies;
+    }
+    
+    if (k > 1)
+    {
+        i = Random() & k;
+        species = gEvolutionTable[species][j[i]].targetSpecies;
+    }
+
+
+    return species;
 }
 
 void VBlankCB_Battle(void)
