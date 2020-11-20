@@ -854,15 +854,23 @@ void GetItemName(s8 *dest, u16 itemId)
     {
         case TMHM_POCKET:
             StringCopy(gStringVar2, gMoveNames[ItemIdToBattleMoveId(itemId)]);
-            if (itemId >= ITEM_HM01)
+            if (itemId >= ITEM_HM01 && itemId <= ITEM_HM08)
             {
                 ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_HM01 + 1, STR_CONV_MODE_LEADING_ZEROS, 1);
                 StringExpandPlaceholders(dest, gText_ClearTo11Var1Clear5Var2);
             }
             else
             {
-                ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_TM01 + 1, STR_CONV_MODE_LEADING_ZEROS, 2);
-                StringExpandPlaceholders(dest, gText_NumberVar1Clear7Var2);
+                if (itemId < 531)
+                {
+                    ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_TM01 + 1, STR_CONV_MODE_LEADING_ZEROS, 2);
+                    StringExpandPlaceholders(dest, gText_NumberVar1Clear7Var2);
+                }
+                else
+                {
+                    ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_TM51 + 51, STR_CONV_MODE_LEADING_ZEROS, 2);
+                    StringExpandPlaceholders(dest, gText_NumberVar1Clear7Var2);
+                }
             }
             break;
         case BERRIES_POCKET:
