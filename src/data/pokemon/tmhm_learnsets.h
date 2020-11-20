@@ -1,19685 +1,2976 @@
-#define TMHM_LEARNSET(moves) {(u32)(moves), ((u64)(moves) >> 32)}
-#define TMHM(tmhm) ((u64)1 << (ITEM_##tmhm - ITEM_TM01_FOCUS_PUNCH))
+//#define TMHM_LEARNSET(moves) {(u32)(moves), ((u64)(moves) >> 32)}
+//#define TMHM(tmhm) ((u64)1 << (ITEM_##tmhm - ITEM_TM01_FOCUS_PUNCH))
 
-// This table determines which TMs and HMs a species is capable of learning.
-// Each entry is a 64-bit bit array spread across two 32-bit values, with
-// each bit corresponding to a .
-const u32 gTMHMLearnsets[][2] =
+#define TMHM(tmhm)          ((u8) ((ITEM_##tmhm) - ITEM_TM01))
+#define TMHM_LEARNSET_END   0xFF
+
+
+static const u8 sNoneTMHMLearnset[] =
 {
-    [SPECIES_NONE]        = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BULBASAUR]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM53_ENERGY_BALL)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM86_GRASS_KNOT)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM75_SWORDS_DANCE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_IVYSAUR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM53_ENERGY_BALL)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM86_GRASS_KNOT)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM75_SWORDS_DANCE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VENUSAUR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM53_ENERGY_BALL)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM68_GIGA_IMPACT)
-											| TMHM(TM86_GRASS_KNOT)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM94_ROCK_CLIMB)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM75_SWORDS_DANCE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHARMANDER]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM56_FLING)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM80_ROCK_SLIDE)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM65_SHADOW_CLAW)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM75_SWORDS_DANCE)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM61_WILL_O_WISP)),
-
-    [SPECIES_CHARMELEON]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM56_FLING)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM80_ROCK_SLIDE)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM65_SHADOW_CLAW)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM75_SWORDS_DANCE)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM61_WILL_O_WISP)),
-
-    [SPECIES_CHARIZARD]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(HM01_CUT)
-											| TMHM(ITEM_TM70_DEFOG)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM59_DRAGON_PULSE)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM56_FLING)
-											| TMHM(HM02_FLY)
-											| TMHM(TM52_FOCUS_BLAST)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM68_GIGA_IMPACT)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM80_ROCK_SLIDE)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM51_ROOST)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM65_SHADOW_CLAW)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM75_SWORDS_DANCE)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM61_WILL_O_WISP)),
-
-    [SPECIES_SQUIRTLE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM55_BRINE)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM56_FLING)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM74_GYRO_BALL)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)
-											| TMHM(TM93_WHIRLPOOL)),
-
-    [SPECIES_WARTORTLE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM55_BRINE)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM56_FLING)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM74_GYRO_BALL)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)
-											| TMHM(TM93_WHIRLPOOL)),
-
-    [SPECIES_BLASTOISE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM72_AVALANCHE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM55_BRINE)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM91_FLASH_CANNON)
-											| TMHM(TM56_FLING)
-											| TMHM(TM52_FOCUS_BLAST)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM68_GIGA_IMPACT)
-											| TMHM(TM74_GYRO_BALL)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM94_ROCK_CLIMB)
-											| TMHM(TM80_ROCK_SLIDE)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)
-											| TMHM(TM93_WHIRLPOOL)),
-
-    [SPECIES_CATERPIE]    = TMHM_LEARNSET(0),
-
-    [SPECIES_METAPOD]     = TMHM_LEARNSET(0),
-
-    [SPECIES_BUTTERFREE]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM78_CAPTIVATE)
-											| TMHM(ITEM_TM70_DEFOG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM85_DREAM_EATER)
-											| TMHM(TM58_ENDURE)
-											| TMHM(TM53_ENERGY_BALL)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM68_GIGA_IMPACT)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM83_NATURAL_GIFT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM77_PSYCH_UP)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM51_ROOST)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM62_SILVER_WIND)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM82_SLEEP_TALK)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM90_SUBSTITUTE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM87_SWAGGER)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM89_U_TURN)),
-
-    [SPECIES_WEEDLE]      = TMHM_LEARNSET(0),
-
-    [SPECIES_KAKUNA]      = TMHM_LEARNSET(0),
-
-    [SPECIES_BEEDRILL]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIDGEY]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIDGEOTTO]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIDGEOT]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RATTATA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RATICATE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SPEAROW]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FEAROW]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EKANS]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ARBOK]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIKACHU]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RAICHU]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SANDSHREW]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SANDSLASH]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NIDORAN_F]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NIDORINA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NIDOQUEEN]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NIDORAN_M]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NIDORINO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NIDOKING]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CLEFAIRY]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CLEFABLE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VULPIX]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NINETALES]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_JIGGLYPUFF]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WIGGLYTUFF]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ZUBAT]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOLBAT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ODDISH]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GLOOM]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VILEPLUME]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PARAS]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PARASECT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VENONAT]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VENOMOTH]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DIGLETT]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUGTRIO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MEOWTH]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PERSIAN]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PSYDUCK]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GOLDUCK]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MANKEY]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PRIMEAPE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GROWLITHE]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ARCANINE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_POLIWAG]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_POLIWHIRL]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_POLIWRATH]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ABRA]        = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KADABRA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALAKAZAM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MACHOP]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MACHOKE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MACHAMP]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BELLSPROUT]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WEEPINBELL]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VICTREEBEL]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TENTACOOL]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TENTACRUEL]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GEODUDE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GRAVELER]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOLEM]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PONYTA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RAPIDASH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SLOWPOKE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SLOWBRO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MAGNEMITE]   = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGNETON]    = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FARFETCHD]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DODUO]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DODRIO]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SEEL]        = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DEWGONG]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GRIMER]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MUK]         = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHELLDER]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CLOYSTER]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GASTLY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HAUNTER]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GENGAR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ONIX]        = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DROWZEE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HYPNO]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KRABBY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KINGLER]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VOLTORB]     = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ELECTRODE]   = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EXEGGCUTE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EXEGGUTOR]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CUBONE]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAROWAK]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HITMONLEE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HITMONCHAN]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LICKITUNG]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KOFFING]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WEEZING]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RHYHORN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RHYDON]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHANSEY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TANGELA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KANGASKHAN]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HORSEA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SEADRA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GOLDEEN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SEAKING]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_STARYU]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_STARMIE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MR_MIME]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SCYTHER]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_JYNX]        = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ELECTABUZZ]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGMAR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PINSIR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TAUROS]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MAGIKARP]    = TMHM_LEARNSET(0),
-
-    [SPECIES_GYARADOS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LAPRAS]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DITTO]       = TMHM_LEARNSET(0),
-
-    [SPECIES_EEVEE]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VAPOREON]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_JOLTEON]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLAREON]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PORYGON]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_OMANYTE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_OMASTAR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KABUTO]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KABUTOPS]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AERODACTYL]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SNORLAX]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ARTICUNO]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ZAPDOS]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MOLTRES]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DRATINI]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DRAGONAIR]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DRAGONITE]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MEWTWO]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MEW]         = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CHIKORITA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BAYLEEF]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MEGANIUM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CYNDAQUIL]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_QUILAVA]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYPHLOSION]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TOTODILE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CROCONAW]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_FERALIGATR]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SENTRET]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_FURRET]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HOOTHOOT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NOCTOWL]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LEDYBA]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LEDIAN]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SPINARAK]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ARIADOS]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CROBAT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHINCHOU]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LANTURN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PICHU]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CLEFFA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_IGGLYBUFF]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TOGEPI]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TOGETIC]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NATU]        = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_XATU]        = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAREEP]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLAAFFY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AMPHAROS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BELLOSSOM]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MARILL]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AZUMARILL]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SUDOWOODO]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_POLITOED]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HOPPIP]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SKIPLOOM]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_JUMPLUFF]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AIPOM]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SUNKERN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SUNFLORA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_YANMA]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WOOPER]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_QUAGSIRE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ESPEON]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_UMBREON]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MURKROW]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SLOWKING]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MISDREAVUS]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_UNOWN]       = TMHM_LEARNSET(TMHM(TM10_HIDDEN_POWER)),
-
-    [SPECIES_WOBBUFFET]   = TMHM_LEARNSET(TMHM(TM20_SAFEGUARD)),
-
-    [SPECIES_GIRAFARIG]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PINECO]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FORRETRESS]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUNSPARCE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GLIGAR]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STEELIX]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SNUBBULL]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GRANBULL]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_QWILFISH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SCIZOR]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHUCKLE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HERACROSS]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SNEASEL]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TEDDIURSA]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_URSARING]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SLUGMA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGCARGO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SWINUB]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PILOSWINE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CORSOLA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_REMORAID]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_OCTILLERY]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DELIBIRD]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MANTINE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SKARMORY]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HOUNDOUR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HOUNDOOM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KINGDRA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PHANPY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DONPHAN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PORYGON2]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STANTLER]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SMEARGLE]    = TMHM_LEARNSET(TMHM(TM35_FLAMETHROWER)),
-
-    [SPECIES_TYROGUE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HITMONTOP]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SMOOCHUM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ELEKID]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGBY]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MILTANK]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BLISSEY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_RAIKOU]      = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ENTEI]       = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SUICUNE]     = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LARVITAR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PUPITAR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYRANITAR]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LUGIA]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HO_OH]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CELEBI]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TREECKO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GROVYLE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SCEPTILE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TORCHIC]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_COMBUSKEN]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BLAZIKEN]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MUDKIP]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MARSHTOMP]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SWAMPERT]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_POOCHYENA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MIGHTYENA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZIGZAGOON]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LINOONE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WURMPLE]     = TMHM_LEARNSET(0),
-
-    [SPECIES_SILCOON]     = TMHM_LEARNSET(0),
-
-    [SPECIES_BEAUTIFLY]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CASCOON]     = TMHM_LEARNSET(0),
-
-    [SPECIES_DUSTOX]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LOTAD]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LOMBRE]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LUDICOLO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SEEDOT]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NUZLEAF]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHIFTRY]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TAILLOW]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SWELLOW]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WINGULL]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PELIPPER]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_RALTS]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KIRLIA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GARDEVOIR]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SURSKIT]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MASQUERAIN]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SHROOMISH]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BRELOOM]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SLAKOTH]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VIGOROTH]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SLAKING]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NINCADA]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NINJASK]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHEDINJA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WHISMUR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LOUDRED]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_EXPLOUD]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MAKUHITA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HARIYAMA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AZURILL]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NOSEPASS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SKITTY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DELCATTY]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SABLEYE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MAWILE]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ARON]        = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LAIRON]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AGGRON]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MEDITITE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MEDICHAM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ELECTRIKE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MANECTRIC]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PLUSLE]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MINUN]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VOLBEAT]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ILLUMISE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ROSELIA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GULPIN]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SWALOT]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CARVANHA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SHARPEDO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WAILMER]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WAILORD]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NUMEL]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CAMERUPT]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TORKOAL]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SPOINK]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GRUMPIG]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SPINDA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TRAPINCH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VIBRAVA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLYGON]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CACNEA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CACTURNE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SWABLU]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALTARIA]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZANGOOSE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SEVIPER]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LUNATONE]    = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SOLROCK]     = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BARBOACH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WHISCASH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CORPHISH]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CRAWDAUNT]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BALTOY]      = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CLAYDOL]     = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LILEEP]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CRADILY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ANORITH]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ARMALDO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_FEEBAS]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MILOTIC]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CASTFORM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KECLEON]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SHUPPET]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BANETTE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUSKULL]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUSCLOPS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TROPIUS]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHIMECHO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ABSOL]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WYNAUT]      = TMHM_LEARNSET(TMHM(TM20_SAFEGUARD)),
-
-    [SPECIES_SNORUNT]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GLALIE]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SPHEAL]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SEALEO]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WALREIN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CLAMPERL]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HUNTAIL]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GOREBYSS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_RELICANTH]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LUVDISC]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BAGON]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHELGON]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SALAMENCE]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BELDUM]      = TMHM_LEARNSET(0),
-
-    [SPECIES_METANG]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_METAGROSS]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_REGIROCK]    = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_REGICE]      = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_REGISTEEL]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LATIAS]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LATIOS]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KYOGRE]      = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GROUDON]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RAYQUAZA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_JIRACHI]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DEOXYS]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TURTWIG]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GROTLE]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TORTERRA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHIMCHAR]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MONFERNO]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_INFERNAPE]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIPLUP]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PRINPLUP]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_EMPOLEON]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_STARLY]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STARAVIA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STARAPTOR]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BIDOOF]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BIBAREL]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KRICKETOT]   = TMHM_LEARNSET(0),
-
-    [SPECIES_KRICKETUNE]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHINX]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LUXIO]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LUXRAY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BUDEW]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ROSERADE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CRANIDOS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RAMPARDOS]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHIELDON]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BASTIODON]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BURMY]       = TMHM_LEARNSET(TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)),
-
-    [SPECIES_WORMADAM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MOTHIM]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_COMBEE]      = TMHM_LEARNSET(0),
-
-    [SPECIES_VESPIQUEN]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PACHIRISU]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BUIZEL]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_FLOATZEL]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CHERUBI]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHERRIM]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHELLOS]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GASTRODON]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AMBIPOM]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DRIFLOON]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DRIFBLIM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BUNEARY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LOPUNNY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MISMAGIUS]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HONCHKROW]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GLAMEOW]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PURUGLY]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CHINGLING]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STUNKY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SKUNTANK]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BRONZOR]     = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BRONZONG]    = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BONSLY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MIMEJR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HAPPINY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CHATOT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SPIRITOMB]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GIBLE]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GABITE]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GARCHOMP]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MUNCHLAX]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_RIOLU]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LUCARIO]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HIPPOPOTAS]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HIPPOWDON]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SKORUPI]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DRAPION]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CROAGUNK]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TOXICROAK]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CARNIVINE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FINNEON]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_LUMINEON]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MANTYKE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SNOVER]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ABOMASNOW]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_WEAVILE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGNEZONE]   = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LICKILICKY]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_RHYPERIOR]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TANGROWTH]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ELECTIVIRE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGMORTAR]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TOGEKISS]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_YANMEGA]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LEAFEON]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GLACEON]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GLISCOR]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAMOSWINE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PORYGON_Z]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GALLADE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PROBOPASS]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUSKNOIR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FROSLASS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ROTOM]       = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_UXIE]        = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MESPRIT]     = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AZELF]       = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DIALGA]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PALKIA]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HEATRAN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_REGIGIGAS]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GIRATINA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CRESSELIA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PHIONE]      = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MANAPHY]     = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DARKRAI]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHAYMIN]     = TMHM_LEARNSET(TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ARCEUS]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VICTINI]     = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SNIVY]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SERVINE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SERPERIOR]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TEPIG]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIGNITE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EMBOAR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_OSHAWOTT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DEWOTT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SAMUROTT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PATRAT]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WATCHOG]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LILLIPUP]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HERDIER]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STOUTLAND]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PURRLOIN]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LIEPARD]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PANSAGE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SIMISAGE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PANSEAR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SIMISEAR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PANPOUR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SIMIPOUR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MUNNA]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MUSHARNA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PIDOVE]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TRANQUILL]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_UNFEZANT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BLITZLE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZEBSTRIKA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ROGGENROLA]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BOLDORE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GIGALITH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WOOBAT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SWOOBAT]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DRILBUR]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EXCADRILL]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AUDINO]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TIMBURR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GURDURR]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CONKELDURR]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYMPOLE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PALPITOAD]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SEISMITOAD]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_THROH]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SAWK]        = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SEWADDLE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SWADLOON]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LEAVANNY]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VENIPEDE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WHIRLIPEDE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SCOLIPEDE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_COTTONEE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WHIMSICOTT]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PETILIL]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LILLIGANT]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BASCULIN]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)),
-
-    [SPECIES_SANDILE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KROKOROK]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KROOKODILE]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DARUMAKA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DARMANITAN]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MARACTUS]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DWEBBLE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CRUSTLE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SCRAGGY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SCRAFTY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SIGILYPH]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_YAMASK]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_COFAGRIGUS]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TIRTOUGA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CARRACOSTA]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ARCHEN]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ARCHEOPS]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TRUBBISH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GARBODOR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZORUA]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZOROARK]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MINCCINO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CINCCINO]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOTHITA]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOTHORITA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOTHITELLE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SOLOSIS]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUOSION]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_REUNICLUS]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DUCKLETT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SWANNA]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VANILLITE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VANILLISH]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_VANILLUXE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DEERLING]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SAWSBUCK]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EMOLGA]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KARRABLAST]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ESCAVALIER]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FOONGUS]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AMOONGUSS]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FRILLISH]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_JELLICENT]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ALOMOMOLA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_JOLTIK]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GALVANTULA]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FERROSEED]   = TMHM_LEARNSET(TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FERROTHORN]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KLINK]       = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KLANG]       = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KLINKLANG]   = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYNAMO]      = TMHM_LEARNSET(0),
-
-    [SPECIES_EELEKTRIK]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_EELEKTROSS]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ELGYEM]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BEHEEYEM]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LITWICK]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LAMPENT]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHANDELURE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AXEW]        = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FRAXURE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HAXORUS]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CUBCHOO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BEARTIC]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CRYOGONAL]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SHELMET]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ACCELGOR]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STUNFISK]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MIENFOO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MIENSHAO]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DRUDDIGON]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOLETT]      = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOLURK]      = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PAWNIARD]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BISHARP]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BOUFFALANT]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RUFFLET]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BRAVIARY]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VULLABY]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MANDIBUZZ]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HEATMOR]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DURANT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DEINO]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZWEILOUS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HYDREIGON]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LARVESTA]    = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VOLCARONA]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_COBALION]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TERRAKION]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VIRIZION]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TORNADUS]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_THUNDURUS]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RESHIRAM]    = TMHM_LEARNSET(TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZEKROM]      = TMHM_LEARNSET(TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LANDORUS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KYUREM]      = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KELDEO]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MELOETTA]    = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GENESECT]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHESPIN]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_QUILLADIN]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHESNAUGHT]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FENNEKIN]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BRAIXEN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DELPHOX]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FROAKIE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_FROGADIER]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GRENINJA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BUNNELBY]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DIGGERSBY]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLETCHLING]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLETCHINDER] = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TALONFLAME]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SCATTERBUG]  = TMHM_LEARNSET(0),
-
-    [SPECIES_SPEWPA]      = TMHM_LEARNSET(TMHM(TM17_PROTECT)),
-
-    [SPECIES_VIVILLON]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LITLEO]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PYROAR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLABEBE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLOETTE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FLORGES]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SKIDDO]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOGOAT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PANCHAM]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PANGORO]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_FURFROU]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ESPURR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MEOWSTIC]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HONEDGE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DOUBLADE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AEGISLASH]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SPRITZEE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AROMATISSE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SWIRLIX]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SLURPUFF]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_INKAY]       = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MALAMAR]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BINACLE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BARBARACLE]  = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SKRELP]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DRAGALGE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CLAUNCHER]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_CLAWITZER]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_HELIOPTILE]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HELIOLISK]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYRUNT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYRANTRUM]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_AMAURA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AURORUS]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SYLVEON]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HAWLUCHA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DEDENNE]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CARBINK]     = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOOMY]       = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SLIGGOO]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_GOODRA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_KLEFKI]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PHANTUMP]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TREVENANT]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PUMPKABOO]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GOURGEIST]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BERGMITE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_AVALUGG]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NOIBAT]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_NOIVERN]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_XERNEAS]     = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_YVELTAL]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZYGARDE]     = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DIANCIE]     = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HOOPA]       = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VOLCANION]   = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ROWLET]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DARTRIX]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DECIDUEYE]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LITTEN]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TORRACAT]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_INCINEROAR]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_POPPLIO]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_BRIONNE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PRIMARINA]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_PIKIPEK]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TRUMBEAK]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TOUCANNON]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM09_BULLET_SEED)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_YUNGOOS]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GUMSHOOS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GRUBBIN]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CHARJABUG]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_VIKAVOLT]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CRABRAWLER]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CRABOMINABLE]= TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ORICORIO]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CUTIEFLY]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_RIBOMBEE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ROCKRUFF]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LYCANROC]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WISHIWASHI]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(HM08_DIVE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MAREANIE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TOXAPEX]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_MUDBRAY]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MUDSDALE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_DEWPIDER]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_ARAQUANID]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(HM03_SURF)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_FOMANTIS]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LURANTIS]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MORELULL]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SHIINOTIC]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SALANDIT]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SALAZZLE]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STUFFUL]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BEWEAR]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BOUNSWEET]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STEENEE]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TSAREENA]    = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_COMFEY]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ORANGURU]    = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PASSIMIAN]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WIMPOD]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)),
-
-    [SPECIES_GOLISOPOD]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_SANDYGAST]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PALOSSAND]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PYUKUMUKU]   = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TYPE_NULL]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_SILVALLY]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MINIOR]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KOMALA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TURTONATOR]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TOGEDEMARU]  = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MIMIKYU]     = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BRUXISH]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM49_SNATCH)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DRAMPA]      = TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_DHELMISE]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(HM03_SURF)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_JANGMO_O]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_HAKAMO_O]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KOMMO_O]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM45_ATTRACT)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_TAPU_KOKO]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TAPU_LELE]   = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TAPU_BULU]   = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_TAPU_FINI]   = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM03_SURF)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)
-											| TMHM(HM07_WATERFALL)
-											| TMHM(TM03_WATER_PULSE)),
-
-    [SPECIES_COSMOG]      = TMHM_LEARNSET(0),
-
-    [SPECIES_COSMOEM]     = TMHM_LEARNSET(0),
-
-    [SPECIES_SOLGALEO]    = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_LUNALA]      = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM05_ROAR)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NIHILEGO]    = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BUZZWOLE]    = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_PHEROMOSA]   = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_XURKITREE]   = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_CELESTEELA]  = TMHM_LEARNSET(TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KARTANA]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM19_GIGA_DRAIN)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_GUZZLORD]    = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NECROZMA]    = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MAGEARNA]    = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM24_THUNDERBOLT)),
-
-    [SPECIES_MARSHADOW]   = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_POIPOLE]     = TMHM_LEARNSET(TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_NAGANADEL]   = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_STAKATAKA]   = TMHM_LEARNSET(TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_BLACEPHALON] = TMHM_LEARNSET(TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM50_OVERHEAT)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ZERAORA]     = TMHM_LEARNSET(TMHM(TM40_AERIAL_ACE)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM01_FOCUS_PUNCH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM06_TOXIC)),
-	//TMs of LGPE don't match with USUM
-    [SPECIES_MELTAN] = TMHM_LEARNSET(TMHM(TM10_HIDDEN_POWER)),
-
-    [SPECIES_MELMETAL] = TMHM_LEARNSET(TMHM(TM10_HIDDEN_POWER)),
-
-    [SPECIES_BURMY_SANDY] = TMHM_LEARNSET(TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)),
-
-    [SPECIES_BURMY_TRASH] = TMHM_LEARNSET(TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM17_PROTECT)),
-
-    [SPECIES_WORMADAM_SANDY]= TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM37_SANDSTORM)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_WORMADAM_TRASH]= TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM46_THIEF)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ROTOM_HEAT]  = TMHM_LEARNSET(TMHM(TM50_OVERHEAT)),
-
-    [SPECIES_ROTOM_WASH]  = TMHM_LEARNSET(0),
-
-    [SPECIES_ROTOM_FROST] = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)),
-
-    [SPECIES_ROTOM_FAN]   = TMHM_LEARNSET(0),
-
-    [SPECIES_ROTOM_MOW]   = TMHM_LEARNSET(0),
-
-    [SPECIES_KYUREM_BLACK]= TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_KYUREM_WHITE]= TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM02_DRAGON_CLAW)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM02_FLY)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM07_HAIL)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM39_ROCK_TOMB)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM47_STEEL_WING)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_MEOWSTIC_F]= TMHM_LEARNSET(TMHM(TM45_ATTRACT)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM32_DOUBLE_TEAM)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM21_FRUSTRATION)
-											| TMHM(TM10_HIDDEN_POWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM18_RAIN_DANCE)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM27_RETURN)
-											| TMHM(TM20_SAFEGUARD)
-											| TMHM(TM43_SECRET_POWER)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM34_SHOCK_WAVE)
-											| TMHM(TM48_SKILL_SWAP)
-											| TMHM(TM49_SNATCH)
-											| TMHM(TM11_SUNNY_DAY)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM41_TORMENT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_RATTATA] = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_RATICATE]= TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM08_BULK_UP)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_RAICHU]      = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_SANDSHREW]   = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_SANDSLASH]   = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_VULPIX]   = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_NINETALES]   = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM04_CALM_MIND)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_DIGLETT]     = TMHM_LEARNSET(TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_DUGTRIO]     = TMHM_LEARNSET(TMHM(HM01_CUT)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_MEOWTH]      = TMHM_LEARNSET(TMHM(HM01_CUT)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_PERSIAN]      = TMHM_LEARNSET(TMHM(HM01_CUT)
-											| TMHM(TM42_FACADE)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_GEODUDE]     = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_GRAVELER]     = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_GOLEM]     = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_GRIMER]      = TMHM_LEARNSET(TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_MUK]      = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM12_TAUNT)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_EXEGGUTOR]   = TMHM_LEARNSET(TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(HM05_FLASH)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM16_LIGHT_SCREEN)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM29_PSYCHIC)
-											| TMHM(TM33_REFLECT)
-											| TMHM(TM44_REST)
-											| TMHM(TM22_SOLARBEAM)
-											| TMHM(TM36_SLUDGE_BOMB)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM06_TOXIC)),
-
-    [SPECIES_ALOLAN_MAROWAK]     = TMHM_LEARNSET(TMHM(TM14_BLIZZARD)
-											| TMHM(TM31_BRICK_BREAK)
-											| TMHM(TM28_DIG)
-											| TMHM(TM26_EARTHQUAKE)
-											| TMHM(TM42_FACADE)
-											| TMHM(TM38_FIRE_BLAST)
-											| TMHM(TM35_FLAMETHROWER)
-											| TMHM(TM15_HYPER_BEAM)
-											| TMHM(TM13_ICE_BEAM)
-											| TMHM(TM23_IRON_TAIL)
-											| TMHM(TM17_PROTECT)
-											| TMHM(TM44_REST)
-											| TMHM(HM06_ROCK_SMASH)
-											| TMHM(TM30_SHADOW_BALL)
-											| TMHM(HM04_STRENGTH)
-											| TMHM(TM24_THUNDERBOLT)
-											| TMHM(TM25_THUNDER)
-											| TMHM(TM06_TOXIC)),
-
+    TMHM_LEARNSET_END
+};
+
+static const u8 sBulbasaurTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sIvysaurTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVenusaurTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCharmanderTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCharmeleonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCharizardTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSquirtleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWartortleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBlastoiseTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCaterpieTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMetapodTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sButterfreeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWeedleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKakunaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBeedrillTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPidgeyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPidgeottoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPidgeotTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRattataTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRaticateTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSpearowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFearowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sEkansTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sArbokTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPikachuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRaichuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSandshrewTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSandslashTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNidoran_FTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNidorinaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNidoqueenTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNidoran_MTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNidorinoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNidokingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sClefairyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sClefableTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVulpixTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNinetalesTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sJigglypuffTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWigglytuffTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sZubatTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGolbatTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sOddishTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGloomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVileplumeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sParasTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sParasectTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVenonatTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVenomothTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDiglettTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDugtrioTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMeowthTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPersianTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPsyduckTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGolduckTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMankeyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPrimeapeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGrowlitheTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sArcanineTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPoliwagTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPoliwhirlTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPoliwrathTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAbraTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKadabraTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAlakazamTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMachopTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMachokeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMachampTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBellsproutTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWeepinbellTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVictreebelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTentacoolTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTentacruelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGeodudeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGravelerTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGolemTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPonytaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRapidashTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSlowpokeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSlowbroTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagnemiteTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagnetonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFarfetchdTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDoduoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDodrioTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSeelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDewgongTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGrimerTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMukTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShellderTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCloysterTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGastlyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHaunterTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGengarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sOnixTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDrowzeeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHypnoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKrabbyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKinglerTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVoltorbTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sElectrodeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sExeggcuteTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sExeggutorTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCuboneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMarowakTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHitmonleeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHitmonchanTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLickitungTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKoffingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWeezingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRhyhornTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRhydonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChanseyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTangelaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKangaskhanTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHorseaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSeadraTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGoldeenTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSeakingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStaryuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStarmieTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMr_MimeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sScytherTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sJynxTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sElectabuzzTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagmarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPinsirTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTaurosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagikarpTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGyaradosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLaprasTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDittoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sEeveeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVaporeonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sJolteonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFlareonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPorygonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sOmanyteTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sOmastarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKabutoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKabutopsTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAerodactylTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSnorlaxTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sArticunoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sZapdosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMoltresTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDratiniTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDragonairTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDragoniteTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMewtwoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMewTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChikoritaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBayleefTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMeganiumTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCyndaquilTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sQuilavaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTyphlosionTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTotodileTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCroconawTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFeraligatrTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSentretTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFurretTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHoothootTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNoctowlTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLedybaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLedianTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSpinarakTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAriadosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCrobatTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChinchouTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLanturnTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPichuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCleffaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sIgglybuffTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTogepiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTogeticTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNatuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sXatuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMareepTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFlaaffyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAmpharosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBellossomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMarillTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAzumarillTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSudowoodoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPolitoedTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHoppipTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSkiploomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sJumpluffTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAipomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSunkernTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSunfloraTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sYanmaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWooperTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sQuagsireTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sEspeonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sUmbreonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMurkrowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSlowkingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMisdreavusTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sUnownTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWobbuffetTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGirafarigTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPinecoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sForretressTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDunsparceTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGligarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSteelixTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSnubbullTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGranbullTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sQwilfishTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sScizorTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShuckleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHeracrossTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSneaselTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTeddiursaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sUrsaringTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSlugmaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagcargoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSwinubTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPiloswineTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCorsolaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRemoraidTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sOctilleryTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDelibirdTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMantineTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSkarmoryTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHoundourTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHoundoomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKingdraTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPhanpyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDonphanTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPorygon2TMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStantlerTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSmeargleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTyrogueTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHitmontopTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSmoochumTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sElekidTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagbyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMiltankTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBlisseyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRaikouTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sEnteiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSuicuneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLarvitarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPupitarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTyranitarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLugiaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHo_OhTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCelebiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTreeckoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGrovyleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSceptileTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTorchicTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCombuskenTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBlazikenTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMudkipTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMarshtompTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSwampertTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPoochyenaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMightyenaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sZigzagoonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLinooneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWurmpleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSilcoonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBeautiflyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCascoonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDustoxTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLotadTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLombreTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLudicoloTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSeedotTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNuzleafTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShiftryTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNincadaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNinjaskTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShedinjaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTaillowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSwellowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShroomishTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBreloomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSpindaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWingullTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPelipperTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSurskitTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMasquerainTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWailmerTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWailordTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSkittyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDelcattyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKecleonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBaltoyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sClaydolTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNosepassTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTorkoalTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSableyeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBarboachTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWhiscashTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLuvdiscTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCorphishTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCrawdauntTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFeebasTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMiloticTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCarvanhaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSharpedoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTrapinchTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVibravaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFlygonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMakuhitaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHariyamaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sElectrikeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sManectricTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sNumelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCameruptTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSphealTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSealeoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWalreinTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCacneaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCacturneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSnoruntTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGlalieTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLunatoneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSolrockTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAzurillTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSpoinkTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGrumpigTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPlusleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMinunTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMawileTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMedititeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMedichamTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSwabluTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAltariaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWynautTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDuskullTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDusclopsTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRoseliaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSlakothTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVigorothTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSlakingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGulpinTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSwalotTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTropiusTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWhismurTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLoudredTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sExploudTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sClamperlTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHuntailTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGorebyssTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAbsolTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShuppetTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBanetteTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSeviperTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sZangooseTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRelicanthTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAronTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLaironTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAggronTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCastformTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVolbeatTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sIllumiseTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLileepTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCradilyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAnorithTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sArmaldoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRaltsTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKirliaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGardevoirTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBagonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShelgonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSalamenceTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBeldumTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMetangTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMetagrossTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRegirockTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRegiceTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRegisteelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKyogreTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGroudonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRayquazaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLatiasTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLatiosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sJirachiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDeoxysTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChimechoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTurtwigTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGrotleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTorterraTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChimcharTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMonfernoTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sInfernapeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPiplupTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPrinplupTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sEmpoleonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStarlyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStaraviaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStaraptorTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBidoofTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBibarelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKricketotTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sKricketuneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShinxTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLuxioTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLuxrayTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBudewTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRoseradeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCranidosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRampardosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShieldonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBastiodonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBurmyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWormadamTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMothimTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCombeeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sVespiquenTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPachirisuTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBuizelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFloatzelTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCherubiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCherrimTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShellosTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGastrodonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAmbipomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDrifloonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDrifblimTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBunearyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLopunnyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMismagiusTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHonchkrowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGlameowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPuruglyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChinglingTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sStunkyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSkuntankTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBronzorTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBronzongTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sBonslyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMimejrTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHappinyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sChatotTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSpiritombTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGibleTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGabiteTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGarchompTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMunchlaxTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRioluTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLucarioTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHippopotasTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHippowdonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSkorupiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDrapionTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCroagunkTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sToxicroakTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCarnivineTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFinneonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLumineonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMantykeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sSnoverTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAbomasnowTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sWeavileTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagnezoneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLickilickyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRhyperiorTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTangrowthTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sElectivireTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMagmortarTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sTogekissTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sYanmegaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sLeafeonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGlaceonTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGliscorTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMamoswineTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPorygon_ZTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGalladeTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sProbopassTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDusknoirTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sFroslassTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRotomTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sUxieTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sMespritTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sAzelfTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDialgaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPalkiaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sHeatranTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sRegigigasTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sGiratinaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sCresseliaTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sPhioneTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sManaphyTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sDarkraiTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sShayminTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+   
+static const u8 sArceusTMHMLearnset[] =
+{
+	TMHM_LEARNSET_END
+};
+
+
+
+const u8 *const gTMHMLearnsets[] =
+{
+	[SPECIES_NONE] = sNoneTMHMLearnset,
+	[SPECIES_BULBASAUR] = sBulbasaurTMHMLearnset,
+    [SPECIES_IVYSAUR] = sIvysaurTMHMLearnset,
+    [SPECIES_VENUSAUR] = sVenusaurTMHMLearnset,
+    [SPECIES_CHARMANDER] = sCharmanderTMHMLearnset,
+    [SPECIES_CHARMELEON] = sCharmeleonTMHMLearnset,
+    [SPECIES_CHARIZARD] = sCharizardTMHMLearnset,
+    [SPECIES_SQUIRTLE] = sSquirtleTMHMLearnset,
+    [SPECIES_WARTORTLE] = sWartortleTMHMLearnset,
+    [SPECIES_BLASTOISE] = sBlastoiseTMHMLearnset,
+    [SPECIES_CATERPIE] = sCaterpieTMHMLearnset,
+    [SPECIES_METAPOD] = sMetapodTMHMLearnset,
+    [SPECIES_BUTTERFREE] = sButterfreeTMHMLearnset,
+    [SPECIES_WEEDLE] = sWeedleTMHMLearnset,
+    [SPECIES_KAKUNA] = sKakunaTMHMLearnset,
+    [SPECIES_BEEDRILL] = sBeedrillTMHMLearnset,
+    [SPECIES_PIDGEY] = sPidgeyTMHMLearnset,
+    [SPECIES_PIDGEOTTO] = sPidgeottoTMHMLearnset,
+    [SPECIES_PIDGEOT] = sPidgeotTMHMLearnset,
+    [SPECIES_RATTATA] = sRattataTMHMLearnset,
+    [SPECIES_RATICATE] = sRaticateTMHMLearnset,
+    [SPECIES_SPEAROW] = sSpearowTMHMLearnset,
+    [SPECIES_FEAROW] = sFearowTMHMLearnset,
+    [SPECIES_EKANS] = sEkansTMHMLearnset,
+    [SPECIES_ARBOK] = sArbokTMHMLearnset,
+    [SPECIES_PIKACHU] = sPikachuTMHMLearnset,
+    [SPECIES_RAICHU] = sRaichuTMHMLearnset,
+    [SPECIES_SANDSHREW] = sSandshrewTMHMLearnset,
+    [SPECIES_SANDSLASH] = sSandslashTMHMLearnset,
+    [SPECIES_NIDORAN_F] = sNidoran_FTMHMLearnset,
+    [SPECIES_NIDORINA] = sNidorinaTMHMLearnset,
+    [SPECIES_NIDOQUEEN] = sNidoqueenTMHMLearnset,
+    [SPECIES_NIDORAN_M] = sNidoran_MTMHMLearnset,
+    [SPECIES_NIDORINO] = sNidorinoTMHMLearnset,
+    [SPECIES_NIDOKING] = sNidokingTMHMLearnset,
+    [SPECIES_CLEFAIRY] = sClefairyTMHMLearnset,
+    [SPECIES_CLEFABLE] = sClefableTMHMLearnset,
+    [SPECIES_VULPIX] = sVulpixTMHMLearnset,
+    [SPECIES_NINETALES] = sNinetalesTMHMLearnset,
+    [SPECIES_JIGGLYPUFF] = sJigglypuffTMHMLearnset,
+    [SPECIES_WIGGLYTUFF] = sWigglytuffTMHMLearnset,
+    [SPECIES_ZUBAT] = sZubatTMHMLearnset,
+    [SPECIES_GOLBAT] = sGolbatTMHMLearnset,
+    [SPECIES_ODDISH] = sOddishTMHMLearnset,
+    [SPECIES_GLOOM] = sGloomTMHMLearnset,
+    [SPECIES_VILEPLUME] = sVileplumeTMHMLearnset,
+    [SPECIES_PARAS] = sParasTMHMLearnset,
+    [SPECIES_PARASECT] = sParasectTMHMLearnset,
+    [SPECIES_VENONAT] = sVenonatTMHMLearnset,
+    [SPECIES_VENOMOTH] = sVenomothTMHMLearnset,
+    [SPECIES_DIGLETT] = sDiglettTMHMLearnset,
+    [SPECIES_DUGTRIO] = sDugtrioTMHMLearnset,
+    [SPECIES_MEOWTH] = sMeowthTMHMLearnset,
+    [SPECIES_PERSIAN] = sPersianTMHMLearnset,
+    [SPECIES_PSYDUCK] = sPsyduckTMHMLearnset,
+    [SPECIES_GOLDUCK] = sGolduckTMHMLearnset,
+    [SPECIES_MANKEY] = sMankeyTMHMLearnset,
+    [SPECIES_PRIMEAPE] = sPrimeapeTMHMLearnset,
+    [SPECIES_GROWLITHE] = sGrowlitheTMHMLearnset,
+    [SPECIES_ARCANINE] = sArcanineTMHMLearnset,
+    [SPECIES_POLIWAG] = sPoliwagTMHMLearnset,
+    [SPECIES_POLIWHIRL] = sPoliwhirlTMHMLearnset,
+    [SPECIES_POLIWRATH] = sPoliwrathTMHMLearnset,
+    [SPECIES_ABRA] = sAbraTMHMLearnset,
+    [SPECIES_KADABRA] = sKadabraTMHMLearnset,
+    [SPECIES_ALAKAZAM] = sAlakazamTMHMLearnset,
+    [SPECIES_MACHOP] = sMachopTMHMLearnset,
+    [SPECIES_MACHOKE] = sMachokeTMHMLearnset,
+    [SPECIES_MACHAMP] = sMachampTMHMLearnset,
+    [SPECIES_BELLSPROUT] = sBellsproutTMHMLearnset,
+    [SPECIES_WEEPINBELL] = sWeepinbellTMHMLearnset,
+    [SPECIES_VICTREEBEL] = sVictreebelTMHMLearnset,
+    [SPECIES_TENTACOOL] = sTentacoolTMHMLearnset,
+    [SPECIES_TENTACRUEL] = sTentacruelTMHMLearnset,
+    [SPECIES_GEODUDE] = sGeodudeTMHMLearnset,
+    [SPECIES_GRAVELER] = sGravelerTMHMLearnset,
+    [SPECIES_GOLEM] = sGolemTMHMLearnset,
+    [SPECIES_PONYTA] = sPonytaTMHMLearnset,
+    [SPECIES_RAPIDASH] = sRapidashTMHMLearnset,
+    [SPECIES_SLOWPOKE] = sSlowpokeTMHMLearnset,
+    [SPECIES_SLOWBRO] = sSlowbroTMHMLearnset,
+    [SPECIES_MAGNEMITE] = sMagnemiteTMHMLearnset,
+    [SPECIES_MAGNETON] = sMagnetonTMHMLearnset,
+    [SPECIES_FARFETCHD] = sFarfetchdTMHMLearnset,
+    [SPECIES_DODUO] = sDoduoTMHMLearnset,
+    [SPECIES_DODRIO] = sDodrioTMHMLearnset,
+    [SPECIES_SEEL] = sSeelTMHMLearnset,
+    [SPECIES_DEWGONG] = sDewgongTMHMLearnset,
+    [SPECIES_GRIMER] = sGrimerTMHMLearnset,
+    [SPECIES_MUK] = sMukTMHMLearnset,
+    [SPECIES_SHELLDER] = sShellderTMHMLearnset,
+    [SPECIES_CLOYSTER] = sCloysterTMHMLearnset,
+    [SPECIES_GASTLY] = sGastlyTMHMLearnset,
+    [SPECIES_HAUNTER] = sHaunterTMHMLearnset,
+    [SPECIES_GENGAR] = sGengarTMHMLearnset,
+    [SPECIES_ONIX] = sOnixTMHMLearnset,
+    [SPECIES_DROWZEE] = sDrowzeeTMHMLearnset,
+    [SPECIES_HYPNO] = sHypnoTMHMLearnset,
+    [SPECIES_KRABBY] = sKrabbyTMHMLearnset,
+    [SPECIES_KINGLER] = sKinglerTMHMLearnset,
+    [SPECIES_VOLTORB] = sVoltorbTMHMLearnset,
+    [SPECIES_ELECTRODE] = sElectrodeTMHMLearnset,
+    [SPECIES_EXEGGCUTE] = sExeggcuteTMHMLearnset,
+    [SPECIES_EXEGGUTOR] = sExeggutorTMHMLearnset,
+    [SPECIES_CUBONE] = sCuboneTMHMLearnset,
+    [SPECIES_MAROWAK] = sMarowakTMHMLearnset,
+    [SPECIES_HITMONLEE] = sHitmonleeTMHMLearnset,
+    [SPECIES_HITMONCHAN] = sHitmonchanTMHMLearnset,
+    [SPECIES_LICKITUNG] = sLickitungTMHMLearnset,
+    [SPECIES_KOFFING] = sKoffingTMHMLearnset,
+    [SPECIES_WEEZING] = sWeezingTMHMLearnset,
+    [SPECIES_RHYHORN] = sRhyhornTMHMLearnset,
+    [SPECIES_RHYDON] = sRhydonTMHMLearnset,
+    [SPECIES_CHANSEY] = sChanseyTMHMLearnset,
+    [SPECIES_TANGELA] = sTangelaTMHMLearnset,
+    [SPECIES_KANGASKHAN] = sKangaskhanTMHMLearnset,
+    [SPECIES_HORSEA] = sHorseaTMHMLearnset,
+    [SPECIES_SEADRA] = sSeadraTMHMLearnset,
+    [SPECIES_GOLDEEN] = sGoldeenTMHMLearnset,
+    [SPECIES_SEAKING] = sSeakingTMHMLearnset,
+    [SPECIES_STARYU] = sStaryuTMHMLearnset,
+    [SPECIES_STARMIE] = sStarmieTMHMLearnset,
+    [SPECIES_MR_MIME] = sMr_MimeTMHMLearnset,
+    [SPECIES_SCYTHER] = sScytherTMHMLearnset,
+    [SPECIES_JYNX] = sJynxTMHMLearnset,
+    [SPECIES_ELECTABUZZ] = sElectabuzzTMHMLearnset,
+    [SPECIES_MAGMAR] = sMagmarTMHMLearnset,
+    [SPECIES_PINSIR] = sPinsirTMHMLearnset,
+    [SPECIES_TAUROS] = sTaurosTMHMLearnset,
+    [SPECIES_MAGIKARP] = sMagikarpTMHMLearnset,
+    [SPECIES_GYARADOS] = sGyaradosTMHMLearnset,
+    [SPECIES_LAPRAS] = sLaprasTMHMLearnset,
+    [SPECIES_DITTO] = sDittoTMHMLearnset,
+    [SPECIES_EEVEE] = sEeveeTMHMLearnset,
+    [SPECIES_VAPOREON] = sVaporeonTMHMLearnset,
+    [SPECIES_JOLTEON] = sJolteonTMHMLearnset,
+    [SPECIES_FLAREON] = sFlareonTMHMLearnset,
+    [SPECIES_PORYGON] = sPorygonTMHMLearnset,
+    [SPECIES_OMANYTE] = sOmanyteTMHMLearnset,
+    [SPECIES_OMASTAR] = sOmastarTMHMLearnset,
+    [SPECIES_KABUTO] = sKabutoTMHMLearnset,
+    [SPECIES_KABUTOPS] = sKabutopsTMHMLearnset,
+    [SPECIES_AERODACTYL] = sAerodactylTMHMLearnset,
+    [SPECIES_SNORLAX] = sSnorlaxTMHMLearnset,
+    [SPECIES_ARTICUNO] = sArticunoTMHMLearnset,
+    [SPECIES_ZAPDOS] = sZapdosTMHMLearnset,
+    [SPECIES_MOLTRES] = sMoltresTMHMLearnset,
+    [SPECIES_DRATINI] = sDratiniTMHMLearnset,
+    [SPECIES_DRAGONAIR] = sDragonairTMHMLearnset,
+    [SPECIES_DRAGONITE] = sDragoniteTMHMLearnset,
+    [SPECIES_MEWTWO] = sMewtwoTMHMLearnset,
+    [SPECIES_MEW] = sMewTMHMLearnset,
+    [SPECIES_CHIKORITA] = sChikoritaTMHMLearnset,
+    [SPECIES_BAYLEEF] = sBayleefTMHMLearnset,
+    [SPECIES_MEGANIUM] = sMeganiumTMHMLearnset,
+    [SPECIES_CYNDAQUIL] = sCyndaquilTMHMLearnset,
+    [SPECIES_QUILAVA] = sQuilavaTMHMLearnset,
+    [SPECIES_TYPHLOSION] = sTyphlosionTMHMLearnset,
+    [SPECIES_TOTODILE] = sTotodileTMHMLearnset,
+    [SPECIES_CROCONAW] = sCroconawTMHMLearnset,
+    [SPECIES_FERALIGATR] = sFeraligatrTMHMLearnset,
+    [SPECIES_SENTRET] = sSentretTMHMLearnset,
+    [SPECIES_FURRET] = sFurretTMHMLearnset,
+    [SPECIES_HOOTHOOT] = sHoothootTMHMLearnset,
+    [SPECIES_NOCTOWL] = sNoctowlTMHMLearnset,
+    [SPECIES_LEDYBA] = sLedybaTMHMLearnset,
+    [SPECIES_LEDIAN] = sLedianTMHMLearnset,
+    [SPECIES_SPINARAK] = sSpinarakTMHMLearnset,
+    [SPECIES_ARIADOS] = sAriadosTMHMLearnset,
+    [SPECIES_CROBAT] = sCrobatTMHMLearnset,
+    [SPECIES_CHINCHOU] = sChinchouTMHMLearnset,
+    [SPECIES_LANTURN] = sLanturnTMHMLearnset,
+    [SPECIES_PICHU] = sPichuTMHMLearnset,
+    [SPECIES_CLEFFA] = sCleffaTMHMLearnset,
+    [SPECIES_IGGLYBUFF] = sIgglybuffTMHMLearnset,
+    [SPECIES_TOGEPI] = sTogepiTMHMLearnset,
+    [SPECIES_TOGETIC] = sTogeticTMHMLearnset,
+    [SPECIES_NATU] = sNatuTMHMLearnset,
+    [SPECIES_XATU] = sXatuTMHMLearnset,
+    [SPECIES_MAREEP] = sMareepTMHMLearnset,
+    [SPECIES_FLAAFFY] = sFlaaffyTMHMLearnset,
+    [SPECIES_AMPHAROS] = sAmpharosTMHMLearnset,
+    [SPECIES_BELLOSSOM] = sBellossomTMHMLearnset,
+    [SPECIES_MARILL] = sMarillTMHMLearnset,
+    [SPECIES_AZUMARILL] = sAzumarillTMHMLearnset,
+    [SPECIES_SUDOWOODO] = sSudowoodoTMHMLearnset,
+    [SPECIES_POLITOED] = sPolitoedTMHMLearnset,
+    [SPECIES_HOPPIP] = sHoppipTMHMLearnset,
+    [SPECIES_SKIPLOOM] = sSkiploomTMHMLearnset,
+    [SPECIES_JUMPLUFF] = sJumpluffTMHMLearnset,
+    [SPECIES_AIPOM] = sAipomTMHMLearnset,
+    [SPECIES_SUNKERN] = sSunkernTMHMLearnset,
+    [SPECIES_SUNFLORA] = sSunfloraTMHMLearnset,
+    [SPECIES_YANMA] = sYanmaTMHMLearnset,
+    [SPECIES_WOOPER] = sWooperTMHMLearnset,
+    [SPECIES_QUAGSIRE] = sQuagsireTMHMLearnset,
+    [SPECIES_ESPEON] = sEspeonTMHMLearnset,
+    [SPECIES_UMBREON] = sUmbreonTMHMLearnset,
+    [SPECIES_MURKROW] = sMurkrowTMHMLearnset,
+    [SPECIES_SLOWKING] = sSlowkingTMHMLearnset,
+    [SPECIES_MISDREAVUS] = sMisdreavusTMHMLearnset,
+    [SPECIES_UNOWN] = sUnownTMHMLearnset,
+    [SPECIES_WOBBUFFET] = sWobbuffetTMHMLearnset,
+    [SPECIES_GIRAFARIG] = sGirafarigTMHMLearnset,
+    [SPECIES_PINECO] = sPinecoTMHMLearnset,
+    [SPECIES_FORRETRESS] = sForretressTMHMLearnset,
+    [SPECIES_DUNSPARCE] = sDunsparceTMHMLearnset,
+    [SPECIES_GLIGAR] = sGligarTMHMLearnset,
+    [SPECIES_STEELIX] = sSteelixTMHMLearnset,
+    [SPECIES_SNUBBULL] = sSnubbullTMHMLearnset,
+    [SPECIES_GRANBULL] = sGranbullTMHMLearnset,
+    [SPECIES_QWILFISH] = sQwilfishTMHMLearnset,
+    [SPECIES_SCIZOR] = sScizorTMHMLearnset,
+    [SPECIES_SHUCKLE] = sShuckleTMHMLearnset,
+    [SPECIES_HERACROSS] = sHeracrossTMHMLearnset,
+    [SPECIES_SNEASEL] = sSneaselTMHMLearnset,
+    [SPECIES_TEDDIURSA] = sTeddiursaTMHMLearnset,
+    [SPECIES_URSARING] = sUrsaringTMHMLearnset,
+    [SPECIES_SLUGMA] = sSlugmaTMHMLearnset,
+    [SPECIES_MAGCARGO] = sMagcargoTMHMLearnset,
+    [SPECIES_SWINUB] = sSwinubTMHMLearnset,
+    [SPECIES_PILOSWINE] = sPiloswineTMHMLearnset,
+    [SPECIES_CORSOLA] = sCorsolaTMHMLearnset,
+    [SPECIES_REMORAID] = sRemoraidTMHMLearnset,
+    [SPECIES_OCTILLERY] = sOctilleryTMHMLearnset,
+    [SPECIES_DELIBIRD] = sDelibirdTMHMLearnset,
+    [SPECIES_MANTINE] = sMantineTMHMLearnset,
+    [SPECIES_SKARMORY] = sSkarmoryTMHMLearnset,
+    [SPECIES_HOUNDOUR] = sHoundourTMHMLearnset,
+    [SPECIES_HOUNDOOM] = sHoundoomTMHMLearnset,
+    [SPECIES_KINGDRA] = sKingdraTMHMLearnset,
+    [SPECIES_PHANPY] = sPhanpyTMHMLearnset,
+    [SPECIES_DONPHAN] = sDonphanTMHMLearnset,
+    [SPECIES_PORYGON2] = sPorygon2TMHMLearnset,
+    [SPECIES_STANTLER] = sStantlerTMHMLearnset,
+    [SPECIES_SMEARGLE] = sSmeargleTMHMLearnset,
+    [SPECIES_TYROGUE] = sTyrogueTMHMLearnset,
+    [SPECIES_HITMONTOP] = sHitmontopTMHMLearnset,
+    [SPECIES_SMOOCHUM] = sSmoochumTMHMLearnset,
+    [SPECIES_ELEKID] = sElekidTMHMLearnset,
+    [SPECIES_MAGBY] = sMagbyTMHMLearnset,
+    [SPECIES_MILTANK] = sMiltankTMHMLearnset,
+    [SPECIES_BLISSEY] = sBlisseyTMHMLearnset,
+    [SPECIES_RAIKOU] = sRaikouTMHMLearnset,
+    [SPECIES_ENTEI] = sEnteiTMHMLearnset,
+    [SPECIES_SUICUNE] = sSuicuneTMHMLearnset,
+    [SPECIES_LARVITAR] = sLarvitarTMHMLearnset,
+    [SPECIES_PUPITAR] = sPupitarTMHMLearnset,
+    [SPECIES_TYRANITAR] = sTyranitarTMHMLearnset,
+    [SPECIES_LUGIA] = sLugiaTMHMLearnset,
+    [SPECIES_HO_OH] = sHo_OhTMHMLearnset,
+    [SPECIES_CELEBI] = sCelebiTMHMLearnset,
+    [SPECIES_TREECKO] = sTreeckoTMHMLearnset,
+    [SPECIES_GROVYLE] = sGrovyleTMHMLearnset,
+    [SPECIES_SCEPTILE] = sSceptileTMHMLearnset,
+    [SPECIES_TORCHIC] = sTorchicTMHMLearnset,
+    [SPECIES_COMBUSKEN] = sCombuskenTMHMLearnset,
+    [SPECIES_BLAZIKEN] = sBlazikenTMHMLearnset,
+    [SPECIES_MUDKIP] = sMudkipTMHMLearnset,
+    [SPECIES_MARSHTOMP] = sMarshtompTMHMLearnset,
+    [SPECIES_SWAMPERT] = sSwampertTMHMLearnset,
+    [SPECIES_POOCHYENA] = sPoochyenaTMHMLearnset,
+    [SPECIES_MIGHTYENA] = sMightyenaTMHMLearnset,
+    [SPECIES_ZIGZAGOON] = sZigzagoonTMHMLearnset,
+    [SPECIES_LINOONE] = sLinooneTMHMLearnset,
+    [SPECIES_WURMPLE] = sWurmpleTMHMLearnset,
+    [SPECIES_SILCOON] = sSilcoonTMHMLearnset,
+    [SPECIES_BEAUTIFLY] = sBeautiflyTMHMLearnset,
+    [SPECIES_CASCOON] = sCascoonTMHMLearnset,
+    [SPECIES_DUSTOX] = sDustoxTMHMLearnset,
+    [SPECIES_LOTAD] = sLotadTMHMLearnset,
+    [SPECIES_LOMBRE] = sLombreTMHMLearnset,
+    [SPECIES_LUDICOLO] = sLudicoloTMHMLearnset,
+    [SPECIES_SEEDOT] = sSeedotTMHMLearnset,
+    [SPECIES_NUZLEAF] = sNuzleafTMHMLearnset,
+    [SPECIES_SHIFTRY] = sShiftryTMHMLearnset,
+    [SPECIES_NINCADA] = sNincadaTMHMLearnset,
+    [SPECIES_NINJASK] = sNinjaskTMHMLearnset,
+    [SPECIES_SHEDINJA] = sShedinjaTMHMLearnset,
+    [SPECIES_TAILLOW] = sTaillowTMHMLearnset,
+    [SPECIES_SWELLOW] = sSwellowTMHMLearnset,
+    [SPECIES_SHROOMISH] = sShroomishTMHMLearnset,
+    [SPECIES_BRELOOM] = sBreloomTMHMLearnset,
+    [SPECIES_SPINDA] = sSpindaTMHMLearnset,
+    [SPECIES_WINGULL] = sWingullTMHMLearnset,
+    [SPECIES_PELIPPER] = sPelipperTMHMLearnset,
+    [SPECIES_SURSKIT] = sSurskitTMHMLearnset,
+    [SPECIES_MASQUERAIN] = sMasquerainTMHMLearnset,
+    [SPECIES_WAILMER] = sWailmerTMHMLearnset,
+    [SPECIES_WAILORD] = sWailordTMHMLearnset,
+    [SPECIES_SKITTY] = sSkittyTMHMLearnset,
+    [SPECIES_DELCATTY] = sDelcattyTMHMLearnset,
+    [SPECIES_KECLEON] = sKecleonTMHMLearnset,
+    [SPECIES_BALTOY] = sBaltoyTMHMLearnset,
+    [SPECIES_CLAYDOL] = sClaydolTMHMLearnset,
+    [SPECIES_NOSEPASS] = sNosepassTMHMLearnset,
+    [SPECIES_TORKOAL] = sTorkoalTMHMLearnset,
+    [SPECIES_SABLEYE] = sSableyeTMHMLearnset,
+    [SPECIES_BARBOACH] = sBarboachTMHMLearnset,
+    [SPECIES_WHISCASH] = sWhiscashTMHMLearnset,
+    [SPECIES_LUVDISC] = sLuvdiscTMHMLearnset,
+    [SPECIES_CORPHISH] = sCorphishTMHMLearnset,
+    [SPECIES_CRAWDAUNT] = sCrawdauntTMHMLearnset,
+    [SPECIES_FEEBAS] = sFeebasTMHMLearnset,
+    [SPECIES_MILOTIC] = sMiloticTMHMLearnset,
+    [SPECIES_CARVANHA] = sCarvanhaTMHMLearnset,
+    [SPECIES_SHARPEDO] = sSharpedoTMHMLearnset,
+    [SPECIES_TRAPINCH] = sTrapinchTMHMLearnset,
+    [SPECIES_VIBRAVA] = sVibravaTMHMLearnset,
+    [SPECIES_FLYGON] = sFlygonTMHMLearnset,
+    [SPECIES_MAKUHITA] = sMakuhitaTMHMLearnset,
+    [SPECIES_HARIYAMA] = sHariyamaTMHMLearnset,
+    [SPECIES_ELECTRIKE] = sElectrikeTMHMLearnset,
+    [SPECIES_MANECTRIC] = sManectricTMHMLearnset,
+    [SPECIES_NUMEL] = sNumelTMHMLearnset,
+    [SPECIES_CAMERUPT] = sCameruptTMHMLearnset,
+    [SPECIES_SPHEAL] = sSphealTMHMLearnset,
+    [SPECIES_SEALEO] = sSealeoTMHMLearnset,
+    [SPECIES_WALREIN] = sWalreinTMHMLearnset,
+    [SPECIES_CACNEA] = sCacneaTMHMLearnset,
+    [SPECIES_CACTURNE] = sCacturneTMHMLearnset,
+    [SPECIES_SNORUNT] = sSnoruntTMHMLearnset,
+    [SPECIES_GLALIE] = sGlalieTMHMLearnset,
+    [SPECIES_LUNATONE] = sLunatoneTMHMLearnset,
+    [SPECIES_SOLROCK] = sSolrockTMHMLearnset,
+    [SPECIES_AZURILL] = sAzurillTMHMLearnset,
+    [SPECIES_SPOINK] = sSpoinkTMHMLearnset,
+    [SPECIES_GRUMPIG] = sGrumpigTMHMLearnset,
+    [SPECIES_PLUSLE] = sPlusleTMHMLearnset,
+    [SPECIES_MINUN] = sMinunTMHMLearnset,
+    [SPECIES_MAWILE] = sMawileTMHMLearnset,
+    [SPECIES_MEDITITE] = sMedititeTMHMLearnset,
+    [SPECIES_MEDICHAM] = sMedichamTMHMLearnset,
+    [SPECIES_SWABLU] = sSwabluTMHMLearnset,
+    [SPECIES_ALTARIA] = sAltariaTMHMLearnset,
+    [SPECIES_WYNAUT] = sWynautTMHMLearnset,
+    [SPECIES_DUSKULL] = sDuskullTMHMLearnset,
+    [SPECIES_DUSCLOPS] = sDusclopsTMHMLearnset,
+    [SPECIES_ROSELIA] = sRoseliaTMHMLearnset,
+    [SPECIES_SLAKOTH] = sSlakothTMHMLearnset,
+    [SPECIES_VIGOROTH] = sVigorothTMHMLearnset,
+    [SPECIES_SLAKING] = sSlakingTMHMLearnset,
+    [SPECIES_GULPIN] = sGulpinTMHMLearnset,
+    [SPECIES_SWALOT] = sSwalotTMHMLearnset,
+    [SPECIES_TROPIUS] = sTropiusTMHMLearnset,
+    [SPECIES_WHISMUR] = sWhismurTMHMLearnset,
+    [SPECIES_LOUDRED] = sLoudredTMHMLearnset,
+    [SPECIES_EXPLOUD] = sExploudTMHMLearnset,
+    [SPECIES_CLAMPERL] = sClamperlTMHMLearnset,
+    [SPECIES_HUNTAIL] = sHuntailTMHMLearnset,
+    [SPECIES_GOREBYSS] = sGorebyssTMHMLearnset,
+    [SPECIES_ABSOL] = sAbsolTMHMLearnset,
+    [SPECIES_SHUPPET] = sShuppetTMHMLearnset,
+    [SPECIES_BANETTE] = sBanetteTMHMLearnset,
+    [SPECIES_SEVIPER] = sSeviperTMHMLearnset,
+    [SPECIES_ZANGOOSE] = sZangooseTMHMLearnset,
+    [SPECIES_RELICANTH] = sRelicanthTMHMLearnset,
+    [SPECIES_ARON] = sAronTMHMLearnset,
+    [SPECIES_LAIRON] = sLaironTMHMLearnset,
+    [SPECIES_AGGRON] = sAggronTMHMLearnset,
+    [SPECIES_CASTFORM] = sCastformTMHMLearnset,
+    [SPECIES_VOLBEAT] = sVolbeatTMHMLearnset,
+    [SPECIES_ILLUMISE] = sIllumiseTMHMLearnset,
+    [SPECIES_LILEEP] = sLileepTMHMLearnset,
+    [SPECIES_CRADILY] = sCradilyTMHMLearnset,
+    [SPECIES_ANORITH] = sAnorithTMHMLearnset,
+    [SPECIES_ARMALDO] = sArmaldoTMHMLearnset,
+    [SPECIES_RALTS] = sRaltsTMHMLearnset,
+    [SPECIES_KIRLIA] = sKirliaTMHMLearnset,
+    [SPECIES_GARDEVOIR] = sGardevoirTMHMLearnset,
+    [SPECIES_BAGON] = sBagonTMHMLearnset,
+    [SPECIES_SHELGON] = sShelgonTMHMLearnset,
+    [SPECIES_SALAMENCE] = sSalamenceTMHMLearnset,
+    [SPECIES_BELDUM] = sBeldumTMHMLearnset,
+    [SPECIES_METANG] = sMetangTMHMLearnset,
+    [SPECIES_METAGROSS] = sMetagrossTMHMLearnset,
+    [SPECIES_REGIROCK] = sRegirockTMHMLearnset,
+    [SPECIES_REGICE] = sRegiceTMHMLearnset,
+    [SPECIES_REGISTEEL] = sRegisteelTMHMLearnset,
+    [SPECIES_KYOGRE] = sKyogreTMHMLearnset,
+    [SPECIES_GROUDON] = sGroudonTMHMLearnset,
+    [SPECIES_RAYQUAZA] = sRayquazaTMHMLearnset,
+    [SPECIES_LATIAS] = sLatiasTMHMLearnset,
+    [SPECIES_LATIOS] = sLatiosTMHMLearnset,
+    [SPECIES_JIRACHI] = sJirachiTMHMLearnset,
+    [SPECIES_DEOXYS] = sDeoxysTMHMLearnset,
+    [SPECIES_CHIMECHO] = sChimechoTMHMLearnset,
+    [SPECIES_TURTWIG] = sTurtwigTMHMLearnset,
+    [SPECIES_GROTLE] = sGrotleTMHMLearnset,
+    [SPECIES_TORTERRA] = sTorterraTMHMLearnset,
+    [SPECIES_CHIMCHAR] = sChimcharTMHMLearnset,
+    [SPECIES_MONFERNO] = sMonfernoTMHMLearnset,
+    [SPECIES_INFERNAPE] = sInfernapeTMHMLearnset,
+    [SPECIES_PIPLUP] = sPiplupTMHMLearnset,
+    [SPECIES_PRINPLUP] = sPrinplupTMHMLearnset,
+    [SPECIES_EMPOLEON] = sEmpoleonTMHMLearnset,
+    [SPECIES_STARLY] = sStarlyTMHMLearnset,
+    [SPECIES_STARAVIA] = sStaraviaTMHMLearnset,
+    [SPECIES_STARAPTOR] = sStaraptorTMHMLearnset,
+    [SPECIES_BIDOOF] = sBidoofTMHMLearnset,
+    [SPECIES_BIBAREL] = sBibarelTMHMLearnset,
+    [SPECIES_KRICKETOT] = sKricketotTMHMLearnset,
+    [SPECIES_KRICKETUNE] = sKricketuneTMHMLearnset,
+    [SPECIES_SHINX] = sShinxTMHMLearnset,
+    [SPECIES_LUXIO] = sLuxioTMHMLearnset,
+    [SPECIES_LUXRAY] = sLuxrayTMHMLearnset,
+    [SPECIES_BUDEW] = sBudewTMHMLearnset,
+    [SPECIES_ROSERADE] = sRoseradeTMHMLearnset,
+    [SPECIES_CRANIDOS] = sCranidosTMHMLearnset,
+    [SPECIES_RAMPARDOS] = sRampardosTMHMLearnset,
+    [SPECIES_SHIELDON] = sShieldonTMHMLearnset,
+    [SPECIES_BASTIODON] = sBastiodonTMHMLearnset,
+    [SPECIES_BURMY] = sBurmyTMHMLearnset,
+    [SPECIES_WORMADAM] = sWormadamTMHMLearnset,
+    [SPECIES_MOTHIM] = sMothimTMHMLearnset,
+    [SPECIES_COMBEE] = sCombeeTMHMLearnset,
+    [SPECIES_VESPIQUEN] = sVespiquenTMHMLearnset,
+    [SPECIES_PACHIRISU] = sPachirisuTMHMLearnset,
+    [SPECIES_BUIZEL] = sBuizelTMHMLearnset,
+    [SPECIES_FLOATZEL] = sFloatzelTMHMLearnset,
+    [SPECIES_CHERUBI] = sCherubiTMHMLearnset,
+    [SPECIES_CHERRIM] = sCherrimTMHMLearnset,
+    [SPECIES_SHELLOS] = sShellosTMHMLearnset,
+    [SPECIES_GASTRODON] = sGastrodonTMHMLearnset,
+    [SPECIES_AMBIPOM] = sAmbipomTMHMLearnset,
+    [SPECIES_DRIFLOON] = sDrifloonTMHMLearnset,
+    [SPECIES_DRIFBLIM] = sDrifblimTMHMLearnset,
+    [SPECIES_BUNEARY] = sBunearyTMHMLearnset,
+    [SPECIES_LOPUNNY] = sLopunnyTMHMLearnset,
+    [SPECIES_MISMAGIUS] = sMismagiusTMHMLearnset,
+    [SPECIES_HONCHKROW] = sHonchkrowTMHMLearnset,
+    [SPECIES_GLAMEOW] = sGlameowTMHMLearnset,
+    [SPECIES_PURUGLY] = sPuruglyTMHMLearnset,
+    [SPECIES_CHINGLING] = sChinglingTMHMLearnset,
+    [SPECIES_STUNKY] = sStunkyTMHMLearnset,
+    [SPECIES_SKUNTANK] = sSkuntankTMHMLearnset,
+    [SPECIES_BRONZOR] = sBronzorTMHMLearnset,
+    [SPECIES_BRONZONG] = sBronzongTMHMLearnset,
+    [SPECIES_BONSLY] = sBonslyTMHMLearnset,
+    [SPECIES_MIMEJR] = sMimejrTMHMLearnset,
+    [SPECIES_HAPPINY] = sHappinyTMHMLearnset,
+    [SPECIES_CHATOT] = sChatotTMHMLearnset,
+    [SPECIES_SPIRITOMB] = sSpiritombTMHMLearnset,
+    [SPECIES_GIBLE] = sGibleTMHMLearnset,
+    [SPECIES_GABITE] = sGabiteTMHMLearnset,
+    [SPECIES_GARCHOMP] = sGarchompTMHMLearnset,
+    [SPECIES_MUNCHLAX] = sMunchlaxTMHMLearnset,
+    [SPECIES_RIOLU] = sRioluTMHMLearnset,
+    [SPECIES_LUCARIO] = sLucarioTMHMLearnset,
+    [SPECIES_HIPPOPOTAS] = sHippopotasTMHMLearnset,
+    [SPECIES_HIPPOWDON] = sHippowdonTMHMLearnset,
+    [SPECIES_SKORUPI] = sSkorupiTMHMLearnset,
+    [SPECIES_DRAPION] = sDrapionTMHMLearnset,
+    [SPECIES_CROAGUNK] = sCroagunkTMHMLearnset,
+    [SPECIES_TOXICROAK] = sToxicroakTMHMLearnset,
+    [SPECIES_CARNIVINE] = sCarnivineTMHMLearnset,
+    [SPECIES_FINNEON] = sFinneonTMHMLearnset,
+    [SPECIES_LUMINEON] = sLumineonTMHMLearnset,
+    [SPECIES_MANTYKE] = sMantykeTMHMLearnset,
+    [SPECIES_SNOVER] = sSnoverTMHMLearnset,
+    [SPECIES_ABOMASNOW] = sAbomasnowTMHMLearnset,
+    [SPECIES_WEAVILE] = sWeavileTMHMLearnset,
+    [SPECIES_MAGNEZONE] = sMagnezoneTMHMLearnset,
+    [SPECIES_LICKILICKY] = sLickilickyTMHMLearnset,
+    [SPECIES_RHYPERIOR] = sRhyperiorTMHMLearnset,
+    [SPECIES_TANGROWTH] = sTangrowthTMHMLearnset,
+    [SPECIES_ELECTIVIRE] = sElectivireTMHMLearnset,
+    [SPECIES_MAGMORTAR] = sMagmortarTMHMLearnset,
+    [SPECIES_TOGEKISS] = sTogekissTMHMLearnset,
+    [SPECIES_YANMEGA] = sYanmegaTMHMLearnset,
+    [SPECIES_LEAFEON] = sLeafeonTMHMLearnset,
+    [SPECIES_GLACEON] = sGlaceonTMHMLearnset,
+    [SPECIES_GLISCOR] = sGliscorTMHMLearnset,
+    [SPECIES_MAMOSWINE] = sMamoswineTMHMLearnset,
+    [SPECIES_PORYGON_Z] = sPorygon_ZTMHMLearnset,
+    [SPECIES_GALLADE] = sGalladeTMHMLearnset,
+    [SPECIES_PROBOPASS] =sProbopassTMHMLearnset,
+    [SPECIES_DUSKNOIR] = sDusknoirTMHMLearnset,
+    [SPECIES_FROSLASS] = sFroslassTMHMLearnset,
+    [SPECIES_ROTOM] = sRotomTMHMLearnset,
+    [SPECIES_UXIE] = sUxieTMHMLearnset,
+    [SPECIES_MESPRIT] = sMespritTMHMLearnset,
+    [SPECIES_AZELF] = sAzelfTMHMLearnset,
+    [SPECIES_DIALGA] = sDialgaTMHMLearnset,
+    [SPECIES_PALKIA] =sPalkiaTMHMLearnset,
+    [SPECIES_HEATRAN] = sHeatranTMHMLearnset,
+    [SPECIES_REGIGIGAS] = sRegigigasTMHMLearnset,
+    [SPECIES_GIRATINA] = sGiratinaTMHMLearnset,
+    [SPECIES_CRESSELIA] = sCresseliaTMHMLearnset,
+    [SPECIES_PHIONE] = sPhioneTMHMLearnset,
+    [SPECIES_MANAPHY] = sManaphyTMHMLearnset,
+    [SPECIES_DARKRAI] = sDarkraiTMHMLearnset,
+    [SPECIES_SHAYMIN] = sShayminTMHMLearnset,
+    [SPECIES_ARCEUS] = sArceusTMHMLearnset,
 };

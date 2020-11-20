@@ -1992,10 +1992,17 @@ static u16 GetTutorMove(u8 tutor)
 
 static bool8 CanLearnTutorMove(u16 species, u8 tutor)
 {
-    if (sTutorLearnsets[species] & (1 << tutor))
-        return TRUE;
-    else
-        return FALSE;
+    const u8 *learnableMoves;
+
+    learnableMoves = sTutorLearnsets[species];
+    while(*learnableMoves != 0xFF)
+    {
+        if(*learnableMoves == tutor)
+            return TRUE;
+        
+        learnableMoves++;
+    }
+    return FALSE;
 }
 
 static void InitPartyMenuWindows(u8 layout)
