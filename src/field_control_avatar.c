@@ -1017,6 +1017,9 @@ static bool8 EnableAutoRun(void)
     if (!FlagGet(FLAG_SYS_B_DASH))
         return FALSE;   //auto run unusable until you get running shoes
 
+    if (gPlayerAvatar.flags & (PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE))
+        return FALSE;   //auto run unusable until you get running shoes
+    
     PlaySE(SE_SELECT);
     if (gSaveBlock2Ptr->autoRun)
     {
