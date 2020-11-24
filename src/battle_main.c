@@ -86,6 +86,7 @@ static void CB2_HandleStartMultiBattle(void);
 static void CB2_HandleStartBattle(void);
 static void TryCorrectShedinjaLanguage(struct Pokemon *mon);
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer);
+static u16 RandomNewMove(u16 species);
 static u16 CanMonEvolve(u16 species, u32 level);
 static void BattleMainCB1(void);
 static void sub_8038538(struct Sprite *sprite);
@@ -1813,6 +1814,11 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     s32 i, j, k;
     u8 monsCount;
     u16 species;
+    struct BattleMove newBattleMove;
+    u16 newMove;
+    u16 newMovePP;
+    bool8 lastMoveChanged = FALSE;
+    bool8 isNewMove;
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
@@ -1861,9 +1867,47 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
 
-                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+                newLevel = partyData[i].lvl;
                 
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                if (partyData[i].dynamicLvl == 1)
+                {
+                    if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+                        {
+                            if (gPlayerParty[i].level >= newLevel)
+                                newLevel = gPlayerParty[i].level;
+                        }
+                    
+                }
+
+                species = CanMonEvolve(partyData[i].species, newLevel);
+
+                CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                /*
+                
+                Add TM/Tutor move to pokemon  WIP
+                
+                while (!lastMoveChanged)
+                {
+                    newMove = RandomNewMove(species);
+                    newBattleMove = gBattleMoves[newMove];
+                    newMovePP = gBattleMoves[newMove].pp;
+                    SetMonData(&party[i], MON_DATA_MOVE1, &newBattleMove);
+                    SetMonData(&party[i], MON_DATA_PP1, &newMovePP);
+                    isNewMove = TRUE;
+
+                    for (j = 1; j < (MAX_MON_MOVES); j++)
+                    {
+                        if (GetMonData(&party[i], MON_DATA_MOVE1, NULL) == GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL))
+                            isNewMove = FALSE;
+                    }
+
+                    if (isNewMove)
+                        lastMoveChanged = TRUE;
+                }
+
+                */
+
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
@@ -1978,6 +2022,25 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     }
 
     return gTrainers[trainerNum].partySize;
+}
+
+static u16 RandomNewMove(u16 species)
+{
+    u32 i, j = 0;
+    u16 moveId = MOVE_NONE;
+    u8 randNum;
+    bool32 shouldUseMove;
+
+    do
+    {
+        randNum = Random() % (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES);
+        shouldUseMove = CanSpeciesLearnTMHM(species, randNum);
+    }
+    while (!shouldUseMove);
+
+    moveId = ItemIdToBattleMoveId(ITEM_TM01 + randNum);
+
+    return moveId;
 }
 
 static u16 CanMonEvolve(u16 species, u32 level)
