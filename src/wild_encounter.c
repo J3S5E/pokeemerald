@@ -448,6 +448,12 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
 
     level = partyLevel / i;
 
+    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
+    {
+        level = level - (level / 4);
+        level++;
+    }
+
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(level))
         return FALSE;
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))

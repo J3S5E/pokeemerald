@@ -1809,6 +1809,11 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 {
     u32 nameHash = 0;
     u32 newLevel = 0;
+    u32 proposedLevel = 0;
+    u32 partyTotalLevel = 0;
+    u32 partyHighestLevel = 0;
+    u32 partyAvgLevel = 0;
+    u16 threshold = 0;
     u32 personalityValue;
     u8 fixedIV;
     s32 i, j, k;
@@ -1819,6 +1824,29 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u16 newMovePP;
     bool8 lastMoveChanged = FALSE;
     bool8 isNewMove;
+
+
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+        {
+            if (gPlayerParty[i].level >= threshold)
+            {
+                partyTotalLevel += gPlayerParty[i].level;
+                if (gPlayerParty[i].level >= partyHighestLevel)
+                {
+                    partyHighestLevel = gPlayerParty[i].level;
+                }
+            }
+                
+        }
+        else
+            break;
+    }
+    partyAvgLevel = partyTotalLevel / i;
+    partyAvgLevel = partyAvgLevel - (partyAvgLevel / 10);
+    
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
@@ -1871,13 +1899,19 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 
                 if (partyData[i].dynamicLvl == 1)
                 {
-                    if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
-                        {
-                            if (gPlayerParty[i].level >= newLevel)
-                                newLevel = gPlayerParty[i].level;
-                        }
+                    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
+                    {
+                        if (newLevel < partyAvgLevel)
+                            newLevel = partyAvgLevel;
+                    }
+                    else
+                    {
+                        if (newLevel < partyHighestLevel)
+                            newLevel = partyHighestLevel;
+                    }
                     
                 }
+                
 
                 species = CanMonEvolve(partyData[i].species, newLevel);
 
@@ -1958,40 +1992,32 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
 
-                newLevel = 1;
-
+                newLevel = partyData[i].lvl;
+                
                 if (partyData[i].dynamicLvl == 1)
                 {
-                    if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
-                        {
-                            if (gPlayerParty[i].level >= newLevel)
-                                newLevel = gPlayerParty[i].level;
-                        }
-                    
-                }
-                if (partyData[i].lvl < newLevel)
-                {
-                    if (partyData[i].shiny == 1)
+                    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
                     {
-                        CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
+                        if (newLevel < partyAvgLevel)
+                            newLevel = partyAvgLevel;
                     }
                     else
                     {
-                        CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                        if (newLevel < partyHighestLevel)
+                            newLevel = partyHighestLevel;
                     }
-                    
+                }
+
+                
+                if (partyData[i].shiny == 1)
+                {
+                    CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
                 }
                 else
                 {
-                    if (partyData[i].shiny == 1)
-                    {
-                        CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_YES_SHINY, 0);
-                    }
-                    else
-                    {
-                        CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-                    }
+                    CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 }
+
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 
@@ -4014,11 +4040,14 @@ static void HandleTurnActionSelectionState(void)
                     }
                     break;
                 case B_ACTION_USE_ITEM:
-                    if (gBattleTypeFlags & (BATTLE_TYPE_LINK
+                    if ((gBattleTypeFlags & (BATTLE_TYPE_LINK
+                                            | BATTLE_TYPE_FRONTIER_NO_PYRAMID
+                                            | BATTLE_TYPE_EREADER_TRAINER
+                                            | BATTLE_TYPE_x2000000)) || (FlagGet(FLAG_CHALLENGE_MODE) && (gBattleTypeFlags & (BATTLE_TYPE_LINK
                                             | BATTLE_TYPE_FRONTIER_NO_PYRAMID
                                             | BATTLE_TYPE_EREADER_TRAINER
                                             | BATTLE_TYPE_TRAINER
-                                            | BATTLE_TYPE_x2000000))
+                                            | BATTLE_TYPE_x2000000))))
                     {
                         RecordedBattle_ClearBattlerAction(gActiveBattler, 1);
                         gSelectionBattleScripts[gActiveBattler] = BattleScript_ActionSelectionItemsCantBeUsed;
