@@ -5,6 +5,7 @@
 #include "string_util.h"
 #include "text.h"
 #include "menu.h"
+#include "overworld.h"
 #include "window.h"
 #include "sprite.h"
 #include "strings.h"
@@ -16,6 +17,8 @@ EWRAM_DATA static u8 sMoneyBoxWindowId = 0;
 EWRAM_DATA static u8 sMoneyLabelSpriteId = 0;
 
 #define MONEY_LABEL_TAG 0x2722
+
+static u32 GetHealCostFromCenter(void);
 
 static const struct OamData sOamData_MoneyLabel =
 {
@@ -194,4 +197,58 @@ void AddMoneyLabelObject(u16 x, u16 y)
 void RemoveMoneyLabelObject(void)
 {
     DestroySpriteAndFreeResources(&gSprites[sMoneyLabelSpriteId]);
+}
+
+
+static u32 GetHealCostFromCenter(void)
+{
+    u32 cost = 10;
+    u8 i;
+    u32 centeredCount = (GetGameStat(GAME_STAT_USED_POKECENTER));
+    
+
+    for (i = 0; i < centeredCount; i++)
+    {
+        if (cost >= 45000)
+        {
+            cost = 50000;
+            i++;
+        }
+        else
+        {
+            cost = (cost) + (cost / 4);
+        }
+    }
+    if (cost >= 45000)
+    {
+        cost = 50000;
+    }
+
+    return cost;
+}
+
+void GetCostToHealFromCenter(void)
+{
+    u8 text[12];
+    u32 cost;
+
+    cost = GetHealCostFromCenter();
+
+    ConvertIntToDecimalStringN(text, cost, STR_CONV_MODE_LEFT_ALIGN, 6);
+
+    StringCopy(gStringVar3, text);
+}
+
+bool8 IsEnoughForCostCenterHeal(void)
+{
+    u32 cost;
+    cost = GetHealCostFromCenter();
+    return IsEnoughMoney(&gSaveBlock1Ptr->money, cost);
+}
+
+void SubtractMoneyForCenterHeal(void)
+{
+    u32 cost;
+    cost = GetHealCostFromCenter();
+    RemoveMoney(&gSaveBlock1Ptr->money, cost);
 }

@@ -3,7 +3,8 @@ gText_WouldYouLikeToRestYourPkmn:: @ 82726EB
     .string "the POKéMON CENTER.\p"
     .string "We restore your tired POKéMON\n"
     .string "to full health.\p"
-    .string "Would you like to rest your POKéMON?$"
+    .string "Would you like to rest your POKéMON\n"
+    .string "for ¥{STR_VAR_3}?$"
 
 gText_IllTakeYourPkmn:: @ 8272768
     .string "Okay, I'll take your POKéMON\n"
@@ -47,5 +48,5 @@ gText_IllTakeYourPkmn2:: @ 82729C0
 gText_ThankYouForWaiting:: @ 82729F0
     .string "Thank you for waiting.$"
 
-gText_WeHopeToSeeYouAgain2:: @ 8272A07
-    .string "We hope to see you again!$"
+gText_NotEnoughMoneyToHeal:: @ 8272A07
+    .string "You don't have enough money…$"

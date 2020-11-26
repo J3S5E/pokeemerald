@@ -16,5 +16,8 @@ void DrawMoneyBox(int amount, u8 x, u8 y);
 void HideMoneyBox(void);
 void AddMoneyLabelObject(u16 x, u16 y);
 void RemoveMoneyLabelObject(void);
+void GetCostToHealFromCenter(void);
+bool8 IsEnoughForCostCenterHeal(void);
+void SubtractMoneyForCenterHeal(void);
 
 #endif // GUARD_MONEY_H

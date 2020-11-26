@@ -203,6 +203,9 @@ gSpecials:: @ 81DBA64
 	def_special ShowDaycareLevelMenu
 	def_special GetNumLevelsGainedFromDaycare
 	def_special GetDaycareCost
+	def_special GetCostToHealFromCenter
+	def_special IsEnoughForCostCenterHeal
+	def_special SubtractMoneyForCenterHeal
 	def_special TakePokemonFromDaycare
 	def_special ScriptHatchMon
 	def_special EggHatch
