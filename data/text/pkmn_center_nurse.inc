@@ -41,9 +41,12 @@ gText_YouWantTheUsual:: @ 8272982
     .string "I'm delighted to see you, {PLAYER}!\n"
     .string "You want the usual, am I right?$"
 
-gText_IllTakeYourPkmn2:: @ 82729C0
-    .string "Okay, I'll take your POKéMON\n"
-    .string "for a few seconds.$"
+gText_WouldYouLikeToRestYourPkmnFree:: @ 82729C0
+    .string "Hello, and welcome to\n"
+    .string "the POKéMON CENTER.\p"
+    .string "We restore your tired POKéMON\n"
+    .string "to full health.\p"
+    .string "Would you like to rest your POKéMON?$"
 
 gText_ThankYouForWaiting:: @ 82729F0
     .string "Thank you for waiting.$"

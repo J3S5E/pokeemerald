@@ -3449,18 +3449,23 @@ double GetPkmnExpMultiplier(u8 level)
     u8 levelDiff;
     s8 avgDiff;
 
-    // multiply the usual exp yield by the soft cap multiplier
-    for (i = 0; i < NUM_SOFT_CAPS; i++)
+    if (FlagGet(FLAG_CHALLENGE_MODE) == TRUE)
     {
-        if (!FlagGet(sLevelCapFlags[i]) && level >= sLevelCaps[i])
+        // multiply the usual exp yield by the soft cap multiplier
+        for (i = 0; i < NUM_SOFT_CAPS; i++)
         {
-            levelDiff = level - sLevelCaps[i];
-            if (levelDiff > 6)
-                levelDiff = 6;
-            lvlCapMultiplier = sLevelCapReduction[levelDiff];
-            break;
+            if (!FlagGet(sLevelCapFlags[i]) && level >= sLevelCaps[i])
+            {
+                levelDiff = level - sLevelCaps[i];
+                if (levelDiff > 6)
+                    levelDiff = 6;
+                lvlCapMultiplier = sLevelCapReduction[levelDiff];
+                break;
+            }
         }
     }
+
+    
 
     // multiply the usual exp yield by the party level multiplier
     avgDiff = level - GetTeamLevel();

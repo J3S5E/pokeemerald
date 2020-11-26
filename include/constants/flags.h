@@ -96,7 +96,7 @@
 #define FLAG_RESCUED_BIRCH                   0x52
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS       0x53
 
-#define FLAG_UNUSED_0x054                    0x54  // Unused Flag
+#define FLAG_CHALLENGE_MODE                  0x54  // Challenge mode flag for "disable bag in trainer battles", "Have PokeCenters charge", "force the Battle style [Set|Shift]" + "Soft EXP caps"
 #define FLAG_UNUSED_0x055                    0x55  // Unused Flag
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly

@@ -11,6 +11,7 @@ Common_EventScript_PkmnCenterNurse:: @ 827191E
     goto_if_eq EventScript_PkmnCenterNurse_AskForUsual
     compare VAR_RESULT, 1
     goto_if_eq EventScript_PkmnCenterNurse_AskForUsual
+    goto_if_unset FLAG_CHALLENGE_MODE, EventScript_PkmnCenterNurse_FreeHeal
     special GetCostToHealFromCenter
     msgbox gText_WouldYouLikeToRestYourPkmn, MSGBOX_YESNO
     compare VAR_RESULT, YES
@@ -29,7 +30,7 @@ EventScript_PkmnCenterNurse_HealPkmn:: @ 827195A
     compare VAR_0x8004, 0
     call_if_eq EventScript_PkmnCenterNurse_IllTakeYourPkmn
     compare VAR_0x8004, 1
-    call_if_eq EventScript_PkmnCenterNurse_IllTakeYourPkmn2
+    call_if_eq EventScript_PkmnCenterNurse_IllTakeYourPkmn
     waitmessage
     call EventScript_PkmnCenterNurse_TakeAndHealPkmn
     goto_if_unset FLAG_POKERUS_EXPLAINED, EventScript_PkmnCenterNurse_CheckPokerus
@@ -40,9 +41,13 @@ EventScript_PkmnCenterNurse_IllTakeYourPkmn:: @ 8271987
     message gText_IllTakeYourPkmn
     return
 
-EventScript_PkmnCenterNurse_IllTakeYourPkmn2:: @ 827198D
-    message gText_IllTakeYourPkmn2
-    return
+EventScript_PkmnCenterNurse_FreeHeal:: @ 827198D
+    msgbox gText_WouldYouLikeToRestYourPkmnFree, MSGBOX_YESNO
+    compare VAR_RESULT, YES
+    goto_if_eq EventScript_PkmnCenterNurse_HealPkmn
+    compare VAR_RESULT, NO
+    goto_if_eq EventScript_PkmnCenterNurse_Goodbye
+    end
 
 EventScript_PkmnCenterNurse_TakeAndHealPkmn:: @ 8271993
     applymovement VAR_0x800B, Common_Movement_WalkInPlaceFastestLeft
