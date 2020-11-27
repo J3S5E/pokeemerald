@@ -97,7 +97,7 @@
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS       0x53
 
 #define FLAG_CHALLENGE_MODE                  0x54  // Challenge mode flag for "disable bag in trainer battles", "Have PokeCenters charge", "force the Battle style [Set|Shift]" + "Soft EXP caps"
-#define FLAG_UNUSED_0x055                    0x55  // Unused Flag
+#define FLAG_NUZLOCKE_MODE                   0x55  // Challenge mode flag for enabling only 1 catch per route and releasing pokemon on death
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly
 #define FLAG_MET_RIVAL_MOM                   0x57
