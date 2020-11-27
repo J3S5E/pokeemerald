@@ -413,6 +413,7 @@ static void DoStandardWildBattle(bool32 isDouble)
         VarSet(VAR_TEMP_E, 0);
         gBattleTypeFlags |= BATTLE_TYPE_PYRAMID;
     }
+    NuzlockeCatchCheck();
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
@@ -1892,4 +1893,25 @@ u16 CountBattledRematchTeams(u16 trainerId)
     }
 
     return i;
+}
+
+static void NuzlockeCatchCheck(void)
+{
+    s8 location;
+
+    if (FlagGet(FLAG_NUZLOCKE_MODE) == FALSE)
+        return;
+    
+    location = gSaveBlock1Ptr->location.mapGroup;
+    
+    if (FlagGet(FLAG_MAPGROUP_WILD_ENC_START + location))
+    {
+        FlagSet(FLAG_DISABLE_CATCHING);
+    }
+    else
+    {
+        FlagClear(FLAG_DISABLE_CATCHING);
+        FlagSet(FLAG_MAPGROUP_WILD_ENC_START + location);
+    }
+    
 }

@@ -650,8 +650,12 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2             (FLAG_HIDDEN_ITEMS_START + 0x5D)
 #define FLAG_HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3             (FLAG_HIDDEN_ITEMS_START + 0x5E)
 
-#define FLAG_UNUSED_0x264  0x264 // Unused Flag
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
+
+
+// Map flags for catching pokemon on the route needs as many flags as there are map groups
+#define FLAG_MAPGROUP_WILD_ENC_START                                                         0x264
+#define FLAG_MAPGROUP_WILD_ENC_GROUP_00                       (FLAG_WILD_POKE_ON_MAP_START + 0x00)
+#define FLAG_MAPGROUP_WILD_ENC_GROUP_01                       (FLAG_WILD_POKE_ON_MAP_START + 0x01)
 #define FLAG_UNUSED_0x266  0x266 // Unused Flag
 #define FLAG_UNUSED_0x267  0x267 // Unused Flag
 #define FLAG_UNUSED_0x268  0x268 // Unused Flag
@@ -1216,7 +1220,7 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
-#define FLAG_UNUSED_0x493                                           0x493 // Unused Flag
+#define FLAG_DISABLE_CATCHING                                       0x493 // Used to disable catching in nuzlocke mode
 #define FLAG_UNUSED_0x494                                           0x494 // Unused Flag
 #define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
 #define FLAG_UNUSED_0x496                                           0x496 // Unused Flag
