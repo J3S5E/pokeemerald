@@ -37,6 +37,7 @@
 #include "mirage_tower.h"
 #include "money.h"
 #include "new_game.h"
+#include "pokemon_storage_system.h"
 #include "palette.h"
 #include "play_time.h"
 #include "random.h"
@@ -94,6 +95,7 @@ static void CB2_LoadMapOnReturnToFieldCableClub(void);
 static void CB2_LoadMap2(void);
 static void VBlankCB_Field(void);
 static void SpriteCB_LinkPlayer(struct Sprite *sprite);
+static void KillMon(void);
 static void ChooseAmbientCrySpecies(void);
 static void DoMapLoadLoop(u8 *state);
 static bool32 LoadMapInStepsLocal(u8 *state, bool32);
@@ -357,6 +359,8 @@ static void (*const gMovementStatusHandler[])(struct LinkPlayerObjectEvent *, st
 // code
 void DoWhiteOut(void)
 {
+    if (FlagGet(FLAG_NUZLOCKE_MODE) == 1)
+        KillMon();
     ScriptContext2_RunNewScript(EventScript_WhiteOut);
     SetMoney(&gSaveBlock1Ptr->money, GetMoney(&gSaveBlock1Ptr->money) / 2);
     HealPlayerParty();
@@ -1619,6 +1623,9 @@ void CB2_ReturnToField(void)
 
 static void CB2_ReturnToFieldLocal(void)
 {
+    if (FlagGet(FLAG_NUZLOCKE_MODE) == 1)
+        KillMon();
+    
     if (ReturnToFieldLocal(&gMain.state))
     {
         SetFieldVBlankCallback();
@@ -1942,6 +1949,10 @@ static bool32 LoadMapInStepsLocal(u8 *state, bool32 a2)
 
 static bool32 ReturnToFieldLocal(u8 *state)
 {
+    
+    if (FlagGet(FLAG_NUZLOCKE_MODE) == 1)
+        KillMon();
+    
     switch (*state)
     {
     case 0:
@@ -3199,4 +3210,20 @@ static void SpriteCB_LinkPlayer(struct Sprite *sprite)
         sprite->invisible = ((sprite->data[7] & 4) >> 2);
         sprite->data[7]++;
     }
+}
+
+static void KillMon(void)
+{
+    u8 i;
+    u8 partyCount = CalculatePlayerPartyCount();
+
+    for (i = 0; i < partyCount; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0)
+        {
+            ZeroMonData(&gPlayerParty[i]);
+        }
+    }
+
+    CompactPartySlots();
 }

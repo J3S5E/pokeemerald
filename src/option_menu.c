@@ -5,6 +5,7 @@
 #include "scanline_effect.h"
 #include "palette.h"
 #include "sprite.h"
+#include "event_data.h"
 #include "task.h"
 #include "bg.h"
 #include "gpu_regs.h"
@@ -24,6 +25,7 @@ enum
     TD_BATTLESCENE,
     TD_SOUND,
     TD_BUTTONMODE,
+    TD_BATTLESTYLE,
     TD_FRAMETYPE,
 };
 
@@ -35,6 +37,7 @@ enum
     MENUITEM_SOUND,
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
+    MENUITEM_BATTLESTYLE,
     MENUITEM_CANCEL,
     MENUITEM_COUNT,
 };
@@ -67,6 +70,7 @@ static u8   Sound_ProcessInput(u8 selection);
 static void Sound_DrawChoices(u8 selection);
 static u8   FrameType_ProcessInput(u8 selection);
 static void FrameType_DrawChoices(u8 selection);
+static void Challenges_DrawChoices(u8 selection);
 static u8   ButtonMode_ProcessInput(u8 selection);
 static void ButtonMode_DrawChoices(u8 selection);
 static void DrawTextOption(void);
@@ -86,6 +90,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_SOUND]       = gText_Sound,
     [MENUITEM_BUTTONMODE]  = gText_ButtonMode,
     [MENUITEM_FRAMETYPE]   = gText_Frame,
+    [MENUITEM_BATTLESTYLE] = gText_BattleStyle,
     [MENUITEM_CANCEL]      = gText_OptionMenuCancel,
 };
 
@@ -236,6 +241,7 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].data[TD_SOUND] = gSaveBlock2Ptr->optionsSound;
         gTasks[taskId].data[TD_BUTTONMODE] = gSaveBlock2Ptr->optionsButtonMode;
         gTasks[taskId].data[TD_FRAMETYPE] = gSaveBlock2Ptr->optionsWindowFrameType;
+        gTasks[taskId].data[TD_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
 
         TextSpeed_DrawChoices(gTasks[taskId].data[TD_TEXTSPEED]);
         BattleScene_DrawChoices(gTasks[taskId].data[TD_BATTLESCENE]);
@@ -243,6 +249,8 @@ void CB2_InitOptionMenu(void)
         ButtonMode_DrawChoices(gTasks[taskId].data[TD_BUTTONMODE]);
         FrameType_DrawChoices(gTasks[taskId].data[TD_FRAMETYPE]);
         HighlightOptionMenuItem(gTasks[taskId].data[TD_MENUSELECTION]);
+        Challenges_DrawChoices(gTasks[taskId].data[TD_BATTLESTYLE]);
+
 
         CopyWindowToVram(WIN_OPTIONS, 3);
         gMain.state++;
@@ -330,6 +338,9 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             if (previousOption != gTasks[taskId].data[TD_FRAMETYPE])
                 FrameType_DrawChoices(gTasks[taskId].data[TD_FRAMETYPE]);
             break;
+        case MENUITEM_BATTLESTYLE:
+            Challenges_DrawChoices(gTasks[taskId].data[TD_BATTLESTYLE]);
+            break;
         default:
             return;
         }
@@ -349,6 +360,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].data[TD_SOUND];
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].data[TD_BUTTONMODE];
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].data[TD_FRAMETYPE];
+    //gSaveBlock2Ptr->optionsBattleStyle = gTasks[taskId].data[TD_BATTLESTYLE];
 
     BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -538,6 +550,24 @@ static void FrameType_DrawChoices(u8 selection)
     DrawOptionMenuChoice(gText_FrameType, 104, YPOS_FRAMETYPE, 0);
     DrawOptionMenuChoice(text, 128, YPOS_FRAMETYPE, 1);
 }
+
+static void Challenges_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+
+    if (FlagGet(FLAG_CHALLENGE_MODE) == TRUE)
+        styles[0] = 1;
+
+    if (FlagGet(FLAG_NUZLOCKE_MODE) == TRUE)
+        styles[1] = 1;
+
+    DrawOptionMenuChoice(gText_ChallengeMode, 104, YPOS_BATTLESTYLE, styles[0]);
+    DrawOptionMenuChoice(gText_NuzlockeMode, GetStringRightAlignXOffset(1, gText_NuzlockeMode, 198), YPOS_BATTLESTYLE, styles[1]);
+}
+
 
 static u8 ButtonMode_ProcessInput(u8 selection)
 {
