@@ -202,7 +202,7 @@ void RemoveMoneyLabelObject(void)
 
 static u32 GetHealCostFromCenter(void)
 {
-    u32 cost = 10;
+    u32 cost = 4;
     u8 i;
     u32 centeredCount = (GetGameStat(GAME_STAT_USED_POKECENTER));
     
@@ -216,7 +216,8 @@ static u32 GetHealCostFromCenter(void)
         }
         else
         {
-            cost = (cost) + (cost / 4);
+            cost = (cost) + (cost / 10);
+            cost++;
         }
     }
     if (cost >= 45000)
