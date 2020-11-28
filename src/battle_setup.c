@@ -1897,12 +1897,12 @@ u16 CountBattledRematchTeams(u16 trainerId)
 
 static void NuzlockeCatchCheck(void)
 {
-    s8 location;
+    u16 location;
 
     if (FlagGet(FLAG_NUZLOCKE_MODE) == FALSE)
         return;
     
-    location = gSaveBlock1Ptr->location.mapGroup;
+    location = gMapHeader.regionMapSectionId;
     
     if (FlagGet(FLAG_MAPGROUP_WILD_ENC_START + location))
     {
