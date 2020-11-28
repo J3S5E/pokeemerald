@@ -7,6 +7,7 @@
 #include "safari_zone.h"
 #include "script.h"
 #include "event_data.h"
+#include "pokedex.h"
 #include "metatile_behavior.h"
 #include "field_player_avatar.h"
 #include "fieldmap.h"
@@ -1898,20 +1899,19 @@ u16 CountBattledRematchTeams(u16 trainerId)
 static void NuzlockeCatchCheck(void)
 {
     u16 location;
+    u16 pokedexNumber = 0;
 
     if (FlagGet(FLAG_NUZLOCKE_MODE) == FALSE)
         return;
     
+    FlagSet(FLAG_DISABLE_CATCHING);
+
+    pokedexNumber = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
+
     location = gMapHeader.regionMapSectionId;
-    
-    if (FlagGet(FLAG_MAPGROUP_WILD_ENC_START + location))
+    if (!FlagGet(FLAG_MAPGROUP_WILD_ENC_START + location) && !HasPokemonBeenCaughtBefore(pokedexNumber))
     {
-        FlagSet(FLAG_DISABLE_CATCHING);
-    }
-    else
-    {
-        FlagClear(FLAG_DISABLE_CATCHING);
         FlagSet(FLAG_MAPGROUP_WILD_ENC_START + location);
+        FlagClear(FLAG_DISABLE_CATCHING);
     }
-    
 }
