@@ -83,4 +83,5 @@ void StartWallClock(void)
 {
     SetMainCallback2(CB2_StartWallClock);
     gMain.savedCallback = ReturnFromStartWallClock;
+    FlagSet(FLAG_SYS_CLOCK_SET);
 }

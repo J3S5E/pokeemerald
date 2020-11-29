@@ -140,7 +140,7 @@ static const struct MenuAction sPlayerPCMenuActions[] =
 {
     { gText_ItemStorage, PlayerPC_ItemStorage },
     { gText_Mailbox, PlayerPC_Mailbox },
-    { gText_Decoration, PlayerPC_Decoration },
+    { gText_Decoration, PlayerPC_TurnOff },
     { gText_TurnOff, PlayerPC_TurnOff }
 };
 
@@ -313,8 +313,8 @@ void NewGameInitPCItems(void)
 
 void BedroomPC(void)
 {
-    gPcItemMenuOptionOrder = gBedroomPC_OptionOrder;
-    gPcItemMenuOptionsNum = 4;
+    gPcItemMenuOptionOrder = gPlayerPC_OptionOrder;
+    gPcItemMenuOptionsNum = 3;
     DisplayItemMessageOnField(CreateTask(TaskDummy, 0), gText_WhatWouldYouLike, InitPlayerPCMenu);
 }
 
