@@ -633,7 +633,10 @@ static u8 ChooseMoveOrAction_Singles(void)
 
         // Consider switching if your mon is about to be OHKO'd
         if (CanAiBeOHKO(sBattler_AI, gBattlerTarget)
-            && gBattleMons[sBattler_AI].hp == gBattleMons[sBattler_AI].maxHP)
+            && gBattleMons[sBattler_AI].hp >= ((gBattleMons[sBattler_AI].maxHP / 4) * 3) // over ~3/4 HP
+            && GetBattlerAbility(sBattler_AI) != ABILITY_STURDY
+            && GetBattlerHoldEffect(sBattler_AI, TRUE) != HOLD_EFFECT_FOCUS_SASH
+            && gBattleMons[sBattler_AI].species != SPECIES_SHEDINJA)
         {
             if (GetMostSuitableMonToSwitchIntoOHKO() != PARTY_SIZE)
             {
