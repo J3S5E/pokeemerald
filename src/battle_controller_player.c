@@ -19,6 +19,7 @@
 #include "party_menu.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "pokemon_summary_screen.h"
 #include "random.h"
 #include "recorded_battle.h"
 #include "reshow_battle_screen.h"
@@ -106,6 +107,9 @@ static void MoveSelectionDestroyCursorAt(u8 cursorPos);
 static void MoveSelectionDisplayPpNumber(void);
 static void MoveSelectionDisplayPpString(void);
 static void MoveSelectionDisplayMoveType(void);
+static void MoveSelectionDisplayMovePower(void);
+static void MoveSelectionDisplayMovePowerString(void);
+static void MoveSelectionDisplayMoveAcc(void);
 static void MoveSelectionDisplayMoveNames(void);
 static void HandleMoveSwitching(void);
 static void sub_8058FC0(void);
@@ -124,6 +128,7 @@ static void DoSwitchOutAnimation(void);
 static void PlayerDoMoveAnimation(void);
 static void task05_08033660(u8 taskId);
 static void sub_805CE38(void);
+
 
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
 {
@@ -708,6 +713,12 @@ static void HandleInputChooseMove(void)
             ChangeMegaTriggerSprite(gBattleStruct->mega.triggerSpriteId, gBattleStruct->mega.playerSelect);
             PlaySE(SE_SELECT);
         }
+    }
+    else if (JOY_NEW(L_BUTTON) || JOY_NEW(R_BUTTON))
+    {
+        MoveSelectionDisplayMovePower();
+        MoveSelectionDisplayMovePowerString();
+        MoveSelectionDisplayMoveAcc();
     }
 }
 
@@ -1571,6 +1582,7 @@ static void MoveSelectionDisplayPpNumber(void)
     ConvertIntToDecimalStringN(txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
 
     BattlePutTextOnWindow(gDisplayedStringBattle, 9);
+    MoveSelectionDisplayPpString();
 }
 
 static void MoveSelectionDisplayMoveType(void)
@@ -1584,6 +1596,44 @@ static void MoveSelectionDisplayMoveType(void)
     *(txtPtr)++ = 1;
 
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+    BattlePutTextOnWindow(gDisplayedStringBattle, 10);
+}
+
+static void MoveSelectionDisplayMovePowerString(void)
+{
+    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePower);
+    BattlePutTextOnWindow(gDisplayedStringBattle, 7);
+
+}
+
+static void MoveSelectionDisplayMovePower(void)
+{
+    u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
+
+    if (gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].power == 0 || gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].power == 1)
+        StringCopy(gDisplayedStringBattle, gText_MoveInterfaceBlank);
+    else
+        ConvertIntToDecimalStringN(gDisplayedStringBattle, gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].power, STR_CONV_MODE_RIGHT_ALIGN, 4);
+    
+    BattlePutTextOnWindow(gDisplayedStringBattle, 9);
+}
+
+static void MoveSelectionDisplayMoveAcc(void)
+{
+    u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
+
+    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceAcc);
+    *(txtPtr)++ = EXT_CTRL_CODE_BEGIN;
+    *(txtPtr)++ = EXT_CTRL_CODE_SIZE;
+    *(txtPtr)++ = 1;
+
+    if (gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].accuracy == 0 || gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].accuracy == 1)
+        StringCopy(gDisplayedStringBattle, gText_MoveInterfaceBlankAcc);
+    else
+        ConvertIntToDecimalStringN(txtPtr, gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+    
     BattlePutTextOnWindow(gDisplayedStringBattle, 10);
 }
 
