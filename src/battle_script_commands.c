@@ -12094,6 +12094,11 @@ static void Cmd_trygivecaughtmonnick(void)
         BattleCreateYesNoCursorAt(0);
         break;
     case 1:
+        if (FlagGet(FLAG_NUZLOCKE_MODE) == TRUE)
+        {
+            gBattleCommunication[MULTIUSE_STATE]++;
+            BeginFastPaletteFade(3);
+        }
         if (JOY_NEW(DPAD_UP) && gBattleCommunication[CURSOR_POSITION] != 0)
         {
             PlaySE(SE_SELECT);
