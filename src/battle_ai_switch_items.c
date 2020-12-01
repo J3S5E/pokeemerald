@@ -600,6 +600,32 @@ static u32 GetBestMonBatonPass(struct Pokemon *party, int firstId, int lastId, u
     return PARTY_SIZE;
 }
 
+static u32 GetBestMonCounterMove(struct Pokemon *party, int firstId, int lastId, u8 invalidMons, int aliveCount, u16 moveToCounter)
+{
+    int i, j, bits = 0;
+
+    for (i = firstId; i < lastId; i++)
+    {
+        u16 species;
+        u8 monAbility;
+
+        if (invalidMons & gBitTable[i])
+            continue;
+
+        species = GetMonData(&party[i], MON_DATA_SPECIES);
+        if (GetMonData(&party[i], MON_DATA_ABILITY_NUM) != 0)
+            monAbility = gBaseStats[species].abilities[1];
+        else
+            monAbility = gBaseStats[species].abilities[0];
+
+        CalcPartyMonTypeEffectivenessMultiplier(moveToCounter, species, monAbility);
+        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE || gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
+            return i;
+    }
+
+    return PARTY_SIZE;
+}
+
 static u32 GestBestMonOffensive(struct Pokemon *party, int firstId, int lastId, u8 invalidMons, u32 opposingBattler)
 {
     int i, bits = 0;
@@ -704,6 +730,7 @@ u8 GetMostSuitableMonToSwitchInto(void)
     struct Pokemon *party;
     s32 i, j, aliveCount = 0;
     u8 invalidMons = 0;
+    u16 moveToCounter;
 
     if (*(gBattleStruct->monToSwitchIntoId + gActiveBattler) != PARTY_SIZE)
         return *(gBattleStruct->monToSwitchIntoId + gActiveBattler);
@@ -751,6 +778,15 @@ u8 GetMostSuitableMonToSwitchInto(void)
             aliveCount++;
     }
 
+    // if pokemon is about to be OHKO'd
+    if (CanAiBeOHKO(gActiveBattler, opposingBattler))
+    {
+        moveToCounter = WhatMoveCanAiBeOHKO(gActiveBattler, opposingBattler);
+        bestMonId = GetBestMonCounterMove(party, firstId, lastId, invalidMons, aliveCount, moveToCounter);
+        if (bestMonId != PARTY_SIZE)
+            return bestMonId;
+    }
+
     bestMonId = GetBestMonBatonPass(party, firstId, lastId, invalidMons, aliveCount);
     if (bestMonId != PARTY_SIZE)
         return bestMonId;
@@ -762,6 +798,78 @@ u8 GetMostSuitableMonToSwitchInto(void)
     bestMonId = GetBestMonDmg(party, firstId, lastId, invalidMons, opposingBattler);
     if (bestMonId != PARTY_SIZE)
         return bestMonId;
+
+    return PARTY_SIZE;
+}
+
+
+u8 GetMostSuitableMonToSwitchIntoOHKO(void)
+{
+    u32 opposingBattler = 0;
+    u32 bestDmg = 0;
+    u32 bestMonId = 0;
+    u8 battlerIn1 = 0, battlerIn2 = 0;
+    s32 firstId = 0;
+    s32 lastId = 0; // + 1
+    struct Pokemon *party;
+    s32 i, j, aliveCount = 0;
+    u8 invalidMons = 0;
+    u16 moveToCounter;
+
+    if (*(gBattleStruct->monToSwitchIntoId + gActiveBattler) != PARTY_SIZE)
+        return *(gBattleStruct->monToSwitchIntoId + gActiveBattler);
+    if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
+        return gBattlerPartyIndexes[gActiveBattler] + 1;
+
+    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+    {
+        battlerIn1 = gActiveBattler;
+        if (gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)])
+            battlerIn2 = gActiveBattler;
+        else
+            battlerIn2 = GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK);
+
+        opposingBattler = BATTLE_OPPOSITE(battlerIn1);
+        if (gAbsentBattlerFlags & gBitTable[opposingBattler])
+            opposingBattler ^= BIT_FLANK;
+    }
+    else
+    {
+        opposingBattler = GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_SIDE);
+        battlerIn1 = gActiveBattler;
+        battlerIn2 = gActiveBattler;
+    }
+
+    GetAIPartyIndexes(gActiveBattler, &firstId, &lastId);
+
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+        party = gPlayerParty;
+    else
+        party = gEnemyParty;
+
+    // Get invalid slots ids.
+    for (i = firstId; i < lastId; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES) == SPECIES_NONE
+            || GetMonData(&party[i], MON_DATA_HP) == 0
+            || gBattlerPartyIndexes[battlerIn1] == i
+            || gBattlerPartyIndexes[battlerIn2] == i
+            || i == *(gBattleStruct->monToSwitchIntoId + battlerIn1)
+            || i == *(gBattleStruct->monToSwitchIntoId + battlerIn2)
+            || (GetMonAbility(&party[i]) == ABILITY_TRUANT && IsTruantMonVulnerable(gActiveBattler, opposingBattler))) // While not really invalid per say, not really wise to switch into this mon.
+            invalidMons |= gBitTable[i];
+        else
+            aliveCount++;
+    }
+
+    // if pokemon is about to be OHKO'd
+    if (CanAiBeOHKO(gActiveBattler, opposingBattler))
+    {
+        moveToCounter = WhatMoveCanAiBeOHKO(gActiveBattler, opposingBattler);
+        bestMonId = GetBestMonCounterMove(party, firstId, lastId, invalidMons, aliveCount, moveToCounter);
+        if (bestMonId != PARTY_SIZE)
+            return bestMonId;
+    }
 
     return PARTY_SIZE;
 }

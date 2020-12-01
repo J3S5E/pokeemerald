@@ -15,6 +15,8 @@ void BattleAI_SetupFlags(void);
 void BattleAI_SetupAIData(u8 defaultScoreMoves);
 u8 BattleAI_ChooseMoveOrAction(void);
 bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler);
+bool32 CanAiBeOHKO(u32 battlerAI, u32 opposingBattler);
+u16 WhatMoveCanAiBeOHKO(u32 battlerAI, u32 opposingBattler);
 bool32 IsBattlerAIControlled(u32 battlerId);
 void ClearBattlerMoveHistory(u8 battlerId);
 void RecordLastUsedMoveBy(u32 battlerId, u32 move);

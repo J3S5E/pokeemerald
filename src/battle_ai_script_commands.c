@@ -470,10 +470,93 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
         u32 move = gBattleResources->battleHistory->usedMoves[opposingBattler][i];
         if (gBattleMoves[move].effect == EFFECT_PROTECT && move != MOVE_ENDURE)
             return TRUE;
-        if (gBattleMoves[move].effect == EFFECT_SEMI_INVULNERABLE && GetWhoStrikesFirst(battlerAI, opposingBattler, TRUE) == 1)
+        if (gBattleMoves[move].effect == EFFECT_SEMI_INVULNERABLE)
             return TRUE;
     }
     return FALSE;
+}
+
+// Check if target has means to faint ai mon from full.
+bool32 CanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
+{
+    s32 i, dmg;
+    u32 unusable = CheckMoveLimitations(opposingBattler, 0, 0xFF & ~MOVE_LIMITATION_PP);
+    u16 *moves = gBattleResources->battleHistory->usedMoves[opposingBattler];
+    u16 lvlUpMoves[MAX_LEVEL_UP_MOVES];
+    u8 numMoves = 0;
+    bool8 checkLevelUpLeanset = FALSE;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i])
+            && AI_CalcDamage(moves[i], opposingBattler, battlerAI) >= gBattleMons[battlerAI].maxHP)
+        {
+            return TRUE;
+        }
+    }
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] == MOVE_NONE)
+            checkLevelUpLeanset = TRUE;
+    }
+
+    if (checkLevelUpLeanset == TRUE)
+    {
+        numMoves = GetLevelUpMovesBySpecies(gBattleMons[opposingBattler].species, lvlUpMoves);
+
+        for (i = 0; i < numMoves; i++)
+        {
+            if (lvlUpMoves[i] != MOVE_NONE && lvlUpMoves[i] != 0xFFFF
+                && AI_CalcDamage(lvlUpMoves[i], opposingBattler, battlerAI) >= gBattleMons[battlerAI].maxHP)
+            {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+u16 WhatMoveCanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
+{
+    s32 i, dmg;
+    u32 unusable = CheckMoveLimitations(opposingBattler, 0, 0xFF & ~MOVE_LIMITATION_PP);
+    u16 *moves = gBattleResources->battleHistory->usedMoves[opposingBattler];
+    u16 lvlUpMoves[MAX_LEVEL_UP_MOVES];
+    u8 numMoves = 0;
+    bool8 checkLevelUpLeanset = FALSE;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i])
+            && AI_CalcDamage(moves[i], opposingBattler, battlerAI) >= gBattleMons[battlerAI].maxHP)
+        {
+            return moves[i];
+        }
+    }
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] == MOVE_NONE)
+            checkLevelUpLeanset = TRUE;
+    }
+
+    if (checkLevelUpLeanset == TRUE)
+    {
+        numMoves = GetLevelUpMovesBySpecies(gBattleMons[opposingBattler].species, lvlUpMoves);
+
+        for (i = 0; i < numMoves; i++)
+        {
+            if (lvlUpMoves[i] != MOVE_NONE && lvlUpMoves[i] != 0xFFFF
+                && AI_CalcDamage(lvlUpMoves[i], opposingBattler, battlerAI) >= gBattleMons[battlerAI].maxHP)
+            {
+                return lvlUpMoves[i];
+            }
+        }
+    }
+
+    return moves[0];
 }
 
 static u8 ChooseMoveOrAction_Singles(void)
@@ -517,7 +600,7 @@ static u8 ChooseMoveOrAction_Singles(void)
         && AI_THINKING_STRUCT->aiFlags & (AI_SCRIPT_CHECK_VIABILITY | AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_PREFER_BATON_PASS))
     {
         // Consider switching if all moves are worthless to use.
-        if (GetTotalBaseStat(gBattleMons[sBattler_AI].species) >= 310 // Mon is not weak.
+        if ((gBattleMons[sBattler_AI].species) >= 310 // Mon is not weak.
             && gBattleMons[sBattler_AI].hp >= gBattleMons[sBattler_AI].maxHP / 2)
         {
             s32 cap = AI_THINKING_STRUCT->aiFlags & (AI_SCRIPT_CHECK_VIABILITY) ? 95 : 93;
@@ -547,6 +630,19 @@ static u8 ChooseMoveOrAction_Singles(void)
                 return AI_CHOICE_SWITCH;
             }
         }
+
+        // Consider switching if your mon is about to be OHKO'd
+        if (CanAiBeOHKO(sBattler_AI, gBattlerTarget)
+            && gBattleMons[sBattler_AI].hp == gBattleMons[sBattler_AI].maxHP)
+        {
+            if (GetMostSuitableMonToSwitchIntoOHKO() != PARTY_SIZE)
+            {
+                AI_THINKING_STRUCT->switchMon = TRUE;
+                return AI_CHOICE_SWITCH;
+            }
+        }
+
+        
     }
 
     numOfBestMoves = 1;
