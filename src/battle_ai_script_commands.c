@@ -518,21 +518,81 @@ bool32 CanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
     return FALSE;
 }
 
-u16 WhatMoveCanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
+
+bool32 CanAiEasilyFinishOpponent(u32 battlerAI, u32 opposingBattler)
 {
     s32 i, dmg;
+    u32 unusable = CheckMoveLimitations(battlerAI, 0, 0xFF & ~MOVE_LIMITATION_PP);
+    u16 *moves = gBattleMons[sBattler_AI].moves;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i])
+            && AI_CalcDamage(moves[i], battlerAI, opposingBattler) >= ((gBattleMons[opposingBattler].hp * 3) / 2))
+        {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+
+bool32 CanMoveFinishOpponent(u32 battlerAI, u32 opposingBattler, u16 move)
+{
+
+    if (AI_CalcDamage(move, battlerAI, opposingBattler) >= gBattleMons[opposingBattler].hp)
+    {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+u16 WhatMoveCanAiEasilyFinishOpponent(u32 battlerAI, u32 opposingBattler)
+{
+    s32 i, highestDmg = 0;
+    u32 unusable = CheckMoveLimitations(battlerAI, 0, 0xFF & ~MOVE_LIMITATION_PP);
+    u16 *moves = gBattleMons[sBattler_AI].moves;
+    u16 returnMove = moves[0];
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i])
+            && AI_CalcDamage(moves[i], battlerAI, opposingBattler) >= ((gBattleMons[opposingBattler].hp * 3) / 2))
+        {
+            if (highestDmg <= AI_CalcDamage(moves[i], opposingBattler, battlerAI))
+            {
+                highestDmg = AI_CalcDamage(moves[i], opposingBattler, battlerAI);
+                returnMove = moves[i];
+            }
+        }
+    }
+
+    return returnMove;
+}
+
+u16 WhatMoveCanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
+{
+    s32 i, highestDmg = 0;
     u32 unusable = CheckMoveLimitations(opposingBattler, 0, 0xFF & ~MOVE_LIMITATION_PP);
     u16 *moves = gBattleResources->battleHistory->usedMoves[opposingBattler];
     u16 lvlUpMoves[MAX_LEVEL_UP_MOVES];
+    u16 returnMove = moves[0];
     u8 numMoves = 0;
     bool8 checkLevelUpLeanset = FALSE;
+
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i])
             && AI_CalcDamage(moves[i], opposingBattler, battlerAI) >= gBattleMons[battlerAI].maxHP)
         {
-            return moves[i];
+            if (highestDmg <= AI_CalcDamage(moves[i], opposingBattler, battlerAI))
+            {
+                highestDmg = AI_CalcDamage(moves[i], opposingBattler, battlerAI);
+                returnMove = moves[i];
+            }
         }
     }
 
@@ -551,12 +611,16 @@ u16 WhatMoveCanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
             if (lvlUpMoves[i] != MOVE_NONE && lvlUpMoves[i] != 0xFFFF
                 && AI_CalcDamage(lvlUpMoves[i], opposingBattler, battlerAI) >= gBattleMons[battlerAI].maxHP)
             {
-                return lvlUpMoves[i];
+                if (highestDmg < AI_CalcDamage(lvlUpMoves[i], opposingBattler, battlerAI))
+                {
+                    highestDmg = AI_CalcDamage(lvlUpMoves[i], opposingBattler, battlerAI);
+                    returnMove = lvlUpMoves[i];
+                }
             }
         }
     }
 
-    return moves[0];
+    return returnMove;
 }
 
 static u8 ChooseMoveOrAction_Singles(void)
@@ -565,7 +629,9 @@ static u8 ChooseMoveOrAction_Singles(void)
     u8 consideredMoveArray[MAX_MON_MOVES];
     u32 numOfBestMoves;
     s32 i, id;
+    s32 type1, type2;
     u32 flags = AI_THINKING_STRUCT->aiFlags;
+    u16 koMove;
 
     RecordLastUsedMoveByTarget();
 
@@ -670,6 +736,40 @@ static u8 ChooseMoveOrAction_Singles(void)
             }
         }
     }
+
+    if ((CanAiEasilyFinishOpponent(sBattler_AI, gBattlerTarget) == TRUE) && (Random() % 4) == 0)
+    {
+        koMove = WhatMoveCanAiEasilyFinishOpponent(sBattler_AI, gBattlerTarget);
+        for (i = 0; i < MAX_MON_MOVES; i++)
+        {
+            if (gBattleMons[sBattler_AI].moves[i] != MOVE_NONE)
+            {
+                GET_MOVE_TYPE(koMove, type1);
+                GET_MOVE_TYPE(gBattleMons[sBattler_AI].moves[i], type2);
+                if (type1 != type2)
+                {
+                    if (CanMoveFinishOpponent(sBattler_AI, gBattlerTarget, gBattleMons[sBattler_AI].moves[i]))
+                        return i;
+                }
+            }
+        }
+        if ((Random() % 2) == 0)
+        {
+            for (i = (Random() % 4); i < (MAX_MON_MOVES * 3); i = (Random() % 4))
+            {
+                if (gBattleMons[sBattler_AI].moves[i] != MOVE_NONE)
+                {
+                    GET_MOVE_TYPE(koMove, type1);
+                    GET_MOVE_TYPE(gBattleMons[sBattler_AI].moves[i], type2);
+                    if (type1 != type2)
+                    {
+                        return i;
+                    }
+                }
+            }
+        }
+    }
+
     return consideredMoveArray[Random() % numOfBestMoves];
 }
 
