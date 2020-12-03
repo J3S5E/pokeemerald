@@ -737,7 +737,7 @@ static u8 ChooseMoveOrAction_Singles(void)
         }
     }
 
-    if ((CanAiEasilyFinishOpponent(sBattler_AI, gBattlerTarget) == TRUE) && (Random() % 4) == 0)
+    if ((CanAiEasilyFinishOpponent(sBattler_AI, gBattlerTarget) == TRUE) && (Random() % 4) == 0 && CountUsablePartyMons(gBattlerTarget) >= 1)
     {
         koMove = WhatMoveCanAiEasilyFinishOpponent(sBattler_AI, gBattlerTarget);
         for (i = 0; i < MAX_MON_MOVES; i++)
