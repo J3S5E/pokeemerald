@@ -595,10 +595,11 @@ static void RemoveIVIndexFromList(u8 *ivs, u8 selectedIv)
 static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
 {
     u8 i;
-    u8 selectedIvs[INHERITED_IV_COUNT];
+    u8 selectedIvs[INHERITED_IV_COUNT + 2];
     u8 availableIVs[NUM_STATS];
-    u8 whichParents[INHERITED_IV_COUNT];
+    u8 whichParents[INHERITED_IV_COUNT + 2];
     u8 iv;
+    bool8 knotted = FALSE;
 
     // Initialize a list of IV indices.
     for (i = 0; i < NUM_STATS; i++)
@@ -606,51 +607,112 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
         availableIVs[i] = i;
     }
 
-    // Select the 3 IVs that will be inherited.
-    for (i = 0; i < INHERITED_IV_COUNT; i++)
-    {
-        // Randomly pick an IV from the available list and stop from being chosen again.
-        selectedIvs[i] = availableIVs[Random() % (NUM_STATS - i)];
-        RemoveIVIndexFromList(availableIVs, i);
-    }
+    // check if parents hold ITEM_DESTINY_KNOT
+    if (GetBoxMonData(&daycare->mons[whichParents[0]].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT || GetBoxMonData(&daycare->mons[whichParents[1]].mon, MON_DATA_HELD_ITEM) == ITEM_DESTINY_KNOT)
+        knotted = TRUE;
 
-    // Determine which parent each of the selected IVs should inherit from.
-    for (i = 0; i < INHERITED_IV_COUNT; i++)
-    {
-        whichParents[i] = Random() % DAYCARE_MON_COUNT;
-    }
 
-    // Set each of inherited IVs on the egg mon.
-    for (i = 0; i < INHERITED_IV_COUNT; i++)
+    if (knotted == TRUE)
     {
-        switch (selectedIvs[i])
+
+        // Select the 5 IVs that will be inherited.
+        for (i = 0; i < INHERITED_IV_COUNT + 2; i++)
         {
-            case 0:
-                iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_HP_IV);
-                SetMonData(egg, MON_DATA_HP_IV, &iv);
-                break;
-            case 1:
-                iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_ATK_IV);
-                SetMonData(egg, MON_DATA_ATK_IV, &iv);
-                break;
-            case 2:
-                iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_DEF_IV);
-                SetMonData(egg, MON_DATA_DEF_IV, &iv);
-                break;
-            case 3:
-                iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPEED_IV);
-                SetMonData(egg, MON_DATA_SPEED_IV, &iv);
-                break;
-            case 4:
-                iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPATK_IV);
-                SetMonData(egg, MON_DATA_SPATK_IV, &iv);
-                break;
-            case 5:
-                iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPDEF_IV);
-                SetMonData(egg, MON_DATA_SPDEF_IV, &iv);
-                break;
+            // Randomly pick an IV from the available list and stop from being chosen again.
+            selectedIvs[i] = availableIVs[Random() % (NUM_STATS - i)];
+            RemoveIVIndexFromList(availableIVs, i);
+        }
+
+        // Determine which parent each of the selected IVs should inherit from.
+        for (i = 0; i < INHERITED_IV_COUNT + 2; i++)
+        {
+            whichParents[i] = Random() % DAYCARE_MON_COUNT;
+        }
+
+        // Set each of inherited IVs on the egg mon.
+        for (i = 0; i < INHERITED_IV_COUNT + 2; i++)
+        {
+            switch (selectedIvs[i])
+            {
+                case 0:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_HP_IV);
+                    SetMonData(egg, MON_DATA_HP_IV, &iv);
+                    break;
+                case 1:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_ATK_IV);
+                    SetMonData(egg, MON_DATA_ATK_IV, &iv);
+                    break;
+                case 2:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_DEF_IV);
+                    SetMonData(egg, MON_DATA_DEF_IV, &iv);
+                    break;
+                case 3:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPEED_IV);
+                    SetMonData(egg, MON_DATA_SPEED_IV, &iv);
+                    break;
+                case 4:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPATK_IV);
+                    SetMonData(egg, MON_DATA_SPATK_IV, &iv);
+                    break;
+                case 5:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPDEF_IV);
+                    SetMonData(egg, MON_DATA_SPDEF_IV, &iv);
+                    break;
+            }
+        }
+
+
+    }
+    else
+    {
+        // Select the 3 IVs that will be inherited.
+        for (i = 0; i < INHERITED_IV_COUNT; i++)
+        {
+            // Randomly pick an IV from the available list and stop from being chosen again.
+            selectedIvs[i] = availableIVs[Random() % (NUM_STATS - i)];
+            RemoveIVIndexFromList(availableIVs, i);
+        }
+
+        // Determine which parent each of the selected IVs should inherit from.
+        for (i = 0; i < INHERITED_IV_COUNT; i++)
+        {
+            whichParents[i] = Random() % DAYCARE_MON_COUNT;
+        }
+
+        // Set each of inherited IVs on the egg mon.
+        for (i = 0; i < INHERITED_IV_COUNT; i++)
+        {
+            switch (selectedIvs[i])
+            {
+                case 0:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_HP_IV);
+                    SetMonData(egg, MON_DATA_HP_IV, &iv);
+                    break;
+                case 1:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_ATK_IV);
+                    SetMonData(egg, MON_DATA_ATK_IV, &iv);
+                    break;
+                case 2:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_DEF_IV);
+                    SetMonData(egg, MON_DATA_DEF_IV, &iv);
+                    break;
+                case 3:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPEED_IV);
+                    SetMonData(egg, MON_DATA_SPEED_IV, &iv);
+                    break;
+                case 4:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPATK_IV);
+                    SetMonData(egg, MON_DATA_SPATK_IV, &iv);
+                    break;
+                case 5:
+                    iv = GetBoxMonData(&daycare->mons[whichParents[i]].mon, MON_DATA_SPDEF_IV);
+                    SetMonData(egg, MON_DATA_SPDEF_IV, &iv);
+                    break;
+            }
         }
     }
+    
+    
 }
 
 // Counts the number of egg moves a pokemon learns and stores the moves in
