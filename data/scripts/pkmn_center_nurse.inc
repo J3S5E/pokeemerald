@@ -1,7 +1,6 @@
 Common_EventScript_PkmnCenterNurse:: @ 827191E
     lock
     faceplayer
-    setflag FLAG_CHALLENGE_MODE
     setvar VAR_0x8004, 0
     specialvar VAR_RESULT, CountPlayerTrainerStars
     compare VAR_RESULT, 4
