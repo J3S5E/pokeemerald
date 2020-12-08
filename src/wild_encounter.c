@@ -450,8 +450,9 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
 
     if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
     {
-        level = level - (level / 4);
-        level++;
+        level = level - (level / 5);
+        if (level < 1)
+            level = 1;
     }
 
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(level))
