@@ -6894,10 +6894,15 @@ void HandleSetPokedexFlag(u16 nationalNum, u8 caseId, u32 personality)
     u8 getFlagCaseId = (caseId == FLAG_SET_SEEN) ? FLAG_GET_SEEN : FLAG_GET_CAUGHT;
     if (!GetSetPokedexFlag(nationalNum, getFlagCaseId)) // don't set if it's already set
     {
-        for (i = 1; i < 493; i++)
+        
+        if (!(FlagGet(FLAG_RACE_MODE))) // If not in race then set all pokemon to seen
         {
-            GetSetPokedexFlag(i, FLAG_SET_SEEN);
+            for (i = 1; i < 493; i++)
+            {
+                GetSetPokedexFlag(i, FLAG_SET_SEEN);
+            }
         }
+        
         GetSetPokedexFlag(nationalNum, caseId);
         if (NationalPokedexNumToSpecies(nationalNum) == SPECIES_UNOWN)
             gSaveBlock2Ptr->pokedex.unownPersonality = personality;

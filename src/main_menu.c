@@ -1061,6 +1061,12 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
             default:
                 gPlttBufferUnfaded[0] = RGB_BLACK;
                 gPlttBufferFaded[0] = RGB_BLACK;
+                if (JOY_HELD(START_BUTTON)) // Enable race mode if holding start
+                {
+                    FlagSet(FLAG_RACE_MODE);
+                    gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_FAST;
+                    gSaveBlock2Ptr->optionsBattleSceneOff = TRUE;
+                }
                 gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
                 break;
             case ACTION_CONTINUE:
