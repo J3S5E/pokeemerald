@@ -4738,6 +4738,7 @@ bool8 MonKnowsMove(struct Pokemon *mon, u16 move)
             return TRUE;
     }
 
+    // This is used for Field moves to use HMs without knowing the move
     if (IsMoveHm(move))
         return MonLearnsTMHMMove(mon, move);
     
