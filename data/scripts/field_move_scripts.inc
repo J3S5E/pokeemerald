@@ -276,3 +276,4 @@ EventScript_EnableAutoRun::
     end
 AutoRunEnabled:
     .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GREY}.$"
+	end

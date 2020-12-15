@@ -616,7 +616,7 @@ void ClearItemSlots(struct ItemSlot *itemSlots, u8 itemCount)
 
 static s32 FindFreePCItemSlot(void)
 {
-    s8 i;
+    u8 i;
 
     for (i = 0; i < PC_ITEMS_COUNT; i++)
     {
@@ -654,7 +654,7 @@ bool8 CheckPCHasItem(u16 itemId, u16 count)
 bool8 AddPCItem(u16 itemId, u16 count)
 {
     u8 i;
-    s8 freeSlot;
+    s16 freeSlot;
     u16 ownedCount;
     struct ItemSlot *newItems;
 
