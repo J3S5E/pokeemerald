@@ -476,6 +476,25 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
     return FALSE;
 }
 
+// Check if stat changes have taken place
+bool32 HaveStatsDecresedTooFar(u32 battlerAI)
+{
+    u8 i, statTotalModifiers = 0;
+
+    // for every stat but HP gets modifiers
+    for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++)
+    {
+        statTotalModifiers = statTotalModifiers + gBattleMons[battlerAI].statStages[i];
+    }
+
+    // Stat mod normally @ 42
+    if (statTotalModifiers < 40)
+        return TRUE;
+
+    return FALSE;
+}
+
+
 // Check if target has means to faint ai mon from full.
 bool32 CanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
 {
@@ -705,6 +724,16 @@ static u8 ChooseMoveOrAction_Singles(void)
             && gBattleMons[sBattler_AI].species != SPECIES_SHEDINJA)
         {
             if (GetMostSuitableMonToSwitchIntoOHKO() != PARTY_SIZE)
+            {
+                AI_THINKING_STRUCT->switchMon = TRUE;
+                return AI_CHOICE_SWITCH;
+            }
+        }
+
+        // Consider switching if mon has 2 or more stats lowered and a 1 in 3 chance
+        if (HaveStatsDecresedTooFar(sBattler_AI) && (Random() % 2) == 0)
+        {
+            if (GetMostSuitableMonToSwitchInto() != PARTY_SIZE)
             {
                 AI_THINKING_STRUCT->switchMon = TRUE;
                 return AI_CHOICE_SWITCH;
