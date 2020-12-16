@@ -1816,6 +1816,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u16 threshold = 0;
     u32 personalityValue;
     u8 fixedIV;
+    u8 nature;
     s32 i, j, k;
     u8 monsCount;
     u16 species;
@@ -1988,6 +1989,17 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                     nameHash += gSpeciesNames[partyData[i].species][j];
 
                 personalityValue += nameHash << 8;
+
+                if (partyData[i].natureNum != nature)
+                {
+                    nature = partyData[i].natureNum;
+
+                    while (personalityValue % 25 != nature)
+                    {
+                        personalityValue = Random32();
+                    }
+                }
+
                 fixedIV = partyData[i].iv * 31 / 255;
 
                 species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
