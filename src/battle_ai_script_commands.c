@@ -537,6 +537,44 @@ bool32 CanAiBeOHKO(u32 battlerAI, u32 opposingBattler)
     return FALSE;
 }
 
+// Check if AI is choice locked in a bad position.
+bool32 BadChoiceLocked(u32 battlerAI, u32 opposingBattler)
+{
+    u8 i;
+    u16 item;
+    u16 move = MOVE_NONE;
+    u16 *moves = gBattleMons[sBattler_AI].moves;
+
+    // if choiced
+    if (HOLD_EFFECT_CHOICE(GetBattlerHoldEffect(sBattler_AI, TRUE)))
+    {
+        // if move already selected
+        if (gLastMoves[battlerAI])
+        {
+            // Find what was the last move
+            for (i = 0; i < MAX_MON_MOVES; i++)
+            {
+                if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && moves[i] == gLastMoves[battlerAI])
+                    move = moves[i]; // save the move to var
+            }
+
+            // If can KO player
+            if (AI_CalcDamage(move, battlerAI, opposingBattler) >= gBattleMons[opposingBattler].hp)
+                return FALSE;
+            
+            // If move is not very effective
+            if (AI_GetTypeEffectiveness(move, battlerAI, opposingBattler) < UQ_4_12(1.0))
+                return TRUE;
+
+            // If attack does not do damage
+            if (AI_CalcDamage(move, battlerAI, opposingBattler) < 2)
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 
 bool32 CanAiEasilyFinishOpponent(u32 battlerAI, u32 opposingBattler)
 {
@@ -732,6 +770,16 @@ static u8 ChooseMoveOrAction_Singles(void)
 
         // Consider switching if mon has 2 or more stats lowered and a 1 in 3 chance
         if (HaveStatsDecresedTooFar(sBattler_AI) && (Random() % 2) == 0)
+        {
+            if (GetMostSuitableMonToSwitchInto() != PARTY_SIZE)
+            {
+                AI_THINKING_STRUCT->switchMon = TRUE;
+                return AI_CHOICE_SWITCH;
+            }
+        }
+
+        // Consider switching if mon badly is choice locked
+        if (BadChoiceLocked(sBattler_AI, gBattlerTarget))
         {
             if (GetMostSuitableMonToSwitchInto() != PARTY_SIZE)
             {
