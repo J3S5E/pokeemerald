@@ -86,7 +86,7 @@ static void CB2_HandleStartMultiBattle(void);
 static void CB2_HandleStartBattle(void);
 static void TryCorrectShedinjaLanguage(struct Pokemon *mon);
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer);
-static u16 RandomNewMove(u16 species);
+static u16 RandomNewTMHM(u16 species);
 static u16 CanMonEvolve(u16 species, u32 level);
 static void BattleMainCB1(void);
 static void sub_8038538(struct Sprite *sprite);
@@ -340,6 +340,112 @@ const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1] =
     _("DRAGON"),
     _("DARK"),
     _("FAIRY"),
+};
+
+static const u16 sTMHMMoves[] =
+{
+    MOVE_FOCUS_PUNCH,
+    MOVE_DRAGON_CLAW,
+    MOVE_WATER_PULSE,
+    MOVE_CALM_MIND,
+    MOVE_ROAR,
+    MOVE_TOXIC,
+    MOVE_HAIL,
+    MOVE_BULK_UP,
+    MOVE_BULLET_SEED,
+    MOVE_HIDDEN_POWER,
+    MOVE_SUNNY_DAY,
+    MOVE_TAUNT,
+    MOVE_ICE_BEAM,
+    MOVE_BLIZZARD,
+    MOVE_HYPER_BEAM,
+    MOVE_LIGHT_SCREEN,
+    MOVE_PROTECT,
+    MOVE_RAIN_DANCE,
+    MOVE_GIGA_DRAIN,
+    MOVE_SAFEGUARD,
+    MOVE_FRUSTRATION,
+    MOVE_SOLAR_BEAM,
+    MOVE_IRON_TAIL,
+    MOVE_THUNDERBOLT,
+    MOVE_THUNDER,
+    MOVE_EARTHQUAKE,
+    MOVE_RETURN,
+    MOVE_DIG,
+    MOVE_PSYCHIC,
+    MOVE_SHADOW_BALL,
+    MOVE_BRICK_BREAK,
+    MOVE_DOUBLE_TEAM,
+    MOVE_REFLECT,
+    MOVE_SHOCK_WAVE,
+    MOVE_FLAMETHROWER,
+    MOVE_SLUDGE_BOMB,
+    MOVE_SANDSTORM,
+    MOVE_FIRE_BLAST,
+    MOVE_ROCK_TOMB,
+    MOVE_AERIAL_ACE,
+    MOVE_TORMENT,
+    MOVE_FACADE,
+    MOVE_SECRET_POWER,
+    MOVE_REST,
+    MOVE_ATTRACT,
+    MOVE_THIEF,
+    MOVE_STEEL_WING,
+    MOVE_SKILL_SWAP,
+    MOVE_SNATCH,
+    MOVE_OVERHEAT,
+    MOVE_CUT,
+    MOVE_FLY,
+    MOVE_SURF,
+    MOVE_STRENGTH,
+    MOVE_FLASH,
+    MOVE_ROCK_SMASH,
+    MOVE_WATERFALL,
+    MOVE_DIVE,
+    MOVE_ROOST,
+    MOVE_FOCUS_BLAST,
+    MOVE_ENERGY_BALL,
+    MOVE_FALSE_SWIPE,
+    MOVE_BRINE,
+    MOVE_FLING,
+    MOVE_CHARGE_BEAM,
+    MOVE_ENDURE,
+    MOVE_DRAGON_PULSE,
+    MOVE_DRAIN_PUNCH,
+    MOVE_WILL_O_WISP,
+    MOVE_SILVER_WIND,
+    MOVE_EMBARGO,
+    MOVE_EXPLOSION,
+    MOVE_SHADOW_CLAW,
+    MOVE_PAYBACK,
+    MOVE_RECYCLE,
+    MOVE_GIGA_IMPACT,
+    MOVE_ROCK_POLISH,
+    MOVE_DEFOG,
+    MOVE_STONE_EDGE,
+    MOVE_AVALANCHE,
+    MOVE_THUNDER_WAVE,
+    MOVE_GYRO_BALL,
+    MOVE_SWORDS_DANCE,
+    MOVE_STEALTH_ROCK,
+    MOVE_PSYCH_UP,
+    MOVE_CAPTIVATE,
+    MOVE_DARK_PULSE,
+    MOVE_ROCK_SLIDE,
+    MOVE_X_SCISSOR,
+    MOVE_SLEEP_TALK,
+    MOVE_NATURAL_GIFT,
+    MOVE_POISON_JAB,
+    MOVE_DREAM_EATER,
+    MOVE_GRASS_KNOT,
+    MOVE_SWAGGER,
+    MOVE_PLUCK,
+    MOVE_U_TURN,
+    MOVE_SUBSTITUTE,
+    MOVE_FLASH_CANNON,
+    MOVE_TRICK_ROOM,
+    MOVE_WHIRLPOOL,
+    MOVE_ROCK_CLIMB,
 };
 
 // This is a factor in how much money you get for beating a trainer.
@@ -1816,14 +1922,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u16 threshold = 0;
     u32 personalityValue;
     u8 fixedIV;
+    u8 nature;
     s32 i, j, k;
     u8 monsCount;
     u16 species;
     struct BattleMove newBattleMove;
-    u16 newMove;
+    u16 tmNumber;
     u16 newMovePP;
     bool8 lastMoveChanged = FALSE;
-    bool8 isNewMove;
 
 
 
@@ -1917,30 +2023,28 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
-                /*
-                
-                Add TM/Tutor move to pokemon  WIP
-                
-                while (!lastMoveChanged)
+                // Give random TM move if pokemon has 4 moves
+                if (GetMonData(&party[i], MON_DATA_MOVE1 + 3, NULL))
                 {
-                    newMove = RandomNewMove(species);
-                    newBattleMove = gBattleMoves[newMove];
-                    newMovePP = gBattleMoves[newMove].pp;
-                    SetMonData(&party[i], MON_DATA_MOVE1, &newBattleMove);
-                    SetMonData(&party[i], MON_DATA_PP1, &newMovePP);
-                    isNewMove = TRUE;
-
-                    for (j = 1; j < (MAX_MON_MOVES); j++)
+                    // loop until new move is given
+                    while (lastMoveChanged != TRUE)
                     {
-                        if (GetMonData(&party[i], MON_DATA_MOVE1, NULL) == GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL))
-                            isNewMove = FALSE;
-                    }
+                        tmNumber = RandomNewTMHM(species); // gets random TM/HM that is compatible
+                        if (tmNumber == 200) // if no compatible TM/HM found exit loop
+                            break;
+                        SetMonData(&party[i], MON_DATA_MOVE1, &sTMHMMoves[tmNumber]); // set first move to new move
+                        SetMonData(&party[i], MON_DATA_PP1, &gBattleMoves[sTMHMMoves[tmNumber]].pp); // assign pp
+                        lastMoveChanged = TRUE; // mark that move is changed
 
-                    if (isNewMove)
-                        lastMoveChanged = TRUE;
+                        // loop through pokemons moves 2-4
+                        for (j = 1; j < (MAX_MON_MOVES); j++)
+                        {
+                            if (GetMonData(&party[i], MON_DATA_MOVE1, NULL) == GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL)) // if new move matches moves the pokemon already has
+                                lastMoveChanged = FALSE; // reset loop
+                        }
+                    }
                 }
 
-                */
 
                 break;
             }
@@ -1988,6 +2092,17 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                     nameHash += gSpeciesNames[partyData[i].species][j];
 
                 personalityValue += nameHash << 8;
+
+                if (partyData[i].natureNum != nature)
+                {
+                    nature = partyData[i].natureNum;
+
+                    while (personalityValue % 25 != nature)
+                    {
+                        personalityValue = Random32();
+                    }
+                }
+
                 fixedIV = partyData[i].iv * 31 / 255;
 
                 species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
@@ -2050,23 +2165,23 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     return gTrainers[trainerNum].partySize;
 }
 
-static u16 RandomNewMove(u16 species)
+static u16 RandomNewTMHM(u16 species)
 {
-    u32 i, j = 0;
-    u16 moveId = MOVE_NONE;
-    u8 randNum;
+    u8 id, i;
     bool32 shouldUseMove;
 
     do
     {
-        randNum = Random() % (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES);
-        shouldUseMove = CanSpeciesLearnTMHM(species, randNum);
+        id = Random() % (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES);
+        shouldUseMove = CanSpeciesLearnTMHM(species, id);
+        i++;
     }
-    while (!shouldUseMove);
+    while (!shouldUseMove && i < 200);
 
-    moveId = ItemIdToBattleMoveId(ITEM_TM01 + randNum);
+    if (i == 200)
+        return 200;
 
-    return moveId;
+    return id;
 }
 
 static u16 CanMonEvolve(u16 species, u32 level)

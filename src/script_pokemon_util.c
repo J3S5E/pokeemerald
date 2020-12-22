@@ -60,14 +60,22 @@ void HealPlayerParty(void)
     }
 }
 
-u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3)
+u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 perfectIVs, u32 unused2, u8 unused3)
 {
     u16 nationalDexNum;
     int sentToPc;
     u8 heldItem[2];
     struct Pokemon mon;
 
-    CreateMon(&mon, species, level, 32, 0, 0, OT_ID_PLAYER_ID, 0);
+    if (perfectIVs == 1)
+    {
+        CreateMon(&mon, species, level, 31, 0, 0, OT_ID_PLAYER_ID, 0);
+    }
+    else
+    {
+        CreateMon(&mon, species, level, 32, 0, 0, OT_ID_PLAYER_ID, 0);
+    }
+
     heldItem[0] = item;
     heldItem[1] = item >> 8;
     SetMonData(&mon, MON_DATA_HELD_ITEM, heldItem);

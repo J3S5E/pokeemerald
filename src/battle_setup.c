@@ -7,6 +7,7 @@
 #include "safari_zone.h"
 #include "script.h"
 #include "event_data.h"
+#include "pokedex.h"
 #include "metatile_behavior.h"
 #include "field_player_avatar.h"
 #include "fieldmap.h"
@@ -929,7 +930,7 @@ static void CB2_GiveStarter(void)
 
     *GetVarPointer(VAR_STARTER_MON) = gSpecialVar_Result;
     starterMon = GetStarterPokemon(gSpecialVar_Result);
-    ScriptGiveMon(starterMon, 5, ITEM_NONE, 0, 0, 0);
+    ScriptGiveMon(starterMon, 5, ITEM_NONE, 1, 0, 0);
     ResetTasks();
     PlayBattleBGM();
     SetMainCallback2(CB2_StartFirstBattle);
@@ -1897,21 +1898,20 @@ u16 CountBattledRematchTeams(u16 trainerId)
 
 static void NuzlockeCatchCheck(void)
 {
-    s8 location;
+    u16 location;
+    u16 pokedexNumber = 0;
 
     if (FlagGet(FLAG_NUZLOCKE_MODE) == FALSE)
         return;
     
-    location = gSaveBlock1Ptr->location.mapGroup;
-    
-    if (FlagGet(FLAG_MAPGROUP_WILD_ENC_START + location))
+    FlagSet(FLAG_DISABLE_CATCHING);
+
+    pokedexNumber = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
+
+    location = gMapHeader.regionMapSectionId;
+    if (!FlagGet(FLAG_MAPGROUP_WILD_ENC_START + location) && !HasPokemonBeenCaughtBefore(pokedexNumber))
     {
-        FlagSet(FLAG_DISABLE_CATCHING);
-    }
-    else
-    {
-        FlagClear(FLAG_DISABLE_CATCHING);
         FlagSet(FLAG_MAPGROUP_WILD_ENC_START + location);
+        FlagClear(FLAG_DISABLE_CATCHING);
     }
-    
 }

@@ -5,16 +5,6 @@ EventScript_CutTree:: @ 82906BB
 	checkpartymove MOVE_CUT
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CheckTreeCantCut
-	setfieldeffectargument 0, VAR_RESULT
-	bufferpartymonnick 0, VAR_RESULT
-	buffermovename 1, MOVE_CUT
-	msgbox Text_WantToCut, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq EventScript_CancelCut
-	msgbox Text_MonUsedFieldMove, MSGBOX_DEFAULT
-	closemessage
-	dofieldeffect FLDEFF_USE_CUT_ON_TREE
-	waitstate
 	goto EventScript_CutTreeDown
 	end
 
@@ -39,6 +29,7 @@ Movement_CutTreeDown: @ 829071F
 
 EventScript_CheckTreeCantCut:: @ 8290721
 	msgbox Text_CantCut, MSGBOX_DEFAULT
+	closemessage
 	releaseall
 	end
 
@@ -66,16 +57,6 @@ EventScript_RockSmash:: @ 82907A6
 	checkpartymove MOVE_ROCK_SMASH
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantSmashRock
-	setfieldeffectargument 0, VAR_RESULT
-	bufferpartymonnick 0, VAR_RESULT
-	buffermovename 1, MOVE_ROCK_SMASH
-	msgbox Text_WantToSmash, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq EventScript_CancelSmash
-	msgbox Text_MonUsedFieldMove, MSGBOX_DEFAULT
-	closemessage
-	dofieldeffect FLDEFF_USE_ROCK_SMASH
-	waitstate
 	goto EventScript_SmashRock
 	end
 
@@ -111,6 +92,7 @@ Movement_SmashRock: @ 829082B
 
 EventScript_CantSmashRock:: @ 829082D
 	msgbox Text_CantSmash, MSGBOX_DEFAULT
+	closemessage
 	releaseall
 	end
 
@@ -134,13 +116,6 @@ EventScript_StrengthBoulder:: @ 82908BA
 	checkpartymove MOVE_STRENGTH
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantStrength
-	setfieldeffectargument 0, VAR_RESULT
-	msgbox Text_WantToStrength, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq EventScript_CancelStrength
-	closemessage
-	dofieldeffect FLDEFF_USE_STRENGTH
-	waitstate
 	goto EventScript_ActivateStrength
 	end
 
@@ -159,6 +134,7 @@ EventScript_ActivateStrength:: @ 8290908
 
 EventScript_CantStrength:: @ 8290915
 	msgbox Text_CantStrength, MSGBOX_DEFAULT
+	closemessage
 	releaseall
 	end
 
@@ -195,12 +171,6 @@ EventScript_UseWaterfall:: @ 8290A49
 	checkpartymove MOVE_WATERFALL
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantWaterfall
-	bufferpartymonnick 0, VAR_RESULT
-	setfieldeffectargument 0, VAR_RESULT
-	msgbox Text_WantToWaterfall, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq EventScript_EndWaterfall
-	msgbox Text_MonUsedWaterfall, MSGBOX_DEFAULT
 	dofieldeffect FLDEFF_USE_WATERFALL
 	goto EventScript_EndWaterfall
 
@@ -209,6 +179,7 @@ EventScript_CannotUseWaterfall:: @ 8290A83
 
 EventScript_CantWaterfall:: @ 8290A84
 	msgbox Text_CantWaterfall, MSGBOX_DEFAULT
+	closemessage
 
 EventScript_EndWaterfall:: @ 8290A8C
 	releaseall
@@ -233,10 +204,6 @@ EventScript_UseDive:: @ 8290B0F
 	bufferpartymonnick 0, VAR_RESULT
 	setfieldeffectargument 0, VAR_RESULT
 	setfieldeffectargument 1, 1
-	msgbox Text_WantToDive, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq EventScript_EndDive
-	msgbox Text_MonUsedDive, MSGBOX_DEFAULT
 	dofieldeffect FLDEFF_USE_DIVE
 	goto EventScript_EndDive
 	end
@@ -258,10 +225,6 @@ EventScript_UseDiveUnderwater:: @ 8290B5A
 	bufferpartymonnick 0, VAR_RESULT
 	setfieldeffectargument 0, VAR_RESULT
 	setfieldeffectargument 1, 1
-	msgbox Text_WantToSurface, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq EventScript_EndSurface
-	msgbox Text_MonUsedDive, MSGBOX_DEFAULT
 	dofieldeffect FLDEFF_USE_DIVE
 	goto EventScript_EndSurface
 	end
@@ -313,3 +276,4 @@ EventScript_EnableAutoRun::
     end
 AutoRunEnabled:
     .string "Auto Run {COLOR GREEN}Enabled{COLOR DARK_GREY}.$"
+	end

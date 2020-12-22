@@ -47,6 +47,7 @@ struct TrainerMonItemCustomMoves
     u8 evs[NUM_STATS];
     u8 abilityNum;
     u8 dynamicLvl;
+    u8 natureNum;
     u8 shiny;
     u8 pokeballNum;
     u16 species;

@@ -7141,12 +7141,12 @@ void AddPokemonToChampion(void)
     u8 level = 100, fixedIV = 31, evs = 255;
 
     u16 newPokemon, newHeldItem, newAbilityNum, newMoves, move;
-    u16 newPokemonList[4];
-    u16 newHeldItemList[4];
-    u32 newNatureList[4];
-    u8 newAbilityNumList[4];
+    u16 newPokemonList[PARTY_SIZE];
+    u16 newHeldItemList[PARTY_SIZE];
+    u32 newNatureList[PARTY_SIZE];
+    u8 newAbilityNumList[PARTY_SIZE];
     u8 pp[MAX_MON_MOVES];
-    u16 newMovesList[4][MAX_MON_MOVES];
+    u16 newMovesList[PARTY_SIZE][MAX_MON_MOVES];
 
     struct Pokemon *party;
     party = gEnemyParty;
@@ -7220,7 +7220,19 @@ void AddPokemonToChampion(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_EXCADRILL) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
         if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GLISCOR) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
+            k++;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if ((GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SWAMPERT) && GetMonData(&party[i], MON_DATA_LEVEL) == level)
             k++;
     }
 
@@ -7261,29 +7273,49 @@ void AddPokemonToChampion(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GLISCOR)
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_EXCADRILL)
             k = 4;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_GLISCOR)
+            k = 5;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_SPECIES, NULL) == SPECIES_SWAMPERT)
+            k = 6;
     }
 
     newPokemonList[0] = SPECIES_HYDREIGON;
     newPokemonList[1] = SPECIES_LUCARIO;
     newPokemonList[2] = SPECIES_TOGEKISS;
-    newPokemonList[3] = SPECIES_GLISCOR;
+    newPokemonList[3] = SPECIES_EXCADRILL;
+    newPokemonList[4] = SPECIES_GLISCOR;
+    newPokemonList[5] = SPECIES_SWAMPERT;
 
     newHeldItemList[0] = ITEM_LIFE_ORB;
     newHeldItemList[1] = ITEM_LIFE_ORB;
-    newHeldItemList[2] = ITEM_LEFTOVERS;
-    newHeldItemList[3] = ITEM_LEFTOVERS;
+    newHeldItemList[2] = ITEM_WEAKNESS_POLICY;
+    newHeldItemList[3] = ITEM_CHOICE_SCARF;
+    newHeldItemList[4] = ITEM_LEFTOVERS;
+    newHeldItemList[5] = ITEM_CHOICE_BAND;
 
     newNatureList[0] = 15;
     newNatureList[1] = 3;
     newNatureList[2] = 15;
+    newNatureList[3] = 3;
     newNatureList[3] = 13;
+    newNatureList[3] = 3;
 
     newAbilityNumList[0] = 0;
     newAbilityNumList[1] = 2;
     newAbilityNumList[2] = 1;
-    newAbilityNumList[3] = 0;
+    newAbilityNumList[3] = 2;
+    newAbilityNumList[4] = 0;
+    newAbilityNumList[5] = 0;
 
 
     newMovesList[0][0] = MOVE_DARK_PULSE;
@@ -7301,10 +7333,20 @@ void AddPokemonToChampion(void)
     newMovesList[2][2] = MOVE_AIR_SLASH;
     newMovesList[2][3] = MOVE_AURA_SPHERE;
 
-    newMovesList[3][0] = MOVE_KNOCK_OFF;
-    newMovesList[3][1] = MOVE_EARTHQUAKE;
-    newMovesList[3][2] = MOVE_ICE_FANG;
-    newMovesList[3][3] = MOVE_ROOST;
+    newMovesList[3][0] = MOVE_EARTHQUAKE;
+    newMovesList[3][1] = MOVE_IRON_HEAD;
+    newMovesList[3][2] = MOVE_SLASH;
+    newMovesList[3][3] = MOVE_ROCK_SLIDE;
+
+    newMovesList[4][0] = MOVE_KNOCK_OFF;
+    newMovesList[4][1] = MOVE_EARTHQUAKE;
+    newMovesList[4][2] = MOVE_ICE_FANG;
+    newMovesList[4][3] = MOVE_ROOST;
+
+    newMovesList[5][0] = MOVE_WATERFALL;
+    newMovesList[5][1] = MOVE_EARTHQUAKE;
+    newMovesList[5][2] = MOVE_STONE_EDGE;
+    newMovesList[5][3] = MOVE_ICE_PUNCH;
 
 
 
@@ -7365,12 +7407,12 @@ void AddPokemonToFinalDouble(void)
     u8 level, fixedIV = 31;
 
     u16 newPokemon, newHeldItem, newAbilityNum, newMoves, move;
-    u16 newPokemonList[6];
-    u16 newHeldItemList[6];
-    u32 newNatureList[6];
-    u8 newAbilityNumList[6];
+    u16 newPokemonList[PARTY_SIZE];
+    u16 newHeldItemList[PARTY_SIZE];
+    u32 newNatureList[PARTY_SIZE];
+    u8 newAbilityNumList[PARTY_SIZE];
     u8 pp[MAX_MON_MOVES];
-    u8 evList[6][6] = {
+    u8 evList[PARTY_SIZE][6] = {
         {200, 200, 108, 0, 0, 0},
         {0, 40, 0, 216, 252, 0},
         {0, 4, 0, 252, 252, 0},
@@ -7378,7 +7420,7 @@ void AddPokemonToFinalDouble(void)
         {0, 252, 0, 252, 0, 4},
         {252, 0, 80, 0, 0, 176}
     };
-    u16 newMovesList[6][MAX_MON_MOVES];
+    u16 newMovesList[PARTY_SIZE][MAX_MON_MOVES];
 
     struct Pokemon *party;
     party = gEnemyParty;

@@ -4737,6 +4737,24 @@ bool8 MonKnowsMove(struct Pokemon *mon, u16 move)
         if (GetMonData(mon, MON_DATA_MOVE1 + i) == move)
             return TRUE;
     }
+
+    // This is used for Field moves to use HMs without knowing the move
+    if (IsMoveHm(move))
+        return MonLearnsTMHMMove(mon, move);
+    
+    return FALSE;
+}
+
+bool8 MonLearnsTMHMMove(struct Pokemon *mon, u16 move)
+{
+    u8 j;
+
+    for (j = 0; j < NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES; j++)
+    {
+        if (move == ItemIdToBattleMoveId(ITEM_TM01_FOCUS_PUNCH + j) && CanMonLearnTMHM(mon, j))
+            return TRUE;
+    }
+
     return FALSE;
 }
 

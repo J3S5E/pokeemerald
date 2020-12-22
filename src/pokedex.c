@@ -5605,3 +5605,8 @@ static void ClearSearchParameterBoxText(void)
 {
     ClearSearchMenuRect(144, 8, 96, 96);
 }
+
+bool16 HasPokemonBeenCaughtBefore(u16 dexNum)
+{
+    return GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT);
+}

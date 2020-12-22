@@ -3296,6 +3296,53 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
     return retVal;
 }
 
+u16 MonTryLearningNewMoveEvolve(struct Pokemon *mon, bool8 firstMove)
+{
+    u32 retVal = 0;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+
+    // since you can learn more than one move per level
+    // the game needs to know whether you decided to
+    // learn it or keep the old set to avoid asking
+    // you to learn the same move over and over again
+    if (firstMove)
+    {
+        sLearningMoveTableID = 0;
+
+        while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level && gLevelUpLearnsets[species][sLearningMoveTableID].level != 0)
+        {
+            sLearningMoveTableID++;
+            if (gLevelUpLearnsets[species][sLearningMoveTableID].move == LEVEL_UP_END)
+                return 0;
+        }
+    }
+
+    if (gLevelUpLearnsets[species][sLearningMoveTableID].level == level || gLevelUpLearnsets[species][sLearningMoveTableID].level == 0)
+    {
+        gMoveToLearn = gLevelUpLearnsets[species][sLearningMoveTableID].move;
+        sLearningMoveTableID++;
+        retVal = GiveMoveToMon(mon, gMoveToLearn);
+    }
+
+    while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level && gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END && retVal == 0)
+    {
+        sLearningMoveTableID++;
+    }
+
+    if (gLevelUpLearnsets[species][sLearningMoveTableID].move == LEVEL_UP_END)
+        return 0;
+    
+    if (gLevelUpLearnsets[species][sLearningMoveTableID].level == level && retVal == 0)
+    {
+        gMoveToLearn = gLevelUpLearnsets[species][sLearningMoveTableID].move;
+        sLearningMoveTableID++;
+        retVal = GiveMoveToMon(mon, gMoveToLearn);
+    }
+
+    return retVal;
+}
+
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
 {
     s32 i;
@@ -6894,10 +6941,15 @@ void HandleSetPokedexFlag(u16 nationalNum, u8 caseId, u32 personality)
     u8 getFlagCaseId = (caseId == FLAG_SET_SEEN) ? FLAG_GET_SEEN : FLAG_GET_CAUGHT;
     if (!GetSetPokedexFlag(nationalNum, getFlagCaseId)) // don't set if it's already set
     {
-        for (i = 1; i < 493; i++)
+        
+        if (!(FlagGet(FLAG_RACE_MODE))) // If not in race then set all pokemon to seen
         {
-            GetSetPokedexFlag(i, FLAG_SET_SEEN);
+            for (i = 1; i < 493; i++)
+            {
+                GetSetPokedexFlag(i, FLAG_SET_SEEN);
+            }
         }
+        
         GetSetPokedexFlag(nationalNum, caseId);
         if (NationalPokedexNumToSpecies(nationalNum) == SPECIES_UNOWN)
             gSaveBlock2Ptr->pokedex.unownPersonality = personality;
