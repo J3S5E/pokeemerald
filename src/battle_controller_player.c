@@ -1601,7 +1601,20 @@ static void MoveSelectionDisplayMoveType(void)
 
 static void MoveSelectionDisplayMovePowerString(void)
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePower);
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
+    switch (gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].split)
+    {
+        case SPLIT_PHYSICAL:
+            StringCopy(gDisplayedStringBattle, gText_MoveInterfacePhys);
+            break;
+        case SPLIT_SPECIAL:
+            StringCopy(gDisplayedStringBattle, gText_MoveInterfaceSpec);
+            break;
+        default:
+            StringCopy(gDisplayedStringBattle, gText_MoveInterfaceStat);
+            break;
+    }
+    
     BattlePutTextOnWindow(gDisplayedStringBattle, 7);
 
 }
