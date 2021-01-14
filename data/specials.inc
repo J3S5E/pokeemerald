@@ -69,6 +69,7 @@ gSpecials:: @ 81DBA64
 	def_special EndTrainerApproach
 	def_special SetUpTrainerEncounterMusic
 	def_special ShouldTryRematchBattle
+	def_special CheckTrainerFollowsRules
 	def_special IsTrainerReadyForRematch
 	def_special BattleSetup_StartRematchBattle
 	def_special ShowPokemonStorageSystemPC
