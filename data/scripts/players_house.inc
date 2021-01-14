@@ -66,6 +66,7 @@ PlayersHouse_2F_EventScript_WallClock:: @ 8292799
 	delay 30
 	setvar VAR_LITTLEROOT_INTRO_STATE, 7
 	setflag FLAG_SET_WALL_CLOCK
+	setflag FLAG_HIDE_RIVAL_IN_HOUSE
 	call PlayersHouse_2F_EventScript_MomComesUpstairsMale
 	playse SE_EXIT
 	removeobject VAR_0x8008
@@ -79,7 +80,14 @@ PlayersHouse_2F_EventScript_MomComesUpstairsMale:: @ 82927DF
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestRight
 	waitmovement 0
-	msgbox PlayersHouse_2F_Text_HowDoYouLikeYourRoom, MSGBOX_DEFAULT
+	msgbox PlayersHouse_2F_Text_PrepareToGiveBag, MSGBOX_DEFAULT
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox PlayersHouse_2F_Text_GiveShoes, MSGBOX_DEFAULT
+	waitfanfare
+	setflag FLAG_RECEIVED_RUNNING_SHOES
+	setflag FLAG_SYS_B_DASH
+	giveitem ITEM_MACH_BIKE
+	giveitem ITEM_OLD_ROD
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsMale
 	waitmovement 0
@@ -92,7 +100,14 @@ PlayersHouse_2F_EventScript_MomComesUpstairsFemale:: @ 829280F
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
-	msgbox PlayersHouse_2F_Text_HowDoYouLikeYourRoom, MSGBOX_DEFAULT
+	msgbox PlayersHouse_2F_Text_PrepareToGiveBag, MSGBOX_DEFAULT
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox PlayersHouse_2F_Text_GiveShoes, MSGBOX_DEFAULT
+	waitfanfare
+	setflag FLAG_RECEIVED_RUNNING_SHOES
+	setflag FLAG_SYS_B_DASH
+	giveitem ITEM_MACH_BIKE
+	giveitem ITEM_OLD_ROD
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsFemale
 	waitmovement 0
@@ -308,8 +323,7 @@ PlayersHouse_1F_EventScript_Mom:: @ 82929C5
 	goto_if_eq PlayersHouse_1F_EventScript_DontPushYourselfTooHard
 	compare VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4
 	goto_if_eq PlayersHouse_1F_EventScript_DontPushYourselfTooHard
-	goto_if_set FLAG_HAS_MATCH_CALL, PlayersHouse_1F_EventScript_TryRegisterMom
-	goto_if_set FLAG_RESCUED_BIRCH, PlayersHouse_1F_EventScript_MomHealsParty
+	goto_if_set FLAG_ADVENTURE_STARTED, PlayersHouse_1F_EventScript_CheckGiveAmuletCoin
 	compare VAR_TEMP_1, 1
 	goto_if_eq PlayersHouse_1F_EventScript_SeeYouHoney
 	compare VAR_LITTLEROOT_INTRO_STATE, 7
@@ -338,11 +352,11 @@ PlayersHouse_1F_EventScript_TryRegisterMom:: @ 8292A19
 	end
 
 PlayersHouse_1F_EventScript_CheckGiveAmuletCoin:: @ 8292A43
-	goto_if_set FLAG_BADGE05_GET, PlayersHouse_1F_EventScript_TryGiveAmuletCoin
+	goto_if_set FLAG_BADGE01_GET, PlayersHouse_1F_EventScript_TryGiveAmuletCoin
 	goto PlayersHouse_1F_EventScript_MomHealsParty
 
 PlayersHouse_1F_EventScript_TryGiveAmuletCoin:: @ 8292A51
-	goto_if_set FLAG_RECEIVED_AMULET_COIN, PlayersHouse_1F_EventScript_MomHealsParty
+	goto_if_set FLAG_RECEIVED_AMULET_COIN, PlayersHouse_1F_EventScript_DontPushYourselfTooHard
 	msgbox PlayersHouse_1F_Text_GotDadsBadgeHeresSomethingFromMom, MSGBOX_DEFAULT
 	giveitem ITEM_AMULET_COIN
 	compare VAR_RESULT, FALSE

@@ -104,7 +104,6 @@ LittlerootTown_MaysHouse_1F_EventScript_YoureNewNeighbor:: @ 81F89AE
 	waitmovement 0
 	special GetRivalSonDaughterString
 	msgbox RivalsHouse_1F_Text_OhYoureTheNewNeighbor, MSGBOX_DEFAULT
-	setflag FLAG_MET_RIVAL_MOM
 	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 2
 	releaseall
 	end
@@ -122,11 +121,8 @@ RivalsHouse_1F_EventScript_RivalMom:: @ 81F89F3
 	lock
 	faceplayer
 	goto_if_set FLAG_DEFEATED_RIVAL_ROUTE103, RivalsHouse_1F_EventScript_GoHomeEverySoOften
-	goto_if_set FLAG_SYS_POKEMON_GET, RivalsHouse_1F_EventScript_RivalIsOnRoute103
-	compare VAR_LITTLEROOT_RIVAL_STATE, 3
-	goto_if_eq RivalsHouse_1F_EventScript_RivalTooBusy
-	special GetRivalSonDaughterString
-	msgbox RivalsHouse_1F_Text_LikeChildLikeFather, MSGBOX_DEFAULT
+	goto_if_set FLAG_SYS_POKEMON_GET, RivalsHouse_1F_EventScript_RivalIsUpstairs
+	msgbox RivalsHouse_1F_Text_Introduce, MSGBOX_DEFAULT
 	release
 	end
 
@@ -135,8 +131,8 @@ RivalsHouse_1F_EventScript_RivalTooBusy:: @ 81F8A1F
 	release
 	end
 
-RivalsHouse_1F_EventScript_RivalIsOnRoute103:: @ 81F8A29
-	msgbox RivalsHouse_1F_Text_WentOutToRoute103, MSGBOX_DEFAULT
+RivalsHouse_1F_EventScript_RivalIsUpstairs:: @ 81F8A29
+	msgbox RivalsHouse_1F_Text_IsUpstairs, MSGBOX_DEFAULT
 	release
 	end
 
@@ -345,12 +341,13 @@ RivalsHouse_1F_Text_OhYoureTheNewNeighbor: @ 81F8BC5
 	.string "a new friend.\p"
 	.string "Our {STR_VAR_1} is upstairs, I think.$"
 
-RivalsHouse_1F_Text_LikeChildLikeFather: @ 81F8CA5
-	.string "Like child, like father.\p"
-	.string "My husband is as wild about POKéMON\n"
-	.string "as our child.\p"
-	.string "If he's not at his LAB, he's likely\n"
-	.string "scrabbling about in grassy places.$"
+RivalsHouse_1F_Text_Introduce: @ 81F8CA5
+	.string "Oh, you're {PLAYER}{KUN}.\n"
+	.string "It's nice to meet you!\p"
+	.string "If you're here to see {RIVAL} he has\n"
+	.string "already left to met PROF. FUJI…\p"
+	.string "Feels like things have been happening\n"
+	.string "non-stop since we moved to this region.$"
 
 RivalsHouse_1F_Text_TooBusyToNoticeVisit: @ 81F8D37
 	.string "That {RIVAL}!\p"
@@ -358,9 +355,11 @@ RivalsHouse_1F_Text_TooBusyToNoticeVisit: @ 81F8D37
 	.string "POKéMON to notice that you came\l"
 	.string "to visit, {PLAYER}{KUN}.$"
 
-RivalsHouse_1F_Text_WentOutToRoute103: @ 81F8D93
-	.string "Oh, {RIVAL} went out to ROUTE 103\n"
-	.string "just a little while ago.\p"
+RivalsHouse_1F_Text_IsUpstairs: @ 81F8D93
+	.string "Oh, {RIVAL} is upstairs.\n"
+	.string "Ever since we arrived he's been\p"
+	.string "talking about going on this adventure\n"
+	.string "and to become reginal champion.\p"
 	.string "Like father, like child.\n"
 	.string "{RIVAL} can't stay quietly at home.$"
 

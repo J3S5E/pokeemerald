@@ -55,11 +55,35 @@ LittlerootTown_MaysHouse_2F_EventScript_CheckInitDecor:: @ 81F9327
 	goto_if_eq SecretBase_EventScript_InitDecorations
 	end
 
-LittlerootTown_MaysHouse_2F_EventScript_RivalsPokeBall:: @ 81F9334
+LittlerootTown_MaysHouse_2F_EventScript_Rival:: @ 81F9334
 	lockall
-	compare VAR_LITTLEROOT_RIVAL_STATE, 2
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_MeetMay
-	msgbox RivalsHouse_2F_Text_ItsRivalsPokeBall, MSGBOX_DEFAULT
+	faceplayer
+	goto_if_set FLAG_BEAT_FIRST_RIVAL, LittlerootTown_MaysHouse_2F_EventScript_RivalFightWon
+	goto_if_set FLAG_ADVENTURE_STARTED, LittlerootTown_MaysHouse_2F_EventScript_RivalLost2
+	goto_if_unset FLAG_BEAT_FIRST_RIVAL, LittlerootTown_MaysHouse_2F_EventScript_RivalLost
+	end
+
+LittlerootTown_MaysHouse_2F_EventScript_RivalFightWon::
+	msgbox RivalsHouse_2F_Text_RivalFightWon, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestUp
+	releaseall
+	end
+
+LittlerootTown_MaysHouse_2F_EventScript_RivalLost::
+	msgbox RivalsHouse_2F_Text_RivalFightLost, MSGBOX_DEFAULT
+	giveitem ITEM_POKE_BALL, 20
+	setflag FLAG_SYS_POKEDEX_GET
+	setflag FLAG_SYS_NATIONAL_DEX
+	special EnableNationalPokedex
+	setflag FLAG_ADVENTURE_STARTED
+	msgbox RivalsHouse_2F_Text_RivalFightLost2, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestUp
+	releaseall
+	end
+
+LittlerootTown_MaysHouse_2F_EventScript_RivalLost2::
+	msgbox RivalsHouse_2F_Text_RivalFightLost2, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestUp
 	releaseall
 	end
 
@@ -381,9 +405,24 @@ RivalsHouse_2F_Text_BrendanGettingReady: @ 81F9962
 	.string "POKéMON fully restored…\n"
 	.string "Items all packed, and…$"
 
-RivalsHouse_2F_Text_ItsRivalsPokeBall: @ 81F9991
-	.string "It's {RIVAL}'s POKé BALL!\p"
-	.string "Better leave it right where it is.$"
+RivalsHouse_2F_Text_RivalFightWon:
+	.string "{RIVAL}: That fight wasn't fair!\p"
+	.string "I've already messaged my dad about\n"
+	.string "FUJI giving me a dud POKéMON.\p"
+	.string "Hope he gets removed from this stupid region.$"
+
+RivalsHouse_2F_Text_RivalFightLost:
+	.string "{RIVAL}: {PLAYER}{KUN}.\n"
+	.string "See how awesome of a trainer I am!\p"
+	.string "I give it a week until I'm campion of\n"
+	.string "this pathetic excuse of a region.\n"
+	.string "Also, FUJI gave me these to give to you.$"
+
+RivalsHouse_2F_Text_RivalFightLost2:
+	.string "My dad is sending me all the information\n"
+	.string "of all the leaders in this region.\p"
+	.string "Once I know what I'm dealing with I'll plan\n"
+	.string "the best strategy to become champion.$"
 
 RivalsHouse_2F_Text_MayJustCheckingMyPokedex: @ 81F99C9
 	.string "MAY: {PLAYER}{KUN}!\p"

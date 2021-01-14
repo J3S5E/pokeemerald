@@ -554,8 +554,8 @@
     {
       "id": "LAYOUT_LITTLEROOT_TOWN_MAYS_HOUSE_1F",
       "name": "LittlerootTown_MaysHouse_1F_Layout",
-      "width": 11,
-      "height": 9,
+      "width": 14,
+      "height": 12,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_BrendansMaysHouse",
       "border_filepath": "data/layouts/LittlerootTown_MaysHouse_1F/border.bin",
@@ -564,7 +564,7 @@
     {
       "id": "LAYOUT_LITTLEROOT_TOWN_MAYS_HOUSE_2F",
       "name": "LittlerootTown_MaysHouse_2F_Layout",
-      "width": 9,
+      "width": 20,
       "height": 8,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_BrendansMaysHouse",

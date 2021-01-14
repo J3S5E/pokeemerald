@@ -1,8 +1,6 @@
-.set LOCALID_WALLY, 2
-.set LOCALID_BOY, 3
-.set LOCALID_WALLYS_DAD, 5
-.set LOCALID_GYM_BOY, 8
-.set LOCALID_SCOTT, 9
+.set LOCALID_PROF, 3
+.set LOCALID_PROFBAG, 4
+.set LOCALID_RIVAL, 5
 
 PetalburgCity_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, PetalburgCity_OnTransition
@@ -12,12 +10,6 @@ PetalburgCity_MapScripts::
 PetalburgCity_OnTransition: @ 81DC2D7
 	setflag FLAG_VISITED_PETALBURG_CITY
 	end
-
-PetalburgCity_EventScript_MoveGymBoyToWestEntrance:: @ 81DC307
-	setobjectxyperm LOCALID_GYM_BOY, 5, 11
-	return
-
-
 
 PetalburgCity_OnFrame: @ 81DC31C
 	map_script_2 VAR_PETALBURG_CITY_STATE, 2, PetalburgCity_EventScript_WallyTutorial
@@ -29,11 +21,153 @@ PetalburgCity_EventScript_WallyTutorial:: @ 81DC32E
 	releaseall
 	end
 
+
+PetalburgCity_EventScript_ProfFuji::
+	lock
+	faceplayer
+	msgbox PetalburgCity_Text_ProfFuji, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+PetalburgCity_EventScript_Rival::
+	lock
+	faceplayer
+	msgbox PetalburgCity_Text_Rival, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+PetalburgCity_EventScript_Bag::
+	lock
+	applymovement LOCALID_PROF, Common_Movement_WalkInPlaceFastestRight
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_1, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestDown
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_2, MSGBOX_DEFAULT
+	applymovement LOCALID_PROF, Common_Movement_WalkInPlaceFastestRight
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_3, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestDown
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_4, MSGBOX_DEFAULT
+	applymovement LOCALID_PROF, Common_Movement_WalkInPlaceFastestRight
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_5, MSGBOX_DEFAULT
+	setflag FLAG_SYS_POKEMON_GET
+	clearflag FLAG_HIDE_RIVAL_IN_HOUSE
+	fadescreen FADE_TO_BLACK
+	removeobject LOCALID_PROFBAG
+	setvar VAR_LITTLEROOT_INTRO_STATE, 8
+	special ChooseStarter
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestDown
+	waitmovement 0
+	trainerbattle_no_intro TRAINER_RIVAL_INTRO, PetalburgCity_Text_Starter_6
+	applymovement LOCALID_PROF, PetalburgCity_Movement_Delay48
+	waitmovement 0
+	applymovement LOCALID_PROF, PetalburgCity_Movement_Delay48
+	waitmovement 0
+	applymovement LOCALID_PROF, PetalburgCity_Movement_Delay48
+	waitmovement 0
+	goto PetalburgCity_EventScript_BagAfterBattle
+	end
+
+PetalburgCity_EventScript_BagAfterBattle::
+	special HealPlayerParty
+	applymovement LOCALID_PROF, Common_Movement_WalkInPlaceFastestRight
+	waitmovement 0
+	bufferleadmonspeciesname 0
+	msgbox PetalburgCity_Text_Starter_7, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, Common_Movement_WalkInPlaceFastestDown
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_8, MSGBOX_DEFAULT
+	applymovement LOCALID_RIVAL, PetalburgCity_Movement_WalkAway
+	waitmovement 0
+	setvar VAR_0x8004, 20
+	setvar VAR_0x8005, 11
+	opendoor VAR_0x8004, VAR_0x8005
+	waitdooranim
+	applymovement LOCALID_RIVAL, PetalburgCity_Movement_WalkInsideHouse
+	waitmovement 0
+	removeobject LOCALID_RIVAL
+	closedoor VAR_0x8004, VAR_0x8005
+	waitdooranim
+	applymovement LOCALID_PROF, PetalburgCity_Movement_WalkRight
+	waitmovement 0
+	applymovement LOCALID_PROF, Common_Movement_FacePlayer
+	waitmovement 0
+	bufferleadmonspeciesname 0
+	msgbox PetalburgCity_Text_Starter_9, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq PetalburgCity_EventScript_NicknameStarter
+	goto_if_set FLAG_NUZLOCKE_MODE, PetalburgCity_EventScript_NicknameStarter
+	goto PetalburgCity_EventScript_EndBag
+	end
+
+PetalburgCity_EventScript_NicknameStarter::
+	setvar VAR_0x8004, 0
+	call Common_EventScript_NameReceivedPartyMon
+	goto PetalburgCity_EventScript_EndBag
+	end
+
+PetalburgCity_EventScript_EndBag::
+	applymovement LOCALID_PROF, Common_Movement_FacePlayer
+	waitmovement 0
+	msgbox PetalburgCity_Text_Starter_10, MSGBOX_DEFAULT
+	giveitem ITEM_POKE_BALL, 10
+	setflag FLAG_SYS_POKEDEX_GET
+	setflag FLAG_SYS_NATIONAL_DEX
+	special EnableNationalPokedex
+	setflag FLAG_ADVENTURE_STARTED
+	applymovement LOCALID_PROF, PetalburgCity_Movement_WalkNorth
+	waitmovement 0
+	removeobject LOCALID_PROF
+	releaseall
+	end
+
+PetalburgCity_EventScript_EndBlock::
+	releaseall
+	end
+
+PetalburgCity_EventScript_BlockDown::
+	goto_if_set FLAG_ADVENTURE_STARTED, PetalburgCity_EventScript_EndBlock
+	lockall
+	applymovement OBJ_EVENT_ID_PLAYER, PetalburgCity_Movement_BlockStartWalkUp
+	waitmovement 0
+	releaseall
+	end
+
+PetalburgCity_EventScript_BlockLeft::
+	goto_if_set FLAG_ADVENTURE_STARTED, PetalburgCity_EventScript_EndBlock
+	lockall
+	applymovement OBJ_EVENT_ID_PLAYER, PetalburgCity_Movement_BlockStartWalkRight
+	waitmovement 0
+	releaseall
+	end
+
+PetalburgCity_EventScript_BlockRight::
+	goto_if_set FLAG_ADVENTURE_STARTED, PetalburgCity_EventScript_EndBlock
+	lockall
+	applymovement OBJ_EVENT_ID_PLAYER, PetalburgCity_Movement_BlockStartWalkLeft
+	waitmovement 0
+	releaseall
+	end
+
+PetalburgCity_EventScript_BlockUp::
+	goto_if_set FLAG_ADVENTURE_STARTED, PetalburgCity_EventScript_EndBlock
+	lockall
+	applymovement OBJ_EVENT_ID_PLAYER, PetalburgCity_Movement_BlockStartWalkDown
+	waitmovement 0
+	releaseall
+	end
+
 PetalburgCity_EventScript_Nick:: @ 81DC3E6
 	lock
 	faceplayer
 	goto_if_set FLAG_BADGE01_GET, PetalburgCity_EventScript_Nick_AskRemoveChallenge
 	goto_if_set FLAG_NUZLOCKE_MODE, PetalburgCity_EventScript_Nick_ChallengeGoing
+	goto_if_set FLAG_ADVENTURE_STARTED, PetalburgCity_EventScript_Nick_ChallengeMissed
 	msgbox PetalburgCity_Text_Nick_1, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Text_Nick_2, MSGBOX_YESNO
 	compare VAR_RESULT, YES
@@ -45,6 +179,7 @@ PetalburgCity_EventScript_Nick:: @ 81DC3E6
 PetalburgCity_EventScript_Nick_StartChallenge::
 	setflag FLAG_NUZLOCKE_MODE
 	msgbox PetalburgCity_Text_Nick_3, MSGBOX_DEFAULT
+	giveitem ITEM_GREAT_BALL, 10
 	closemessage
 	release
 	end
@@ -70,12 +205,18 @@ PetalburgCity_EventScript_Nick_ChallengeOver::
 	release
 	end
 
+PetalburgCity_EventScript_Nick_ChallengeMissed::
+	msgbox PetalburgCity_Text_Nick_7, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
 
 PetalburgCity_EventScript_Unnamed:: @ 81DC3E6
 	lock
 	faceplayer
 	goto_if_set FLAG_BADGE01_GET, PetalburgCity_EventScript_Unnamed_AskRemoveChallenge
 	goto_if_set FLAG_CHALLENGE_MODE, PetalburgCity_EventScript_Unnamed_ChallengeGoing
+	goto_if_set FLAG_ADVENTURE_STARTED, PetalburgCity_EventScript_Unnamed_ChallengeMissed
 	msgbox PetalburgCity_Text_Unnamed_1, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Text_Unnamed_2, MSGBOX_YESNO
 	compare VAR_RESULT, YES
@@ -87,6 +228,13 @@ PetalburgCity_EventScript_Unnamed:: @ 81DC3E6
 PetalburgCity_EventScript_Unnamed_StartChallenge::
 	setflag FLAG_CHALLENGE_MODE
 	msgbox PetalburgCity_Text_Unnamed_3, MSGBOX_DEFAULT
+	giveitem ITEM_MACHO_BRACE
+	giveitem ITEM_POWER_BRACER
+	giveitem ITEM_POWER_BELT
+	giveitem ITEM_POWER_LENS
+	giveitem ITEM_POWER_BAND
+	giveitem ITEM_POWER_ANKLET
+	giveitem ITEM_POWER_WEIGHT
 	closemessage
 	release
 	end
@@ -112,20 +260,24 @@ PetalburgCity_EventScript_Unnamed_ChallengeOver::
 	release
 	end
 
+PetalburgCity_EventScript_Unnamed_ChallengeMissed::
+	msgbox PetalburgCity_Text_Unnamed_7, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
 
-PetalburgCity_Movement_WalkToWallyHousePlayer: @ 81DC406
+PetalburgCity_EventScript_DoorLocked::
+	lock
+	msgbox PetalburgCity_Text_DoorLocked, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+PetalburgCity_Movement_WalkNorth:
 	delay_8
-	walk_down
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
+	walk_up
+	walk_up
+	walk_up
 	walk_up
 	walk_up
 	walk_up
@@ -133,8 +285,54 @@ PetalburgCity_Movement_WalkToWallyHousePlayer: @ 81DC406
 	walk_up
 	step_end
 
+PetalburgCity_Movement_WalkAway:
+	delay_8
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	step_end
 
+PetalburgCity_Movement_WalkInsideHouse: @ 81DC42D
+	walk_up
+	set_invisible
+	step_end
 
+PetalburgCity_Movement_WalkRight:
+	delay_8
+	walk_right
+	step_end
+
+PetalburgCity_Movement_BlockStartWalkDown:
+	delay_8
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+PetalburgCity_Movement_BlockStartWalkLeft:
+	delay_8
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+PetalburgCity_Movement_BlockStartWalkRight:
+	delay_8
+	walk_right
+	walk_right
+	walk_right
+	step_end
+
+PetalburgCity_Movement_BlockStartWalkUp:
+	delay_8
+	walk_up
+	walk_up
+	walk_up
+	step_end
 
 
 @ Unused
@@ -520,6 +718,66 @@ PetalburgCity_Text_ThisIsGymSign: @ 81DC93E
 	.string "This is the GYM's sign. Look for it\n"
 	.string "whenever you're looking for a GYM.$"
 
+PetalburgCity_Text_DoorLocked:
+	.string "The door appears to be locked.$"
+
+PetalburgCity_Text_ProfFuji:
+	.string "PROF. FUJI: You must be {PLAYER}{KUN}!\p"
+	.string "Now that you're here we can go ahead\n"
+	.string "with handing out the Pokémon.\p"
+	.string "Gather around my bag and we will start.$"
+
+PetalburgCity_Text_Rival:
+	.string "{RIVAL}: About time {PLAYER}{KUN}!\p"
+	.string "I hope FUJI pulled through and has\n"
+	.string "the Pokémon I told him to get.$"
+
+PetalburgCity_Text_Starter_1:
+	.string "PROF. FUJI: Now {PLAYER}{KUN}!\p"
+	.string "Since {RIVAL} has been waiting so long\n"
+	.string "I'm going to give him his Pokémon first$"
+
+PetalburgCity_Text_Starter_2:
+	.string "{RIVAL}: Did you get the Pokémon that\n"
+	.string "my dad requested, FUJI?$"
+
+PetalburgCity_Text_Starter_3:
+	.string "PROF. FUJI: Yes {RIVAL}.\p"
+	.string "Just hatched earlier this week.\n"
+	.string "So it may need to take it slow.$"
+
+PetalburgCity_Text_Starter_4:
+	.string "{RIVAL}: {PLAYER}{KUN}, choose your Pokémon.\n"
+	.string "I want to show you this beast!$"
+
+PetalburgCity_Text_Starter_5:
+	.string "PROF. FUJI: …$"
+
+PetalburgCity_Text_Starter_6:
+	.string "{RIVAL}: FUJI! This Pokémon is too weak!$"
+
+PetalburgCity_Text_Starter_7:
+	.string "PROF. FUJI: As I said before.\n"
+	.string "It just hatched earlier this week.\p"
+	.string "Once it grows it will easily outmatch\n"
+	.string "{PLAYER}{KUN}'s {STR_VAR_1}$"
+
+PetalburgCity_Text_Starter_8:
+	.string "{RIVAL}: …$"
+
+PetalburgCity_Text_Starter_9:
+	.string "PROF. FUJI: That brat…\p"
+	.string "My business partner and his dad have\n"
+	.string "become quite close latley…\p"
+	.string "So, back to your Pokémon. Would you like\n"
+	.string "to give a nickname to that {STR_VAR_1}$\n"
+
+PetalburgCity_Text_Starter_10:
+	.string "PROF. FUJI: Oh yeah… Take these\n"
+	.string "POKé BALLS and POKéDEX\p"
+	.string "That's me done for the day…\p"
+	.string "Good luck with your adventure!$\n"
+
 PetalburgCity_Text_Nick_1: @ 81DC985
 	.string "Hi, I'm Nick!\n"
 	.string "I'm the creator of the nuzlocke challenge\p"
@@ -554,6 +812,10 @@ PetalburgCity_Text_Nick_6:
 	.string "Nick: That's ok.\n"
 	.string "The important thing is you have fun!$"
 
+PetalburgCity_Text_Nick_7:
+	.string "Nick: Next time you should try my\n"
+	.string "Nuzlocke challenge rules!$"
+
 PetalburgCity_Text_Unnamed_1: @ 81DC985
 	.string "Think your an expert?\p"
 	.string "What if I added some rules?\p"
@@ -580,6 +842,10 @@ PetalburgCity_Text_Unnamed_5:
 
 PetalburgCity_Text_Unnamed_6:
 	.string "Knew you weren't ready yet.$"
+
+PetalburgCity_Text_Unnamed_7:
+	.string "Next time you should give these\n"
+	.string "Expert mode rules a try.$"
 
 PetalburgCity_Text_CitySign: @ 81DCAF1
 	.string "PETALBURG CITY\n"

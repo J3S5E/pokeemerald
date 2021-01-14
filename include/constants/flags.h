@@ -96,12 +96,12 @@
 #define FLAG_RESCUED_BIRCH                   0x52
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS       0x53
 
-#define FLAG_CHALLENGE_MODE                  0x54  // Challenge mode flag for "disable bag in trainer battles", "Have PokeCenters charge", "force the Battle style [Set|Shift]" + "Soft EXP caps"
-#define FLAG_NUZLOCKE_MODE                   0x55  // Challenge mode flag for enabling only 1 catch per route and releasing pokemon on death
+#define FLAG_CHALLENGE_MODE                  0x54  // USED Challenge mode flag for "disable bag in trainer battles", "Have PokeCenters charge", "force the Battle style [Set|Shift]" + "Soft EXP caps"
+#define FLAG_NUZLOCKE_MODE                   0x55  // USED Challenge mode flag for enabling only 1 catch per route and releasing pokemon on death
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly
-#define FLAG_MET_RIVAL_MOM                   0x57
-#define FLAG_BIRCH_AIDE_MET                  0x58
+#define FLAG_BEAT_FIRST_RIVAL                0x57  // USED Keeping track of first rival fight
+#define FLAG_HIDE_RIVAL_IN_HOUSE             0x58  // USED to hide rival in his home
 #define FLAG_DECLINED_BIKE                   0x59
 #define FLAG_RECEIVED_BIKE                   0x5A
 #define FLAG_WATTSON_REMATCH_AVAILABLE       0x5B
@@ -118,7 +118,7 @@
 #define FLAG_MOSSDEEP_GYM_SWITCH_3           0x66 //
 #define FLAG_MOSSDEEP_GYM_SWITCH_4           0x67 //
 
-#define FLAG_RACE_MODE                       0x68  // Unused Flag
+#define FLAG_RACE_MODE                       0x68  // USED for race mode
 
 #define FLAG_OCEANIC_MUSEUM_MET_REPORTER     0x69
 #define FLAG_RECEIVED_HM04                   0x6A
@@ -131,7 +131,7 @@
 #define FLAG_UNUSED_RS_LEGENDARY_BATTLE_DONE 0x71 // Unused Flag. Used in R/S to indicate whether player defeated or caught Groudon/Kyogre in Cave of Origin.
 #define FLAG_SCOTT_CALL_BATTLE_FRONTIER      0x72 // Used in order to activate a phone call from Scott, inviting the player to the SS Tidal.
 #define FLAG_RECEIVED_METEORITE              0x73
-#define FLAG_ADVENTURE_STARTED               0x74 // RECEIVED Pokédex.
+#define FLAG_ADVENTURE_STARTED               0x74 // USED.
 #define FLAG_DEFEATED_MAGMA_SPACE_CENTER     0x75 // Set when Team Magma is defeated at Mossdeep's Space Center.
 #define FLAG_MET_HIDDEN_POWER_GIVER          0x76
 
@@ -744,7 +744,7 @@
 #define FLAG_UNUSED_0x2BB  0x2BB // Unused Flag
 
 // Event Flags
-#define FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG                      0x2BC
+#define FLAG_HIDE_UNUSED_FLAG                                       0x2BC
 #define FLAG_HIDE_APPRENTICE                                        0x2BD
 #define FLAG_HIDE_POKEMON_CENTER_2F_MYSTERY_GIFT_MAN                0x2BE
 #define FLAG_HIDE_UNION_ROOM_PLAYER_1                               0x2BF

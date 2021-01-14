@@ -59,7 +59,6 @@ LittlerootTown_BrendansHouse_2F_EventScript_RivalsPokeBall:: @ 81F8481
 	lockall
 	compare VAR_LITTLEROOT_RIVAL_STATE, 2
 	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_MeetBrendan
-	msgbox RivalsHouse_2F_Text_ItsRivalsPokeBall, MSGBOX_DEFAULT
 	releaseall
 	end
 
@@ -281,15 +280,18 @@ PlayersHouse_2F_Text_ClockIsStopped: @ 81F8668
 	.string "The clock is stopped…\p"
 	.string "Better set it and start it!$"
 
-PlayersHouse_2F_Text_HowDoYouLikeYourRoom: @ 81F869A
-	.string "MOM: {PLAYER}, how do you like your\n"
-	.string "new room?\p"
-	.string "Good! Everything's put away neatly!\p"
-	.string "They finished moving everything in\n"
-	.string "downstairs, too.\p"
-	.string "POKéMON movers are so convenient!\p"
-	.string "Oh, you should make sure that\n"
-	.string "everything's all there on your desk.$"
+PlayersHouse_2F_Text_PrepareToGiveBag:
+	.string "MOM: {PLAYER}…\p"
+	.string "Before you go on your adventure\n"
+	.string "I wanted to give you something.\n"
+
+PlayersHouse_2F_Text_GiveShoes:
+	.string "Obtained Running Shoes!$"
+
+PlayersHouse_2F_Text_ExpBag:
+	.string "In this bag I packed…\p"
+	.string "Your bike, running shoes\n"
+	.string "and the fishing rod you used once.$"
 
 PlayersHouse_2F_Text_Notebook: @ 81F877F
 	.string "{PLAYER} flipped open the notebook.\p"

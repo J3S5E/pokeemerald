@@ -105,7 +105,6 @@ LittlerootTown_BrendansHouse_1F_EventScript_YoureNewNeighbor:: @ 81F785E
 	waitmovement 0
 	special GetRivalSonDaughterString
 	msgbox RivalsHouse_1F_Text_OhYoureTheNewNeighbor, MSGBOX_DEFAULT
-	setflag FLAG_MET_RIVAL_MOM
 	setvar VAR_LITTLEROOT_HOUSES_STATE_MAY, 2
 	releaseall
 	end
@@ -347,7 +346,7 @@ PlayersHouse_1F_Text_SeeYouHoney: @ 81F7CC3
 
 PlayersHouse_1F_Text_DidYouMeetProfBirch: @ 81F7CD8
 	.string "MOM: Did you introduce yourself to\n"
-	.string "PROF. BIRCH?$"
+	.string "PROF. FUJI?$"
 
 PlayersHouse_1F_Text_YouShouldRestABit: @ 81F7D08
 	.string "MOM: How are you doing, {PLAYER}?\n"
@@ -358,7 +357,7 @@ PlayersHouse_1F_Text_TakeCareHoney: @ 81F7D5C
 	.string "MOM: Take care, honey!$"
 
 PlayersHouse_1F_Text_GotDadsBadgeHeresSomethingFromMom: @ 81F7D73
-	.string "MOM: Oh? Did DAD give you that BADGE?\p"
+	.string "MOM: Oh? You got a BADGE?\p"
 	.string "Then here's something from your MOM!$"
 
 PlayersHouse_1F_Text_DontPushYourselfTooHard: @ 81F7DBE
