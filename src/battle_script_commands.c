@@ -345,7 +345,8 @@ const u16 sLevelCapFlags[NUM_SOFT_CAPS] =
 };
 
 const u16 sLevelCaps[NUM_SOFT_CAPS] = { 15, 20, 25, 30, 35, 40, 45, 50 };
-const double sLevelCapReduction[7] = { 0, 0, 0, 0, 0, 0, 0 };
+const double sLevelCapReductionChallenge[7] = { 0, 0, 0, 0, 0, 0, 0 };
+const double sLevelCapReduction[7] = { 0.5, 0.25, 0.12, 0.06, 0.03, 0.01, 0.001 };
 const double sRelativePartyScaling[27] =
 {
     3.00, 2.75, 2.50, 2.33, 2.25,
@@ -3459,11 +3460,27 @@ double GetPkmnExpMultiplier(u8 level)
                 levelDiff = level - sLevelCaps[i];
                 if (levelDiff > 6)
                     levelDiff = 6;
+                lvlCapMultiplier = sLevelCapReductionChallenge[levelDiff];
+                break;
+            }
+        }
+    }
+    else
+    {
+        // multiply the usual exp yield by the soft cap multiplier
+        for (i = 0; i < NUM_SOFT_CAPS; i++)
+        {
+            if (!FlagGet(sLevelCapFlags[i]) && level >= sLevelCaps[i])
+            {
+                levelDiff = level - sLevelCaps[i];
+                if (levelDiff > 6)
+                    levelDiff = 6;
                 lvlCapMultiplier = sLevelCapReduction[levelDiff];
                 break;
             }
         }
     }
+    
 
     
 

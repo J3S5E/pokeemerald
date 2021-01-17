@@ -1850,6 +1850,69 @@ bool8 ShouldTryRematchBattle(void)
     return WasSecondRematchWon(gRematchTable, gTrainerBattleOpponent_A);
 }
 
+bool8 CheckTrainerFollowsRules(void)
+{
+    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
+        return TRUE;
+
+    if (PlayerHasNoDupPokemon() && PlayerHasNoDupItems())
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 PlayerHasNoDupPokemon(void)
+{
+    u16 pokedexNumbers[6];
+    s32 i, j;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+        pokedexNumbers[i] = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
+    
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (pokedexNumbers[i] > 0)
+        {
+            for (j = 0; j < PARTY_SIZE; j++)
+            {
+                if (i != j)
+                {
+                    if (pokedexNumbers[i] == pokedexNumbers[j])
+                        return FALSE;
+                }
+            }
+        }
+    }
+
+    return TRUE;
+}
+
+bool8 PlayerHasNoDupItems(void)
+{
+    u16 itemsList[6];
+    s32 i, j;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+        itemsList[i] = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, NULL);
+    
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (itemsList[i] > 0)
+        {
+            for (j = 0; j < PARTY_SIZE; j++)
+            {
+                if (i != j)
+                {
+                    if (itemsList[i] == itemsList[j])
+                        return FALSE;
+                }
+            }
+        }
+    }
+
+    return TRUE;
+}
+
 bool8 IsTrainerReadyForRematch(void)
 {
     return IsTrainerReadyForRematch_(gRematchTable, gTrainerBattleOpponent_A);
