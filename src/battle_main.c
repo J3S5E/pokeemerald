@@ -3225,14 +3225,7 @@ static void BattleStartClearSetData(void)
         gHitMarker |= HITMARKER_NO_ANIMATIONS;
     }
 
-    if (FlagGet(FLAG_CHALLENGE_MODE) == TRUE)
-    {
-        gBattleScripting.battleStyle = OPTIONS_BATTLE_STYLE_SET;
-    }
-    else
-    {
-        gBattleScripting.battleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
-    }
+    gBattleScripting.battleStyle = OPTIONS_BATTLE_STYLE_SET;
     
 
 	gBattleScripting.expOnCatch = (B_EXP_CATCH >= GEN_6);
