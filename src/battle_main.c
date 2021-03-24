@@ -2082,6 +2082,29 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+
+                // Give random TM move if pokemon has 4 moves
+                if (GetMonData(&party[i], MON_DATA_MOVE1 + 3, NULL))
+                {
+                    // loop until new move is given
+                    while (lastMoveChanged != TRUE)
+                    {
+                        tmNumber = RandomNewTMHM(species); // gets random TM/HM that is compatible
+                        if (tmNumber == 200) // if no compatible TM/HM found exit loop
+                            break;
+                        SetMonData(&party[i], MON_DATA_MOVE1, &sTMHMMoves[tmNumber]); // set first move to new move
+                        SetMonData(&party[i], MON_DATA_PP1, &gBattleMoves[sTMHMMoves[tmNumber]].pp); // assign pp
+                        lastMoveChanged = TRUE; // mark that move is changed
+
+                        // loop through pokemons moves 2-4
+                        for (j = 1; j < (MAX_MON_MOVES); j++)
+                        {
+                            if (GetMonData(&party[i], MON_DATA_MOVE1, NULL) == GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL)) // if new move matches moves the pokemon already has
+                                lastMoveChanged = FALSE; // reset loop
+                        }
+                    }
+                }
+
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
