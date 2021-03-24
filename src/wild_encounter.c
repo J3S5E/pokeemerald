@@ -38,6 +38,7 @@ static void ApplyFluteEncounterRateMod(u32 *encRate);
 static void ApplyCleanseTagEncounterRateMod(u32 *encRate);
 static bool8 TryGetAbilityInfluencedWildMonIndex(const struct WildPokemon *wildMon, u8 type, u8 ability, u8 *monIndex);
 static bool8 IsAbilityAllowingEncounter(u8 level);
+static u16 GenRandomMon(u16 species);
 
 // EWRAM vars
 EWRAM_DATA static u8 sWildEncountersDisabled = 0;
@@ -228,40 +229,32 @@ static u8 ChooseWildMonIndex_Fishing(u8 rod)
 
 static u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon)
 {
-    u8 min;
-    u8 max;
-    u8 range;
-    u8 rand;
-
-    // Make sure minimum level is less than maximum level
-    if (wildPokemon->maxLevel >= wildPokemon->minLevel)
+    u8 level;
+    u8 partyLevel = 0;
+    u8 threshold = 0;
+    u8 i;
+    
+    for (i = 0; i < PARTY_SIZE; i++)
     {
-        min = wildPokemon->minLevel;
-        max = wildPokemon->maxLevel;
-    }
-    else
-    {
-        min = wildPokemon->maxLevel;
-        max = wildPokemon->minLevel;
-    }
-    range = max - min + 1;
-    rand = Random() % range;
-
-    // check ability for max level mon
-    if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
-    {
-        u8 ability = GetMonAbility(&gPlayerParty[0]);
-        if (ability == ABILITY_HUSTLE || ability == ABILITY_VITAL_SPIRIT || ability == ABILITY_PRESSURE)
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
         {
-            if (Random() % 2 == 0)
-                return max;
-
-            if (rand != 0)
-                rand--;
+            if (gPlayerParty[i].level >= threshold)
+                partyLevel += gPlayerParty[i].level;
         }
+        else
+            break;
     }
 
-    return min + rand;
+    level = partyLevel / i;
+
+    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
+    {
+        level = level - (level / 5);
+        if (level < 1)
+            level = 1;
+    }
+
+    return level;
 }
 
 static u16 GetCurrentMapWildMonHeaderId(void)
@@ -341,6 +334,9 @@ static u8 PickWildMonNature(void)
 static void CreateWildMon(u16 species, u8 level)
 {
     bool32 checkCuteCharm;
+    u16 partyLevel = 0;
+    u16 threshold = 0;
+    u8 i;
 
     ZeroEnemyPartyMons();
     checkCuteCharm = TRUE;
@@ -352,6 +348,31 @@ static void CreateWildMon(u16 species, u8 level)
     case MON_GENDERLESS:
         checkCuteCharm = FALSE;
         break;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+        {
+            if (gPlayerParty[i].level >= threshold)
+                partyLevel += gPlayerParty[i].level;
+        }
+        else
+            break;
+    }
+
+    level = partyLevel / i;
+
+    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
+    {
+        level = level - (level / 5);
+        if (level < 1)
+            level = 1;
+    }
+
+    if (FlagGet(FLAG_RANDOM_MODE) == TRUE)
+    {
+        species = GenRandomMon(species);
     }
 
     if (checkCuteCharm
@@ -391,9 +412,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
 {
     u8 wildMonIndex = 0;
     u8 i;
-    u8 level;
-    u16 partyLevel = 0;
-    u16 threshold = 0;
+    u8 level = ChooseWildMonLevel(&wildMonInfo->wildPokemon[wildMonIndex]);
 
     switch (area)
     {
@@ -432,27 +451,6 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
     case WILD_AREA_ROCKS:
         wildMonIndex = ChooseWildMonIndex_WaterRock();
         break;
-    }
-
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
-        {
-            if (gPlayerParty[i].level >= threshold)
-                partyLevel += gPlayerParty[i].level;
-        }
-        else
-            break;
-    }
-
-
-    level = partyLevel / i;
-
-    if (FlagGet(FLAG_CHALLENGE_MODE) == FALSE)
-    {
-        level = level - (level / 5);
-        if (level < 1)
-            level = 1;
     }
 
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(level))
@@ -972,4 +970,41 @@ static void ApplyCleanseTagEncounterRateMod(u32 *encRate)
 {
     if (GetMonData(&gPlayerParty[0], MON_DATA_HELD_ITEM) == ITEM_CLEANSE_TAG)
         *encRate = *encRate * 2 / 3;
+}
+
+static u16 GenRandomMon(u16 species)
+{
+    u32 newSpecies;
+    u16 returnSpecies;
+    u8 i;
+    u32 otId;
+    u32 divNum;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gPlayerParty[i];
+
+        if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
+        {
+            // do not calculate ticket values for eggs.
+            if (!GetMonData(mon, MON_DATA_IS_EGG))
+            {
+                otId = GetMonData(mon, MON_DATA_OT_ID);
+            }
+        }
+        else // pokemon are always arranged from populated spots first to unpopulated, so the moment a NONE species is found, that's the end of the list.
+            break;
+    }
+
+    newSpecies = species * (gSaveBlock1Ptr->location.mapNum + 1) * (gSaveBlock1Ptr->location.mapGroup + 1);
+    newSpecies = newSpecies * species;
+    newSpecies = newSpecies + otId;
+
+    divNum = newSpecies / 493;
+
+    newSpecies = newSpecies - (divNum * 493);
+
+    returnSpecies = newSpecies;
+
+    return returnSpecies;
 }

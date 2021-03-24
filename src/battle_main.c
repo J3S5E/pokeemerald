@@ -87,6 +87,7 @@ static void CB2_HandleStartBattle(void);
 static void TryCorrectShedinjaLanguage(struct Pokemon *mon);
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer);
 static u16 RandomNewTMHM(u16 species);
+static u16 GenRandomMon(u16 species , u16 trainerNum);
 static u16 CanMonEvolve(u16 species, u32 level);
 static void BattleMainCB1(void);
 static void sub_8038538(struct Sprite *sprite);
@@ -2017,9 +2018,17 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                     }
                     
                 }
-                
 
-                species = CanMonEvolve(partyData[i].species, newLevel);
+                if (FlagGet(FLAG_RANDOM_MODE) == FALSE)
+                {
+                    species = CanMonEvolve(partyData[i].species, newLevel);
+                }
+                else
+                {
+                    species = GenRandomMon(partyData[i].species, trainerNum);
+                    species = CanMonEvolve(species, newLevel);
+                }
+                    
 
                 CreateMon(&party[i], species, newLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
@@ -2058,7 +2067,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
 
-                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+                if (FlagGet(FLAG_RANDOM_MODE) == FALSE)
+                {
+                    species = CanMonEvolve(partyData[i].species, newLevel);
+                }
+                else
+                {
+                    species = GenRandomMon(partyData[i].species, trainerNum);
+                    species = CanMonEvolve(species, newLevel);
+                }
 
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
@@ -2078,7 +2095,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+                if (FlagGet(FLAG_RANDOM_MODE) == FALSE)
+                {
+                    species = CanMonEvolve(partyData[i].species, newLevel);
+                }
+                else
+                {
+                    species = GenRandomMon(partyData[i].species, trainerNum);
+                    species = CanMonEvolve(species, newLevel);
+                }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
@@ -2128,7 +2153,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 fixedIV = partyData[i].iv * 31 / 255;
 
-                species = CanMonEvolve(partyData[i].species, partyData[i].lvl);
+                if (FlagGet(FLAG_RANDOM_MODE) == FALSE)
+                {
+                    species = CanMonEvolve(partyData[i].species, newLevel);
+                }
+                else
+                {
+                    species = GenRandomMon(partyData[i].species, trainerNum);
+                    species = CanMonEvolve(species, newLevel);
+                }
 
                 newLevel = partyData[i].lvl;
                 
@@ -2206,6 +2239,44 @@ static u16 RandomNewTMHM(u16 species)
 
     return id;
 }
+
+static u16 GenRandomMon(u16 species , u16 trainerNum)
+{
+    u32 newSpecies;
+    u16 returnSpecies;
+    u8 i;
+    u32 otId;
+    U32 divNum;
+
+    newSpecies = species * (trainerNum + 1);
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gPlayerParty[i];
+
+        if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
+        {
+            // do not calculate ticket values for eggs.
+            if (!GetMonData(mon, MON_DATA_IS_EGG))
+            {
+                otId = GetMonData(mon, MON_DATA_OT_ID);
+            }
+        }
+        else // pokemon are always arranged from populated spots first to unpopulated, so the moment a NONE species is found, that's the end of the list.
+            break;
+    }
+
+    newSpecies = newSpecies + otId;
+
+    divNum = newSpecies / 493;
+
+    newSpecies = newSpecies - (divNum * 493);
+
+    returnSpecies = newSpecies;
+
+    return returnSpecies;
+}
+
 
 static u16 CanMonEvolve(u16 species, u32 level)
 {
